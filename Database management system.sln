@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32519.379
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Database management system", "Database management system\Database management system.csproj", "{9F298EDF-3828-4C46-BB22-CBBED9E9A16F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "back-end", "Database management system\back-end.csproj", "{9F298EDF-3828-4C46-BB22-CBBED9E9A16F}"
+EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "front-end-react", "reactinferface\front-end-react.esproj", "{68EAD03D-F121-4DEF-9F7A-6C77856F8F16}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,12 @@ Global
 		{9F298EDF-3828-4C46-BB22-CBBED9E9A16F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9F298EDF-3828-4C46-BB22-CBBED9E9A16F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9F298EDF-3828-4C46-BB22-CBBED9E9A16F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68EAD03D-F121-4DEF-9F7A-6C77856F8F16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68EAD03D-F121-4DEF-9F7A-6C77856F8F16}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68EAD03D-F121-4DEF-9F7A-6C77856F8F16}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{68EAD03D-F121-4DEF-9F7A-6C77856F8F16}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68EAD03D-F121-4DEF-9F7A-6C77856F8F16}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68EAD03D-F121-4DEF-9F7A-6C77856F8F16}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
