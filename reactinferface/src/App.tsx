@@ -1,14 +1,25 @@
 // import your route components too
 
-import Editor from "@monaco-editor/react";
 import { AppBar, Box, CssBaseline, Toolbar, Typography } from "@mui/material";
+import CodeEditor from "components/CodeEditor";
 import Sidebars from "components/Sidebars";
 import ErrorBoundary from "errer_check/ErrorBoundary";
+import { useState } from "react";
 import { BrowserRouter } from "react-router-dom";
 
 const drawerWidth = 240;
 
 function App() {
+    const [codeText, setCodeText] = useState("");
+    function handleEditorChange(value: string | undefined, event: any) {
+        if (value) {
+            setCodeText(value);
+        }
+        else {
+            setCodeText("");
+        }
+    }
+
     return (
         <ErrorBoundary>
             <BrowserRouter>
@@ -30,10 +41,9 @@ function App() {
                         sx={{ flexGrow: 1, bgcolor: 'background.default', p: 3 }}
                     >
                         <Toolbar />
-                        <Editor
-                            height="90vh"
-                            defaultLanguage="sql"
-                            defaultValue="// some comment"
+                        <CodeEditor
+                            defaultValue={codeText}
+                            handleEditorChange={handleEditorChange}
                         />
                     </Box>
                 </Box>
