@@ -15,6 +15,7 @@ public class SQLLiteController : ControllerBase, ISQLController<SQLLiteCredentia
         _postgreSQLRepository = postgreSQLRepository;
     }
 
+    [HttpPut("Connect")]
     public HttpResponse Connect(SQLLiteCredentialsModel credentials)
     {
         throw new NotImplementedException();
