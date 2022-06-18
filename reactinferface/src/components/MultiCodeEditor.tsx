@@ -1,4 +1,4 @@
-import PhotoCamera from '@mui/icons-material/PhotoCamera';
+import AddIcon from '@mui/icons-material/Add';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
@@ -46,7 +46,7 @@ function MultiCodeEditor(props: ICodeEditorProps) {
             <Grid
                 container
                 direction="row"
-                justifyContent="flex-start"
+                justifyContent="space-between"
                 alignItems="center"
             >
                 <Grid item xs={10}>
@@ -69,7 +69,7 @@ function MultiCodeEditor(props: ICodeEditorProps) {
                             handleChange({}, (array.length - 1).toString())
                         }}
                     >
-                        <PhotoCamera />
+                        <AddIcon />
                     </IconButton>
                 </Grid>
             </Grid>

@@ -1,6 +1,6 @@
 // import your route components too
 
-import { AppBar, Box, CssBaseline, Toolbar, Typography } from "@mui/material";
+import { AppBar, Box, CssBaseline, Grid, Toolbar, Typography } from "@mui/material";
 import MultiCodeEditor from "components/MultiCodeEditor";
 import Sidebars from "components/Sidebars";
 import ErrorBoundary from "errer_check/ErrorBoundary";
@@ -25,13 +25,17 @@ function App() {
                         </Toolbar>
                     </AppBar>
                     <Sidebars />
-                    <Box
+                    <Grid
+                        container
+                        direction="column"
+                        justifyContent="center"
+                        alignItems="stretch"
                         component="main"
                         sx={{ flexGrow: 1, bgcolor: 'background.default', p: 3 }}
                     >
                         <Toolbar />
                         <MultiCodeEditor />
-                    </Box>
+                    </Grid>
                 </Box>
             </BrowserRouter>
         </ErrorBoundary>
