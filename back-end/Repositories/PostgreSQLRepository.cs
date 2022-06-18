@@ -12,7 +12,7 @@ public class PostgreSQLRepository : ISQLRepository
         _logger = logger;
     }
 
-    public TestConnectionModel TestConnection(string connString)
+    public TestConnectionModel TestConnection(string? connString)
     {
         try
         {
@@ -26,7 +26,7 @@ public class PostgreSQLRepository : ISQLRepository
         catch (Exception ex)
         {
             _logger.LogError(Constants.UNHANDLED_ERROR, ex);
-            return new TestConnectionModel(true, ex.Message);
+            return new TestConnectionModel(true, ex.Message, connString);
         }
     }
 }

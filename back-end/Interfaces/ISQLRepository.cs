@@ -4,5 +4,5 @@ using System.Data.Common;
 
 public interface ISQLRepository
 {
-    public TestConnectionModel TestConnection(string connString);
+    public TestConnectionModel TestConnection(string? connString);
 }

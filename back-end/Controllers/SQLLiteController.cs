@@ -7,17 +7,22 @@ using System.Net;
 public class SQLLiteController : ControllerBase, ISQLController<SQLLiteCredentialsModel>
 {
     private readonly ILogger<SQLLiteController> _logger;
-    private readonly PostgreSQLRepository _postgreSQLRepository;
+    private readonly SQLLiteRepository _repository;
 
-    public SQLLiteController(ILogger<SQLLiteController> logger, PostgreSQLRepository postgreSQLRepository)
+    public SQLLiteController(ILogger<SQLLiteController> logger, SQLLiteRepository repository)
     {
         _logger = logger;
-        _postgreSQLRepository = postgreSQLRepository;
+        _repository = repository;
     }
 
     [HttpPut("Connect")]
     public HttpResponse Connect(SQLLiteCredentialsModel credentials)
     {
-        throw new NotImplementedException();
+        var conn = _repository.TestConnection(credentials.Path);
+        if (conn.Error)
+        {
+            return new HttpResponse(HttpStatusCode.ServiceUnavailable, conn);
+        }
+        return new HttpResponse(HttpStatusCode.OK, conn);
     }
 }

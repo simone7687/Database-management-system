@@ -7,12 +7,12 @@ using System.Net;
 public class PostgreSQLController : ControllerBase, ISQLController<PostgreSQLCredentialsModel>
 {
     private readonly ILogger<PostgreSQLController> _logger;
-    private readonly PostgreSQLRepository _postgreSQLRepository;
+    private readonly PostgreSQLRepository _repository;
 
-    public PostgreSQLController(ILogger<PostgreSQLController> logger, PostgreSQLRepository postgreSQLRepository)
+    public PostgreSQLController(ILogger<PostgreSQLController> logger, PostgreSQLRepository repository)
     {
         _logger = logger;
-        _postgreSQLRepository = postgreSQLRepository;
+        _repository = repository;
     }
 
     [HttpPut("Connect")]
@@ -27,7 +27,7 @@ public class PostgreSQLController : ControllerBase, ISQLController<PostgreSQLCre
             credentials.Password
         );
 
-        var conn = _postgreSQLRepository.TestConnection(connString);
+        var conn = _repository.TestConnection(connString);
         if (conn.Error)
         {
             return new HttpResponse(HttpStatusCode.ServiceUnavailable, conn);
