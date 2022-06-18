@@ -20,7 +20,7 @@ type ITabs = {
 
 function MultiCodeEditor(props: ICodeEditorProps) {
     const { defaultLanguage = "sql", height = "90vh", defaultValue = undefined, handleEditorChange = undefined } = props;
-    const [value, setValue] = React.useState('1');
+    const [value, setValue] = React.useState('0');
     const [tabs, setTabs] = React.useState<ITabs[]>([{ codeText: defaultValue ? defaultValue : "" }]);
     const handleChange = (event: any, newValue: string) => {
         setValue(newValue);
