@@ -1,0 +1,62 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+# https://www.youtube.com/watch?v=kLEp5tGDqcI
+# https://docs.github.com/en/actions/learn-github-actions/environment-variables
+
+name: Firebase CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: cd reactinferface and npm install and ci and build
+      env:
+        REACT_APP_API_KEY_CROWDIN: ${{ secrets.API_KEY_CROWDIN }}
+        REACT_APP_API_KEY_GITHUB: ${{ secrets.API_KEY_GITHUB }}
+      run: |
+        cd reactinferface
+        npm install
+        npm ci
+        npm run build
+    - name: Archive Build
+      uses: actions/upload-artifact@v2
+      with:
+        name: build
+        path: build
+
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Download Build
+        uses: actions/download-artifact@v2
+        with:
+          name: build
+          path: build
+      # https://github.com/FirebaseExtended/action-hosting-deploy
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_DATABASE_MANAGEMENT_SYST_614C1 }}'
+          channelId: live
+          projectId: database-management-syst-614c1
