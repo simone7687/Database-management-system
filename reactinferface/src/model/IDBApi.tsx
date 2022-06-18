@@ -4,5 +4,9 @@ export type IDBApi = {
 }
 
 export interface PostGressIDBApi extends IDBApi {
-    host: string;
+    host: string,
+    user: string,
+    dbName: string,
+    password: string,
+    port: string,
 }
