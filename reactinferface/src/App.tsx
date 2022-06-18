@@ -32,7 +32,8 @@ function App() {
                         </Toolbar>
                     </AppBar>
                     <Sidebars >
-                        <SideDatabase databases={dbPostgreSQLList} name="PostgreSQL" connnectNewDB={addDBPostgreSQL} />
+                        <SideDatabase databases={dbPostgreSQLList} name="Postgre SQL" connnectNewDB={addDBPostgreSQL} />
+                        <SideDatabase databases={dbPostgreSQLList} name="SQL Light" connnectNewDB={addDBPostgreSQL} />
                     </Sidebars>
                     <Grid
                         container
