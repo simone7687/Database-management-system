@@ -5,7 +5,7 @@ VisualStudioVersion = 17.2.32519.379
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "front-end-react", "reactinferface\front-end-react.esproj", "{68EAD03D-F121-4DEF-9F7A-6C77856F8F16}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "back-end", "back-end\back-end.csproj", "{F3F6D6D4-B328-480C-A817-A3F7DEBFFA4F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "back-end", "back-end\back-end.csproj", "{F3F6D6D4-B328-480C-A817-A3F7DEBFFA4F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

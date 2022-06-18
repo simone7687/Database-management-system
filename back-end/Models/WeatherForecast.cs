@@ -1,4 +1,4 @@
-namespace back_end
+namespace back_end.Models
 {
     public class WeatherForecast
     {
