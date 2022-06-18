@@ -3,12 +3,19 @@
 import { AppBar, Box, CssBaseline, Grid, Toolbar, Typography } from "@mui/material";
 import MultiCodeEditor from "components/MultiCodeEditor";
 import Sidebars from "components/Sidebars";
+import SideDatabase from "components/SideDatabase";
 import ErrorBoundary from "errer_check/ErrorBoundary";
+import { PostGressIDBApi } from "model/IDBApi";
+import { useState } from "react";
 import { BrowserRouter } from "react-router-dom";
 
 const drawerWidth = 240;
 
 function App() {
+    const [dbPostgreSQLList, setDBPostgreSQLList] = useState<PostGressIDBApi[]>([]);
+    const addDBPostgreSQL = () => {
+    }
+
     return (
         <ErrorBoundary>
             <BrowserRouter>
@@ -24,7 +31,9 @@ function App() {
                             </Typography>
                         </Toolbar>
                     </AppBar>
-                    <Sidebars />
+                    <Sidebars >
+                        <SideDatabase databases={dbPostgreSQLList} name="PostgreSQL" connnectNewDB={addDBPostgreSQL} />
+                    </Sidebars>
                     <Grid
                         container
                         direction="column"

@@ -12,8 +12,11 @@ import { useState } from 'react';
 import SideStoreProcedure from './SideStoreProcedure';
 import SideTabelle from './SideTabelle';
 
+type ISideHostProps = {
+}
 
-function SideHost() {
+function SideHost(props: ISideHostProps) {
+    const { } = props;
     const [open, setOpen] = useState(false);
     const handleClick = () => {
         setOpen(!open);

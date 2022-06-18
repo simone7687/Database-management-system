@@ -1,10 +1,10 @@
 import Drawer from '@mui/material/Drawer';
 import Toolbar from '@mui/material/Toolbar';
-import SideDatabase from './SideDatabase';
 
 const drawerWidth = 240;
 
-function Sidebars() {
+function Sidebars(props: any) {
+    const { children } = props;
     return (
         <Drawer
             sx={{
@@ -19,8 +19,7 @@ function Sidebars() {
             anchor="left"
         >
             <Toolbar />
-            <SideDatabase />
-            <SideDatabase />
+            {children}
         </Drawer>
     );
 }
