@@ -4,7 +4,7 @@ using System.Net;
 
 [ApiController]
 [Route("[controller]")]
-public class PostgreSQLController : ControllerBase
+public class PostgreSQLController : ControllerBase, ISQLController<PostgreSQLCredentialsModel>
 {
     private readonly ILogger<PostgreSQLController> _logger;
     private readonly PostgreSQLRepository _postgreSQLRepository;
