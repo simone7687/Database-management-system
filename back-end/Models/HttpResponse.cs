@@ -7,10 +7,12 @@ public class HttpResponse : HttpResponseMessage
     { 
         StatusCode = statusCode;
     }
-    public HttpResponse(HttpStatusCode statusCode, Object? values)
+    public HttpResponse(HttpStatusCode statusCode, string messages, object? content)
     { 
         StatusCode = statusCode;
-        Values = values;
+        Messages = messages;
+        Content = content;
     }
-    public Object? Values { get; set; }
+    public new object? Content { get; set; }
+    public string Messages { get; set; }
 }
