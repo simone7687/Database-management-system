@@ -56,7 +56,11 @@ function MultiCodeEditor(props: ICodeEditorProps) {
                         scrollButtons="auto"
                     >
                         {tabs.map((element, index) => (
-                            <Tab label={"Query " + index} value={index.toString()} />
+                            <Tab
+                                label={"Query " + index}
+                                value={index.toString()}
+                                key={index}
+                            />
                         ))}
                     </TabList>
                 </Grid>
@@ -74,8 +78,12 @@ function MultiCodeEditor(props: ICodeEditorProps) {
                 </Grid>
             </Grid>
             {tabs.map((element, index) => {
-                return <TabPanel value={index.toString()}>
+                return <TabPanel
+                    value={index.toString()}
+                    key={index}
+                >
                     <CodeEditor
+                        key={index}
                         defaultLanguage={defaultLanguage}
                         height={height}
                         defaultValue={element.codeText}
