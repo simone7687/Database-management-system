@@ -1,11 +1,23 @@
-export interface PostGressIDBApi {
+export interface IHttpResponse {
+    headers: any[],
+    isSuccessStatusCode: boolean,
     content: any,
     messages: string,
-    version: string,
-    statusCode: number,
     reasonPhrase: string,
-    headers: any[],
-    trailingHeaders: any[],
     requestMessage: any,
-    isSuccessStatusCode: boolean,
+    statusCode: number,
+    trailingHeaders: any[],
+    version: string,
+}
+
+export function generalIHttpResponseError(body: IHttpResponse) {
+    if (body?.messages) {
+        console.trace(body?.messages)
+    } else if (body?.reasonPhrase) {
+        console.trace(body?.reasonPhrase)
+    } else if (body?.statusCode) {
+        console.error(body?.statusCode)
+    } else {
+        console.error(body)
+    }
 }

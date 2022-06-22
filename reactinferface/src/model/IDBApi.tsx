@@ -3,7 +3,7 @@ export type IDBApi = {
     key: string,
 }
 
-export interface PostGressIDBApi extends IDBApi {
+export interface IPostGressIDBApi extends IDBApi {
     host: string,
     user: string,
     dbName: string,
