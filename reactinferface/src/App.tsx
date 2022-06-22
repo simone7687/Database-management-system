@@ -162,6 +162,13 @@ function App() {
                         PostgreSQL parametri di connessione.
                     </DialogContentText>
                     <MyTextField
+                        id="key"
+                        label="Nome"
+                        onChange={(event: any) => handleInputChangeGeneric(event, itemToEdit, setItemToEdit)}
+                        defaultValue={itemToEdit?.key || ""}
+                        error={errorFields.includes("key")}
+                    />
+                    <MyTextField
                         id="dbName"
                         label="Nome del DataBase"
                         onChange={(event: any) => handleInputChangeGeneric(event, itemToEdit, setItemToEdit)}

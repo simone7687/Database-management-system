@@ -35,7 +35,7 @@ function SideDatabase(props: ISideDatabaseProps) {
                 component="nav"
                 aria-labelledby="nested-list-subheader"
             >
-                <ListItemButton onClick={handleClick}>
+                <ListItemButton >
                     <ListItemIcon>
                         <InboxIcon />
                     </ListItemIcon>
@@ -49,9 +49,9 @@ function SideDatabase(props: ISideDatabaseProps) {
                         </IconButton>}
                 </ListItemButton>
                 <Collapse in={open} timeout="auto" unmountOnExit>
-                    {databases.map((item, index) => (
+                    {databases.map((item: IDBApi, index: number) => (
                         <ListItem key={item.key} disablePadding>
-                            <SideHost />
+                            <SideHost database={item} />
                         </ListItem>
                     ))}
                 </Collapse>
