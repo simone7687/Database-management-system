@@ -86,11 +86,15 @@ function App() {
             }
             else if (!res.isSuccessStatusCode) {
                 setOpenProgressBarDialog(false);
+                setOpenBugDialog(true);
+                // TODO cambiare ErrorDialog
                 setOpenErrorDialog(true);
             }
             else {
                 console.trace(itemToEdit)
                 setOpenProgressBarDialog(false);
+                setOpenBugDialog(true);
+                // TODO cambiare ErrorDialog
                 setOpenErrorDialog(true);
             }
         }).catch(err => {
