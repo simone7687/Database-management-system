@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>back_end</RootNamespace>
     <OutputType>Exe</OutputType>
+    <UserSecretsId>0d578314-bf3f-490e-90f6-8dfd3dd325e7</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

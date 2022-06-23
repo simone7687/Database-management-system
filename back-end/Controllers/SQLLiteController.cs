@@ -21,8 +21,8 @@ public class SQLLiteController : ControllerBase, ISQLController<SQLLiteCredentia
         var conn = _repository.TestConnection(credentials.Path);
         if (conn.Error)
         {
-            return new HttpResponse(HttpStatusCode.ServiceUnavailable, conn);
+            return new HttpResponse(HttpStatusCode.ServiceUnavailable, conn.Message, conn.ConnectionString);
         }
-        return new HttpResponse(HttpStatusCode.OK, conn);
+        return new HttpResponse(HttpStatusCode.OK, conn.Message, conn.ConnectionString);
     }
 }

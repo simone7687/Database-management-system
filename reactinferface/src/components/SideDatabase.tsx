@@ -1,4 +1,5 @@
 import AddIcon from '@mui/icons-material/Add';
+import CloseIcon from '@mui/icons-material/Close';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
@@ -11,21 +12,30 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { IDBApi } from 'model/IDBApi';
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import SideHost from './SideHost';
 
-type ISideDatabaseProps = {
+type ISideDatabaseProps<T> = {
     connnectNewDB: () => void,
-    databases: IDBApi[],
+    databases: T[],
+    setDatabases: Dispatch<SetStateAction<T[]>>
     name?: string,
 }
 
-function SideDatabase(props: ISideDatabaseProps) {
-    const { connnectNewDB, databases, name } = props;
+function SideDatabase<T extends IDBApi>(props: ISideDatabaseProps<T>) {
+    const { connnectNewDB, databases, setDatabases, name } = props;
     const [open, setOpen] = useState(true);
     const handleClick = () => {
         setOpen(!open);
     };
+
+    const remove = (key: string) => {
+        setDatabases(
+            databases.filter((item: T) => {
+                return item.key !== key
+            })
+        )
+    }
 
     return (
         <>
@@ -35,7 +45,7 @@ function SideDatabase(props: ISideDatabaseProps) {
                 component="nav"
                 aria-labelledby="nested-list-subheader"
             >
-                <ListItemButton onClick={handleClick}>
+                <ListItemButton >
                     <ListItemIcon>
                         <InboxIcon />
                     </ListItemIcon>
@@ -49,9 +59,13 @@ function SideDatabase(props: ISideDatabaseProps) {
                         </IconButton>}
                 </ListItemButton>
                 <Collapse in={open} timeout="auto" unmountOnExit>
-                    {databases.map((item, index) => (
+                    {databases.map((item: T, index: number) => (
                         <ListItem key={item.key} disablePadding>
-                            <SideHost />
+                            <SideHost database={item} >
+                                <IconButton color="primary" aria-label="upload picture" component="span" onClick={() => { remove(item.key) }}>
+                                    <CloseIcon />
+                                </IconButton>
+                            </SideHost>
                         </ListItem>
                     ))}
                 </Collapse>
