@@ -52,7 +52,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: build
-          path: build
+          path: reactinferface/build
       # https://github.com/FirebaseExtended/action-hosting-deploy
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
