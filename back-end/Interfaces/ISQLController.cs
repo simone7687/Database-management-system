@@ -3,8 +3,9 @@ using back_end.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Data.Common;
 
-public interface ISQLController<SQLLiteCredentialsModel>
+public interface ISQLController<T>
 {
     [HttpPut("Connect")]
-    public HttpResponse Connect(SQLLiteCredentialsModel credentials);
+    public HttpResponse Connect(T credentials);
+    public HttpResponse GetTableListName(T credentials);
 }

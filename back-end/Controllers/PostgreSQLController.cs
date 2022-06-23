@@ -34,4 +34,25 @@ public class PostgreSQLController : ControllerBase, ISQLController<PostgreSQLCre
         }
         return new HttpResponse(HttpStatusCode.OK, conn.Message, conn.Content);
     }
+
+
+    [HttpGet("GetTableListName")]
+    public HttpResponse GetTableListName(PostgreSQLCredentialsModel credentials)
+    {
+        string connString = string.Format(
+            "Server={0};Username={1};Database={2};Port={3};Password={4};SSLMode=Prefer",
+            credentials.Host,
+            credentials.User,
+            credentials.DBname,
+            credentials.Port,
+            credentials.Password
+        );
+
+        var conn = _repository.GetTableListName(connString);
+        if (conn.Error)
+        {
+            return new HttpResponse(HttpStatusCode.ServiceUnavailable, conn.Message, conn.Content);
+        }
+        return new HttpResponse(HttpStatusCode.OK, conn.Message, conn.Content);
+    }
 }

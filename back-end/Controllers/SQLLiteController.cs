@@ -26,14 +26,9 @@ public class SQLLiteController : ControllerBase, ISQLController<SQLLiteCredentia
         return new HttpResponse(HttpStatusCode.OK, conn.Message, conn.Content);
     }
 
-    [HttpPut("GetTableListName")]
+    [HttpGet("GetTableListName")]
     public HttpResponse GetTableListName(SQLLiteCredentialsModel credentials)
     {
-        var res = _repository.GetTableListName(credentials.Path);
-        if (res.Error)
-        {
-            return new HttpResponse(HttpStatusCode.BadRequest, res.Message, res.Content);
-        }
-        return new HttpResponse(HttpStatusCode.OK, res.Message, res.Content);
+        throw new NotImplementedException();
     }
 }
