@@ -13,7 +13,7 @@ public class SQLLiteRepository : ISQLRepository
         _logger = logger;
     }
 
-    public TestConnectionModel TestConnection(string? connString)
+    public ResRepository<string> TestConnection(string? connString)
     {
         try
         {
@@ -21,13 +21,18 @@ public class SQLLiteRepository : ISQLRepository
             {
                 _logger.LogTrace("TestConnection SQLLiteRepository");
                 conn.Open();
-                return new TestConnectionModel(conn);
+                return new ResRepository<string>(conn.DataSource, conn.ConnectionString);
             }
         }
         catch (Exception ex)
         {
             _logger.LogError(Constants.UNHANDLED_ERROR, ex);
-            return new TestConnectionModel(true, ex.Message, connString);
+            return new ResRepository<string>(true, ex.Message, connString);
         }
+    }
+
+    public ResRepository<string[]> GetTableListName(string? connString)
+    {
+        throw new NotImplementedException();
     }
 }

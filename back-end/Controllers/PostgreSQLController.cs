@@ -30,8 +30,8 @@ public class PostgreSQLController : ControllerBase, ISQLController<PostgreSQLCre
         var conn = _repository.TestConnection(connString);
         if (conn.Error)
         {
-            return new HttpResponse(HttpStatusCode.ServiceUnavailable, conn.Message, conn.ConnectionString);
+            return new HttpResponse(HttpStatusCode.ServiceUnavailable, conn.Message, conn.Content);
         }
-        return new HttpResponse(HttpStatusCode.OK, conn.Message, conn.ConnectionString);
+        return new HttpResponse(HttpStatusCode.OK, conn.Message, conn.Content);
     }
 }

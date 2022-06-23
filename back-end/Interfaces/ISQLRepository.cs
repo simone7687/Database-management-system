@@ -4,5 +4,6 @@ using System.Data.Common;
 
 public interface ISQLRepository
 {
-    public TestConnectionModel TestConnection(string? connString);
+    public ResRepository<string> TestConnection(string? connString);
+    public ResRepository<string[]> GetTableListName(string? connString);
 }

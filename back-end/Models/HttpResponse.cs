@@ -7,7 +7,7 @@ public class HttpResponse : HttpResponseMessage
     { 
         StatusCode = statusCode;
     }
-    public HttpResponse(HttpStatusCode statusCode, string messages, object content)
+    public HttpResponse(HttpStatusCode statusCode, string messages, object? content)
     { 
         StatusCode = statusCode;
         Messages = messages;
