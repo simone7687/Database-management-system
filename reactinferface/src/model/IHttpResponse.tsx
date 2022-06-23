@@ -11,13 +11,23 @@ export interface IHttpResponse {
 }
 
 export function generalIHttpResponseLog(body: IHttpResponse) {
-    if (body?.messages) {
-        console.trace(body?.messages)
-    } else if (body?.reasonPhrase) {
-        console.trace(body?.reasonPhrase)
-    } else if (body?.statusCode) {
-        console.error(body?.statusCode)
-    } else {
-        console.error(body)
+    if (body?.isSuccessStatusCode) {
+        if (body?.messages) {
+            console.log(body?.messages)
+        }
+        else {
+            console.log(body)
+        }
+    }
+    else {
+        if (body?.messages) {
+            console.trace(body?.messages)
+        } else if (body?.reasonPhrase) {
+            console.trace(body?.reasonPhrase)
+        } else if (body?.statusCode) {
+            console.error(body?.statusCode)
+        } else {
+            console.error(body)
+        }
     }
 }

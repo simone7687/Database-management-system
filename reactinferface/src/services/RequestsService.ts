@@ -1,4 +1,3 @@
-import { IHttpResponse } from "model/IHttpResponse";
 
 class RequestsService {
 
@@ -34,9 +33,9 @@ class RequestsService {
             })
             .catch((res: Error) => {
                 if (res.message === "Failed to fetch") {
+                    console.error(res)
                     window.alert("Errore di Connesione con le WebApi");
-                    let model: IHttpResponse = { isSuccessStatusCode: false, messages: res.toString() };
-                    return model
+                    return null
                 }
                 else {
                     throw Object.assign(

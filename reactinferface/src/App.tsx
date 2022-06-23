@@ -6,12 +6,12 @@ import MyDialog from "components/MyDialog";
 import MyTextField from "components/MyTextField";
 import Sidebars from "components/Sidebars";
 import SideDatabase from "components/SideDatabase";
-import ErrorBoundary from "errer_check/ErrorBoundary";
 import { IPostGressIDBApi } from "model/IDBApi";
 import { IHttpResponse } from "model/IHttpResponse";
 import { useState } from "react";
 import { BrowserRouter } from "react-router-dom";
 import DataBasePostgreSQLService from "services/DataBasePostgreSQLService";
+import ErrorBoundary from "utility/ErrorBoundary";
 
 const drawerWidth = 240;
 
