@@ -29,5 +29,28 @@ class DataBasePostgreSQLService {
                 );
             });
     }
+
+    async getTableListName(conn: IPostGressIDBApi, abortController: any) {
+        var raw = JSON.stringify(conn);
+
+        var requestOptions = {
+            method: 'GET',
+            body: raw,
+        };
+
+        return this.authService.fetch(this.url + `GetTableListName`, requestOptions, null, "", { signal: abortController.signal })
+            .then((response: IHttpResponse) => {
+                if (response) {
+                    generalIHttpResponseLog(response)
+                }
+                return response;
+            })
+            .catch((res) => {
+                window.alert("Unmanaged error");
+                throw Object.assign(
+                    new Error(res.toString()),
+                );
+            });
+    }
 }
 export default DataBasePostgreSQLService;
