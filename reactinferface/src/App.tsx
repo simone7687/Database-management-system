@@ -132,7 +132,7 @@ function App() {
                     </Grid>
                 </Box>
 
-                {/* Bug Dialog */}
+                {/* Progress Dialog */}
                 <MyDialog
                     open={openBugDialog}
                     title="Parametri di connessione"
