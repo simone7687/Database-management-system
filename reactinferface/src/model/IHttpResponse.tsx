@@ -1,16 +1,16 @@
 export interface IHttpResponse {
-    headers: any[],
+    headers?: any[],
     isSuccessStatusCode: boolean,
-    content: any,
+    content?: any,
     messages: string,
-    reasonPhrase: string,
-    requestMessage: any,
-    statusCode: number,
-    trailingHeaders: any[],
-    version: string,
+    reasonPhrase?: string,
+    requestMessage?: any,
+    statusCode?: number,
+    trailingHeaders?: any[],
+    version?: string,
 }
 
-export function generalIHttpResponseError(body: IHttpResponse) {
+export function generalIHttpResponseLog(body: IHttpResponse) {
     if (body?.messages) {
         console.trace(body?.messages)
     } else if (body?.reasonPhrase) {

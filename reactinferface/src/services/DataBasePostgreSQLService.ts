@@ -1,5 +1,5 @@
 import { IPostGressIDBApi } from "model/IDBApi.js";
-import { generalIHttpResponseError, IHttpResponse } from "model/IHttpResponse";
+import { generalIHttpResponseLog, IHttpResponse } from "model/IHttpResponse";
 import RequestsService from "./RequestsService";
 
 class DataBasePostgreSQLService {
@@ -17,8 +17,8 @@ class DataBasePostgreSQLService {
 
         return this.authService.fetch(this.url + `Connect`, requestOptions, null, "", { signal: abortController.signal })
             .then((response: IHttpResponse) => {
-                if (!response.isSuccessStatusCode) {
-                    generalIHttpResponseError(response)
+                if (!response?.isSuccessStatusCode) {
+                    generalIHttpResponseLog(response)
                 }
                 return response;
             })

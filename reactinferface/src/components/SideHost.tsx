@@ -41,6 +41,9 @@ function SideHost(props: ISideHostProps) {
                 <IconButton color="primary" aria-label="upload picture" component="span" onClick={handleClick}>
                     {open ? <ExpandLess /> : <ExpandMore />}
                 </IconButton>
+                <IconButton color="primary" aria-label="upload picture" component="span" onClick={handleClick}>
+                    {open ? <ExpandLess /> : <ExpandMore />}
+                </IconButton>
             </ListItemButton>
             <Collapse in={open} timeout="auto" unmountOnExit>
                 <SideTabelle />
