@@ -13,10 +13,10 @@ export interface IHttpResponse {
 export function generalIHttpResponseLog(body: IHttpResponse) {
     if (body?.isSuccessStatusCode) {
         if (body?.messages) {
-            console.log(body?.messages)
+            console.info(body?.messages)
         }
         else {
-            console.log(body)
+            console.info(body)
         }
     }
     else {

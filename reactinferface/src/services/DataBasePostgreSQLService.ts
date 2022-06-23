@@ -17,7 +17,7 @@ class DataBasePostgreSQLService {
 
         return this.authService.fetch(this.url + `Connect`, requestOptions, null, "", { signal: abortController.signal })
             .then((response: IHttpResponse) => {
-                if (response && !response?.isSuccessStatusCode) {
+                if (response) {
                     generalIHttpResponseLog(response)
                 }
                 return response;

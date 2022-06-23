@@ -84,14 +84,7 @@ function App() {
                 setItemToEdit(undefined)
                 setOpenProgressBarDialog(false);
             }
-            else if (!res.isSuccessStatusCode) {
-                setOpenProgressBarDialog(false);
-                setOpenBugDialog(true);
-                // TODO cambiare ErrorDialog
-                setOpenErrorDialog(true);
-            }
             else {
-                console.trace(itemToEdit)
                 setOpenProgressBarDialog(false);
                 setOpenBugDialog(true);
                 // TODO cambiare ErrorDialog
@@ -252,7 +245,7 @@ function App() {
                         alignItems="center"
                     >
                         <DialogContentText>
-                            C'è stato un errore di sistema. Per favore riprova, se l'errore persiste contatta lo sviluppatore.
+                            Non è stato possibile connetersi al database, perfavore riprova.
                         </DialogContentText>
                     </Grid>
                 </MyDialog>
