@@ -117,7 +117,7 @@ function App() {
                         </Toolbar>
                     </AppBar>
                     <Sidebars >
-                        <SideDatabase databases={dbPostgreSQLList} name="PostgreSQL" connnectNewDB={addDBPostgreSQL} />
+                        <SideDatabase<IPostGressIDBApi> databases={dbPostgreSQLList} name="PostgreSQL" connnectNewDB={addDBPostgreSQL} setDatabases={setDBPostgreSQLList} />
                     </Sidebars>
                     <Grid
                         container

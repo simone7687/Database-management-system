@@ -5,7 +5,7 @@ type IMyDialogProps = {
     open: boolean,
     maxWidth?: false | Breakpoint | undefined,
     title: string,
-    children: ReactNode,
+    children?: ReactNode,
     actions?: ReactNode,
 }
 
