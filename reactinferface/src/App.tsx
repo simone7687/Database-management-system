@@ -14,6 +14,7 @@ import DataBasePostgreSQLService from "services/DataBasePostgreSQLService";
 import ErrorBoundary from "utility/ErrorBoundary";
 
 const drawerWidth = 240;
+const postgreSQLService = new DataBasePostgreSQLService();
 
 function App() {
     const [dbPostgreSQLList, setDBPostgreSQLList] = useState<IPostGressIDBApi[]>([]);
@@ -72,8 +73,7 @@ function App() {
         setOpenProgressBarDialog(true);
 
         const abortController = new AbortController();
-        const postgreSQLService = new DataBasePostgreSQLService();
-        postgreSQLService.connect(item, abortController).then((res: IHttpResponse) => {
+        postgreSQLService.connect(item, abortController).then((res: IHttpResponse<string>) => {
             if (abortController.signal.aborted) {
                 return;
             }
@@ -90,7 +90,7 @@ function App() {
                 // TODO cambiare ErrorDialog
                 setOpenErrorDialog(true);
             }
-        }).catch(err => {
+        }).catch((err: Error) => {
             console.log("handleSend", err)
             setOpenProgressBarDialog(false);
             setOpenErrorDialog(true);
@@ -117,7 +117,13 @@ function App() {
                         </Toolbar>
                     </AppBar>
                     <Sidebars >
-                        <SideDatabase<IPostGressIDBApi> databases={dbPostgreSQLList} name="PostgreSQL" connnectNewDB={addDBPostgreSQL} setDatabases={setDBPostgreSQLList} />
+                        <SideDatabase<IPostGressIDBApi>
+                            databases={dbPostgreSQLList}
+                            name="PostgreSQL"
+                            connnectNewDB={addDBPostgreSQL}
+                            setDatabases={setDBPostgreSQLList}
+                            dataBaseService={postgreSQLService}
+                        />
                     </Sidebars>
                     <Grid
                         container

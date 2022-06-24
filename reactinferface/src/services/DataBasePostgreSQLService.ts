@@ -1,8 +1,9 @@
-import { IPostGressIDBApi } from "model/IDBApi.js";
+import { DataBaseService } from "model/DataBaseService";
+import { IPostGressIDBApi } from "model/IDBApi";
 import { generalIHttpResponseLog, IHttpResponse } from "model/IHttpResponse";
 import RequestsService from "./RequestsService";
 
-class DataBasePostgreSQLService {
+class DataBasePostgreSQLService implements DataBaseService<IPostGressIDBApi> {
     url = "https://localhost:7119/PostgreSQL/";
 
     authService = new RequestsService();
@@ -16,7 +17,7 @@ class DataBasePostgreSQLService {
         };
 
         return this.authService.fetch(this.url + `Connect`, requestOptions, null, "", { signal: abortController.signal })
-            .then((response: IHttpResponse) => {
+            .then((response: IHttpResponse<any>) => {
                 if (response) {
                     generalIHttpResponseLog(response)
                 }
@@ -39,7 +40,7 @@ class DataBasePostgreSQLService {
         };
 
         return this.authService.fetch(this.url + `GetTableListName`, requestOptions, null, "", { signal: abortController.signal })
-            .then((response: IHttpResponse) => {
+            .then((response: IHttpResponse<string[]>) => {
                 if (response) {
                     generalIHttpResponseLog(response)
                 }

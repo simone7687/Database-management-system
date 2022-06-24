@@ -11,19 +11,21 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import { DataBaseService } from 'model/DataBaseService';
 import { IDBApi } from 'model/IDBApi';
 import { Dispatch, SetStateAction, useState } from 'react';
 import SideHost from './SideHost';
 
-type ISideDatabaseProps<T> = {
+type ISideDatabaseProps<T extends IDBApi> = {
     connnectNewDB: () => void,
     databases: T[],
     setDatabases: Dispatch<SetStateAction<T[]>>
     name?: string,
+    dataBaseService: DataBaseService<T>,
 }
 
 function SideDatabase<T extends IDBApi>(props: ISideDatabaseProps<T>) {
-    const { connnectNewDB, databases, setDatabases, name } = props;
+    const { connnectNewDB, databases, setDatabases, name, dataBaseService } = props;
     const [open, setOpen] = useState(true);
     const handleClick = () => {
         setOpen(!open);
@@ -56,12 +58,13 @@ function SideDatabase<T extends IDBApi>(props: ISideDatabaseProps<T>) {
                     {databases.length > 0 &&
                         <IconButton color="primary" aria-label="upload picture" component="span" onClick={handleClick}>
                             {open ? <ExpandLess /> : <ExpandMore />}
-                        </IconButton>}
+                        </IconButton>
+                    }
                 </ListItemButton>
                 <Collapse in={open} timeout="auto" unmountOnExit>
                     {databases.map((item: T, index: number) => (
                         <ListItem key={item.key} disablePadding>
-                            <SideHost database={item} >
+                            <SideHost<T> database={item} dataBaseService={dataBaseService} >
                                 <IconButton color="primary" aria-label="upload picture" component="span" onClick={() => { remove(item.key) }}>
                                     <CloseIcon />
                                 </IconButton>

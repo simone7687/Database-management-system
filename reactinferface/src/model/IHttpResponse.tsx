@@ -1,7 +1,7 @@
-export interface IHttpResponse {
+export interface IHttpResponse<T> {
     headers?: any[],
     isSuccessStatusCode: boolean,
-    content?: any,
+    content?: T,
     messages: string,
     reasonPhrase?: string,
     requestMessage?: any,
@@ -10,7 +10,7 @@ export interface IHttpResponse {
     version?: string,
 }
 
-export function generalIHttpResponseLog(body: IHttpResponse) {
+export function generalIHttpResponseLog(body: IHttpResponse<any>) {
     if (body?.isSuccessStatusCode) {
         if (body?.messages) {
             console.info(body?.messages)
