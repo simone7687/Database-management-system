@@ -30,22 +30,24 @@ function SideTabelle<T extends IDBApi>(props: ISideTabelleProps<T>) {
     };
 
     useEffect(() => {
-        const abortController = new AbortController();
-        dataBaseService.getTableListName(conn, abortController).then((res: IHttpResponse<string[]>) => {
-            if (abortController.signal.aborted) {
+        if (open) {
+            const abortController = new AbortController();
+            dataBaseService.getTableListName(conn, abortController).then((res: IHttpResponse<string[]>) => {
+                if (abortController.signal.aborted) {
+                    settabelleList([])
+                }
+                else if (res.content) {
+                    settabelleList(res.content)
+                }
+                else {
+                    settabelleList([])
+                }
+            }).catch((err: Error) => {
+                console.log("getTabellePostgre", err)
                 settabelleList([])
-            }
-            else if (res.content) {
-                settabelleList(res.content)
-            }
-            else {
-                settabelleList([])
-            }
-        }).catch((err: Error) => {
-            console.log("getTabellePostgre", err)
-            settabelleList([])
-        })
-    }, [dataBaseService, conn])
+            })
+        }
+    }, [dataBaseService, conn, open])
 
     return (
         <>
@@ -63,14 +65,12 @@ function SideTabelle<T extends IDBApi>(props: ISideTabelleProps<T>) {
                     <IconButton color="primary" aria-label="upload picture" component="span">
                         <PhotoCamera />
                     </IconButton>
-                    {tabelleList.length &&
-                        <IconButton color="primary" aria-label="upload picture" component="span" onClick={handleClick}>
-                            {open ? <ExpandLess /> : <ExpandMore />}
-                        </IconButton>
-                    }
+                    <IconButton color="primary" aria-label="upload picture" component="span" onClick={handleClick}>
+                        {open ? <ExpandLess /> : <ExpandMore />}
+                    </IconButton>
                 </ListItemButton>
                 <Collapse in={open} timeout="auto" unmountOnExit>
-                    {tabelleList.map((text, index) => (
+                    {tabelleList.length > 0 && tabelleList.map((text, index) => (
                         <ListItem key={index} disablePadding>
                             <ListItemButton sx={{ pl: 12 }}>
                                 <ListItemIcon>
@@ -80,6 +80,13 @@ function SideTabelle<T extends IDBApi>(props: ISideTabelleProps<T>) {
                             </ListItemButton>
                         </ListItem>
                     ))}
+                    {tabelleList.length === 0 &&
+                        <ListItem disablePadding>
+                            <ListItemButton sx={{ pl: 12 }}>
+                                <ListItemText primary={"Nesuna Tabella"} />
+                            </ListItemButton>
+                        </ListItem>
+                    }
                 </Collapse>
             </List>
         </>

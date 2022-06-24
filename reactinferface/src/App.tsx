@@ -17,7 +17,7 @@ const drawerWidth = 240;
 const postgreSQLService = new DataBasePostgreSQLService();
 
 function App() {
-    const [dbPostgreSQLList, setDBPostgreSQLList] = useState<IPostGressIDBApi[]>([]);
+    const [dbPostgreSQLList, setDBPostgreSQLListState] = useState<IPostGressIDBApi[]>(JSON.parse(localStorage.getItem('dbPostgreSQLList') || "null") || []);
     const [openBugDialog, setOpenBugDialog] = useState(false)
     const [openProgressBarDialog, setOpenProgressBarDialog] = useState(false)
     const [openErrorDialog, setOpenErrorDialog] = useState(false)
@@ -33,6 +33,11 @@ function App() {
             ...itemToEdit,
             [idModel]: value
         })
+    }
+
+    const setDBPostgreSQLList = (list: IPostGressIDBApi[]) => {
+        setDBPostgreSQLListState(list)
+        localStorage.setItem('dbPostgreSQLList', JSON.stringify(list));
     }
 
     const addDBPostgreSQL = () => {

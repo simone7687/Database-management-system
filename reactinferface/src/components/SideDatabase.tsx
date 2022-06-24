@@ -13,13 +13,13 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { DataBaseService } from 'model/DataBaseService';
 import { IDBApi } from 'model/IDBApi';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { useState } from 'react';
 import SideHost from './SideHost';
 
 type ISideDatabaseProps<T extends IDBApi> = {
     connnectNewDB: () => void,
     databases: T[],
-    setDatabases: Dispatch<SetStateAction<T[]>>
+    setDatabases: (list: T[]) => void,
     name?: string,
     dataBaseService: DataBaseService<T>,
 }
