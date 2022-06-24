@@ -35,7 +35,7 @@ class DataBasePostgreSQLService implements DataBaseService<IPostGressIDBApi> {
         var raw = JSON.stringify(conn);
 
         var requestOptions = {
-            method: 'GET',
+            method: 'POST',
             body: raw,
         };
 

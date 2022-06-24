@@ -36,7 +36,7 @@ public class PostgreSQLController : ControllerBase, ISQLController<PostgreSQLCre
     }
 
 
-    [HttpGet("GetTableListName")]
+    [HttpPost("GetTableListName")]
     public HttpResponse GetTableListName(PostgreSQLCredentialsModel credentials)
     {
         string connString = string.Format(

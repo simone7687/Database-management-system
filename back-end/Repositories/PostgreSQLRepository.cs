@@ -31,7 +31,7 @@ public class PostgreSQLRepository : ISQLRepository
         }
     }
 
-    public ResRepository<string[]> GetTableListName(string? connString)
+    public ResRepository<IEnumerable<string>> GetTableListName(string? connString)
     {
         try
         {
@@ -39,18 +39,18 @@ public class PostgreSQLRepository : ISQLRepository
             {
                 _logger.LogTrace("GetTableListName PostgreSQLRepository");
                 conn.Open();
-                string sQuery = @"SELECT table_name
+                string sQuery = @"SELECT table_name AS TableName
                                 FROM information_schema.tables
-                                WHERE table_schema='public'
-                                AND table_type='BASE TABLE'";
-                var res = conn.QueryFirstOrDefaultAsync<string[]>(sQuery).Result;
-                return new ResRepository<string[]>(conn.DataSource, res);
+                                WHERE table_type='BASE TABLE'
+                                ORDER BY table_name";
+                var res = conn.QueryAsync<string>(sQuery).Result;
+                return new ResRepository<IEnumerable<string>>(conn.DataSource, res);
             }
         }
         catch (Exception ex)
         {
             _logger.LogError(Constants.UNHANDLED_ERROR, ex);
-            return new ResRepository<string[]>(true, ex.Message, default);
+            return new ResRepository<IEnumerable<string>>(true, ex.Message, default);
         }
     }
 }

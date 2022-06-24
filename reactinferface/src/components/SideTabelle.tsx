@@ -1,5 +1,6 @@
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
+import InfoIcon from '@mui/icons-material/Info';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import { Collapse } from '@mui/material';
 import Divider from '@mui/material/Divider';
@@ -56,11 +57,14 @@ function SideTabelle<T extends IDBApi>(props: ISideTabelleProps<T>) {
                 component="nav"
                 aria-labelledby="nested-list-subheader"
             >
-                <ListItemButton onClick={handleClick} sx={{ pl: 8 }}>
+                <ListItemButton sx={{ pl: 8 }}>
                     <ListItemIcon>
                         <InboxIcon />
                     </ListItemIcon>
                     <ListItemText primary="Tabelle" />
+                    <IconButton color="primary" aria-label="upload picture" component="span" onClick={handleClick}>
+                        <InfoIcon />
+                    </IconButton>
                     <IconButton color="primary" aria-label="upload picture" component="span" onClick={handleClick}>
                         {open ? <ExpandLess /> : <ExpandMore />}
                     </IconButton>
