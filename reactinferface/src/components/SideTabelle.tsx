@@ -1,7 +1,6 @@
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
-import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import { Collapse } from '@mui/material';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
@@ -61,10 +60,7 @@ function SideTabelle<T extends IDBApi>(props: ISideTabelleProps<T>) {
                     <ListItemIcon>
                         <InboxIcon />
                     </ListItemIcon>
-                    <ListItemText primary="Inbox" />
-                    <IconButton color="primary" aria-label="upload picture" component="span">
-                        <PhotoCamera />
-                    </IconButton>
+                    <ListItemText primary="Tabelle" />
                     <IconButton color="primary" aria-label="upload picture" component="span" onClick={handleClick}>
                         {open ? <ExpandLess /> : <ExpandMore />}
                     </IconButton>
