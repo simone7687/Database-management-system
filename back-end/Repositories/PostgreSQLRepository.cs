@@ -31,7 +31,7 @@ public class PostgreSQLRepository : ISQLRepository
         }
     }
 
-    public ResRepository<IEnumerable<string>> GetTableListName(string? connString)
+    public ResRepository<IEnumerable<string>> GetTablesListName(string? connString)
     {
         try
         {
@@ -51,6 +51,39 @@ public class PostgreSQLRepository : ISQLRepository
         {
             _logger.LogError(Constants.UNHANDLED_ERROR, ex);
             return new ResRepository<IEnumerable<string>>(true, ex.Message, default);
+        }
+    }
+
+    public ResRepository<IEnumerable<InfoTables>> GetInfoTables(string? connString, string tableName)
+    {
+        try
+        {
+            using (var conn = new NpgsqlConnection(connString))
+            {
+                _logger.LogTrace("GetTableListName PostgreSQLRepository");
+                conn.Open();
+                string sQuery = @"select c.column_name  as Name,
+                                c.is_nullable = 'YES' as Nullable,
+                                c.data_type  as type,
+                                tco.constraint_type = 'PRIMARY KEY' as PrimaryKey,
+                                tco.constraint_type = 'FOREIGN KEY' as ForeignKey,
+                                tco.constraint_type = 'UNIQUE' as Index
+                                FROM information_schema.columns c
+                                left join information_schema.key_column_usage kcu on c.column_name = kcu.column_name
+                                left join information_schema.table_constraints tco 
+                                on kcu.constraint_name = tco.constraint_name
+                                and kcu.constraint_schema = tco.constraint_schema
+                                and kcu.constraint_name = tco.constraint_name
+                                WHERE c.table_name   = @TableName
+                                ORDER BY c.table_name";
+                var res = conn.QueryAsync<InfoTables>(sQuery, param: new { TableName= tableName }).Result;
+                return new ResRepository<IEnumerable<InfoTables>>(conn.DataSource, res);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(Constants.UNHANDLED_ERROR, ex);
+            return new ResRepository<IEnumerable<InfoTables>>(true, ex.Message, default);
         }
     }
 }

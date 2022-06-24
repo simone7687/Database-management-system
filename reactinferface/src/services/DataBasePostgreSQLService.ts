@@ -39,7 +39,7 @@ class DataBasePostgreSQLService implements DataBaseService<IPostGressIDBApi> {
             body: raw,
         };
 
-        return this.authService.fetch(this.url + `GetTableListName`, requestOptions, null, "", { signal: abortController.signal })
+        return this.authService.fetch(this.url + `GetTablesListName`, requestOptions, null, "", { signal: abortController.signal })
             .then((response: IHttpResponse<string[]>) => {
                 if (response) {
                     generalIHttpResponseLog(response)

@@ -31,7 +31,7 @@ public class SQLLiteRepository : ISQLRepository
         }
     }
 
-    public ResRepository<IEnumerable<string>> GetTableListName(string? connString)
+    public ResRepository<IEnumerable<string>> GetTablesListName(string? connString)
     {
         throw new NotImplementedException();
     }
