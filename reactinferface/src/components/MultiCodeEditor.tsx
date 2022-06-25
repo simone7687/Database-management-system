@@ -10,6 +10,7 @@ import * as React from 'react';
 import { ReflexContainer, ReflexElement, ReflexSplitter } from 'react-reflex';
 import 'react-reflex/styles.css';
 import CodeEditor from "./CodeEditor";
+import WindowsResults from './WindowsResults';
 
 type ICodeEditorProps = {
     defaultLanguage?: "sql" | undefined,
@@ -19,13 +20,13 @@ type ICodeEditorProps = {
 }
 type ITabs = {
     codeText: string,
-    resuls: QueyData[]
+    results: QueyData[]
 }
 
 function MultiCodeEditor(props: ICodeEditorProps) {
     const { defaultLanguage = "sql", height = "78vh", defaultValue = undefined, handleEditorChange = undefined } = props;
     const [value, setValue] = React.useState('0');
-    const [tabs, setTabs] = React.useState<ITabs[]>([{ resuls: [], codeText: defaultValue ? defaultValue : "" }]);
+    const [tabs, setTabs] = React.useState<ITabs[]>([{ results: [], codeText: defaultValue ? defaultValue : "" }]);
     const handleChange = (event: any, newValue: string) => {
         setValue(newValue);
     };
@@ -76,7 +77,7 @@ function MultiCodeEditor(props: ICodeEditorProps) {
                     <IconButton color="primary" aria-label="upload picture" component="span"
                         onClick={() => {
                             let array = tabs;
-                            array.push({ resuls: [], codeText: defaultValue ? defaultValue : "" });
+                            array.push({ results: [], codeText: defaultValue ? defaultValue : "" });
                             setTabs(array);
                             handleChange({}, (array.length - 1).toString())
                         }}
@@ -103,7 +104,7 @@ function MultiCodeEditor(props: ICodeEditorProps) {
                                     handleEditorChange={(value: string | undefined, event: any) => { handleEditorChangeItems(value, index, event) }}
                                 />
                             </ReflexElement>
-                            {element.resuls.length > 0 &&
+                            {element.results.length > 0 &&
                                 <>
                                     <ReflexSplitter />
                                     <ReflexElement
@@ -111,19 +112,9 @@ function MultiCodeEditor(props: ICodeEditorProps) {
                                         minSize={20}
                                         size={60}
                                     >
-                                        <ReflexContainer orientation="vertical">
-                                            <ReflexSplitter />
-                                            {element.resuls.map((element, index) => (
-                                                <>
-                                                    key={index}
-                                                    <ReflexElement
-                                                        minSize={5}
-                                                    >
-                                                    </ReflexElement>
-                                                    <ReflexSplitter />
-                                                </>
-                                            ))}
-                                        </ReflexContainer>
+                                        <WindowsResults
+                                            results={element.results}
+                                        />
                                     </ReflexElement>
                                 </>
                             }
