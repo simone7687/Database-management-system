@@ -149,6 +149,7 @@ function SideTabelle<T extends IDBApi>(props: ISideTabelleProps<T>) {
                 <InfoTabelle
                     data={infoTabelData}
                     height={750}
+                    rowHeight={50}
                 />
             </MyDialog>
         </>

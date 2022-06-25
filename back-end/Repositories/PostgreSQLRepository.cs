@@ -62,7 +62,8 @@ public class PostgreSQLRepository : ISQLRepository
             {
                 _logger.LogTrace("GetTableListName PostgreSQLRepository");
                 conn.Open();
-                string sQuery = @"select c.column_name  as Name,
+                string sQuery = @"select DISTINCT ON  (c.column_name) 
+                                c.column_name  as Name,
                                 c.is_nullable = 'YES' as Nullable,
                                 c.data_type  as type,
                                 tco.constraint_type = 'PRIMARY KEY' as PrimaryKey,
