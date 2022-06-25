@@ -37,7 +37,7 @@ const columns = [
     {
         field: 'nullable',
         headerName: 'Nullable',
-        maxWidth: 100,
+        maxWidth: 80,
         renderCell: (params: any) => (
             <>
                 {params.value &&
@@ -67,7 +67,7 @@ const columns = [
     {
         field: 'index',
         headerName: 'Index',
-        maxWidth: 100,
+        maxWidth: 60,
         renderCell: (params: any) => (
             <>
                 {params.value &&
@@ -92,6 +92,26 @@ const columns = [
                     <CloseIcon sx={{ color: "red" }} />
                 }
             </>
+        )
+    },
+    {
+        field: 'foreignTable',
+        headerName: 'Tabella Foreign',
+        minWidth: 200,
+        renderCell: (params: any) => (
+            <strong>
+                {params?.value}
+            </strong>
+        )
+    },
+    {
+        field: 'foreignColumn',
+        headerName: 'Column Foreign',
+        minWidth: 200,
+        renderCell: (params: any) => (
+            <strong>
+                {params?.value}
+            </strong>
         )
     },
 ];

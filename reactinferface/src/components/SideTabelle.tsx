@@ -135,7 +135,7 @@ function SideTabelle<T extends IDBApi>(props: ISideTabelleProps<T>) {
             <MyDialog
                 open={infoTabel.open}
                 title={infoTabel.tabelName}
-                maxWidth="md"
+                maxWidth="xl"
                 actions={
                     <>
                         <Button

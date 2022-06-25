@@ -70,11 +70,13 @@ public class PostgreSQLRepository : ISQLRepository
                                 tco.constraint_type = 'PRIMARY KEY' as PrimaryKey,
                                 tco.constraint_type = 'FOREIGN KEY' as ForeignKey,
                                 tco.constraint_type = 'UNIQUE' as Index,
+                                ccu.table_name AS ForeignTable,
+                                ccu.column_name AS ForeignColumn,
                                 row_number() over(order by c.column_name) as Id
                                 FROM information_schema.columns c
-                                left join information_schema.key_column_usage kcu on c.column_name = kcu.column_name and kcu.table_name = @TableName
-                                left join information_schema.table_constraints tco on kcu.constraint_name = tco.constraint_name
-                                and kcu.constraint_schema = tco.constraint_schema and kcu.constraint_name = tco.constraint_name
+                                full join information_schema.key_column_usage kcu on c.column_name = kcu.column_name and kcu.table_name = @TableName
+                                left join information_schema.table_constraints tco on kcu.constraint_name = tco.constraint_name and kcu.constraint_schema = tco.constraint_schema and kcu.constraint_name = tco.constraint_name
+                                left JOIN information_schema.constraint_column_usage AS ccu ON ccu.constraint_name = kcu.constraint_name
                                 WHERE c.table_name = @TableName
                                 ORDER BY c.column_name";
                 var res = conn.QueryAsync<InfoTables>(sQuery, param: new { TableName= tableName }).Result;

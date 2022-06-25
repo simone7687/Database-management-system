@@ -11,4 +11,6 @@ public class InfoTables
     public bool PrimaryKey { get; set; }
     public bool Index { get; set; }
     public bool ForeignKey { get; set; }
+    public string? ForeignTable { get; set; }
+    public string? ForeignColumn { get; set; }
 }
