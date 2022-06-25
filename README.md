@@ -13,3 +13,9 @@ docker run --name postgresql -e POSTGRES_USER=myusername -e POSTGRES_PASSWORD=my
   "port": "5432"
 }
 ```
+web api ulr
+```
+https://localhost:7119
+http://localhost:3000
+https://database-management-syst-614c1.web.app/
+```
