@@ -5,7 +5,10 @@ import TabPanel from '@mui/lab/TabPanel';
 import { Grid } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import Tab from '@mui/material/Tab';
+import { QueyData } from 'model/QueyData';
 import * as React from 'react';
+import { ReflexContainer, ReflexElement, ReflexSplitter } from 'react-reflex';
+import 'react-reflex/styles.css';
 import CodeEditor from "./CodeEditor";
 
 type ICodeEditorProps = {
@@ -16,12 +19,13 @@ type ICodeEditorProps = {
 }
 type ITabs = {
     codeText: string,
+    resuls: QueyData[]
 }
 
 function MultiCodeEditor(props: ICodeEditorProps) {
-    const { defaultLanguage = "sql", height = "90vh", defaultValue = undefined, handleEditorChange = undefined } = props;
+    const { defaultLanguage = "sql", height = "78vh", defaultValue = undefined, handleEditorChange = undefined } = props;
     const [value, setValue] = React.useState('0');
-    const [tabs, setTabs] = React.useState<ITabs[]>([{ codeText: defaultValue ? defaultValue : "" }]);
+    const [tabs, setTabs] = React.useState<ITabs[]>([{ resuls: [], codeText: defaultValue ? defaultValue : "" }]);
     const handleChange = (event: any, newValue: string) => {
         setValue(newValue);
     };
@@ -43,6 +47,10 @@ function MultiCodeEditor(props: ICodeEditorProps) {
 
     return (
         <TabContext value={value}>
+
+
+
+
             <Grid
                 container
                 direction="row"
@@ -68,7 +76,7 @@ function MultiCodeEditor(props: ICodeEditorProps) {
                     <IconButton color="primary" aria-label="upload picture" component="span"
                         onClick={() => {
                             let array = tabs;
-                            array.push({ codeText: defaultValue ? defaultValue : "" });
+                            array.push({ resuls: [], codeText: defaultValue ? defaultValue : "" });
                             setTabs(array);
                             handleChange({}, (array.length - 1).toString())
                         }}
@@ -82,13 +90,47 @@ function MultiCodeEditor(props: ICodeEditorProps) {
                     value={index.toString()}
                     key={index}
                 >
-                    <CodeEditor
-                        key={index}
-                        defaultLanguage={defaultLanguage}
-                        height={height}
-                        defaultValue={element.codeText}
-                        handleEditorChange={(value: string | undefined, event: any) => { handleEditorChangeItems(value, index, event) }}
-                    />
+
+
+                    <div style={{ height: height, width: '100%' }}>
+                        <ReflexContainer orientation="horizontal">
+                            <ReflexElement className="left-pane">
+                                <CodeEditor
+                                    key={index}
+                                    defaultLanguage={defaultLanguage}
+                                    height={height}
+                                    defaultValue={element.codeText}
+                                    handleEditorChange={(value: string | undefined, event: any) => { handleEditorChangeItems(value, index, event) }}
+                                />
+                            </ReflexElement>
+                            {element.resuls.length > 0 &&
+                                <>
+                                    <ReflexSplitter />
+                                    <ReflexElement
+                                        className="right-pane"
+                                        minSize={20}
+                                        size={60}
+                                    >
+                                        <ReflexContainer orientation="vertical">
+                                            <ReflexSplitter />
+                                            {element.resuls.map((element, index) => (
+                                                <>
+                                                    key={index}
+                                                    <ReflexElement
+                                                        minSize={5}
+                                                    >
+                                                    </ReflexElement>
+                                                    <ReflexSplitter />
+                                                </>
+                                            ))}
+                                        </ReflexContainer>
+                                    </ReflexElement>
+                                </>
+                            }
+                        </ReflexContainer>
+                    </div>
+
+
                 </TabPanel>
             })}
         </TabContext>

@@ -16,7 +16,7 @@ public class PostgreSQLController : ControllerBase, ISQLController<PostgreSQLCre
     }
 
     [HttpPut("Connect")]
-    public HttpResponse Connect(PostgreSQLCredentialsModel credentials)
+    public HttpResponse<string> Connect(PostgreSQLCredentialsModel credentials)
     {
         string connString = string.Format(
             "Server={0};Username={1};Database={2};Port={3};Password={4};SSLMode=Prefer",
@@ -30,13 +30,13 @@ public class PostgreSQLController : ControllerBase, ISQLController<PostgreSQLCre
         var conn = _repository.TestConnection(connString);
         if (conn.Error)
         {
-            return new HttpResponse(HttpStatusCode.ServiceUnavailable, conn.Message, conn.Content);
+            return new HttpResponse<string>(HttpStatusCode.ServiceUnavailable, conn.Message, conn.Content);
         }
-        return new HttpResponse(HttpStatusCode.OK, conn.Message, conn.Content);
+        return new HttpResponse<string>(HttpStatusCode.OK, conn.Message, conn.Content);
     }
 
     [HttpPost("GetTablesListName")]
-    public HttpResponse GetTablesListName(PostgreSQLCredentialsModel credentials)
+    public HttpResponse<IEnumerable<string>> GetTablesListName(PostgreSQLCredentialsModel credentials)
     {
         string connString = string.Format(
             "Server={0};Username={1};Database={2};Port={3};Password={4};SSLMode=Prefer",
@@ -47,16 +47,16 @@ public class PostgreSQLController : ControllerBase, ISQLController<PostgreSQLCre
             credentials.Password
         );
 
-        var conn = _repository.GetTablesListName(connString);
-        if (conn.Error)
+        var data = _repository.GetTablesListName(connString);
+        if (data.Error)
         {
-            return new HttpResponse(HttpStatusCode.ServiceUnavailable, conn.Message, conn.Content);
+            return new HttpResponse<IEnumerable<string>>(HttpStatusCode.ServiceUnavailable, data.Message, data.Content);
         }
-        return new HttpResponse(HttpStatusCode.OK, conn.Message, conn.Content);
+        return new HttpResponse<IEnumerable<string>>(HttpStatusCode.OK, data.Message, data.Content);
     }
 
     [HttpPost("GetInfoTables")]
-    public HttpResponse GetInfoTables([FromBody] PostgreSQLCredentialsModel credentials, string tableName)
+    public HttpResponse<IEnumerable<InfoTables>> GetInfoTables([FromBody] PostgreSQLCredentialsModel credentials, string tableName)
     {
         string connString = string.Format(
             "Server={0};Username={1};Database={2};Port={3};Password={4};SSLMode=Prefer",
@@ -67,11 +67,32 @@ public class PostgreSQLController : ControllerBase, ISQLController<PostgreSQLCre
             credentials.Password
         );
 
-        var conn = _repository.GetInfoTables(connString, tableName);
-        if (conn.Error)
+        var data = _repository.GetInfoTables(connString, tableName);
+        if (data.Error)
         {
-            return new HttpResponse(HttpStatusCode.ServiceUnavailable, conn.Message, conn.Content);
+            return new HttpResponse<IEnumerable<InfoTables>>(HttpStatusCode.ServiceUnavailable, data.Message, data.Content);
         }
-        return new HttpResponse(HttpStatusCode.OK, conn.Message, conn.Content);
+        return new HttpResponse<IEnumerable<InfoTables>>(HttpStatusCode.OK, data.Message, data.Content);
+    }
+
+    [HttpPost("ExecuteQueries")]
+    public HttpResponse<IEnumerable<QueyData<object>>> ExecuteQueries([FromBody] PostgreSQLCredentialsModel credentials, string query)
+    {
+        string connString = string.Format(
+            "Server={0};Username={1};Database={2};Port={3};Password={4};SSLMode=Prefer",
+            credentials.Host,
+            credentials.User,
+            credentials.DBname,
+            credentials.Port,
+            credentials.Password
+        );
+        var arrayQuery = query.Split(";");
+
+        var data = _repository.ExecuteQueries(connString, arrayQuery);
+        if (data.Error)
+        {
+            return new HttpResponse<IEnumerable<QueyData<object>>>(HttpStatusCode.ServiceUnavailable, data.Message, data.Content);
+        }
+        return new HttpResponse<IEnumerable<QueyData<object>>>(HttpStatusCode.OK, data.Message, data.Content);
     }
 }

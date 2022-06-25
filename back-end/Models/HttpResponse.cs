@@ -1,13 +1,14 @@
 using System.ComponentModel.DataAnnotations;
 using System.Net;
 
-public class HttpResponse : HttpResponseMessage
+public class HttpResponse<T> : HttpResponseMessage
 {
     public HttpResponse(HttpStatusCode statusCode)
     {
         StatusCode = statusCode;
+        Messages = "Status " + statusCode;
     }
-    public HttpResponse(HttpStatusCode statusCode, string messages, object? content)
+    public HttpResponse(HttpStatusCode statusCode, string messages, T? content)
     {
         StatusCode = statusCode;
         Messages = messages;
@@ -18,6 +19,6 @@ public class HttpResponse : HttpResponseMessage
         StatusCode = statusCode;
         Messages = messages;
     }
-    public new object? Content { get; set; }
+    public new T? Content { get; set; }
     public string Messages { get; set; }
 }
