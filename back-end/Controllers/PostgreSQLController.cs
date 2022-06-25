@@ -30,8 +30,48 @@ public class PostgreSQLController : ControllerBase, ISQLController<PostgreSQLCre
         var conn = _repository.TestConnection(connString);
         if (conn.Error)
         {
-            return new HttpResponse(HttpStatusCode.ServiceUnavailable, conn.Message, conn.ConnectionString);
+            return new HttpResponse(HttpStatusCode.ServiceUnavailable, conn.Message, conn.Content);
         }
-        return new HttpResponse(HttpStatusCode.OK, conn.Message, conn.ConnectionString);
+        return new HttpResponse(HttpStatusCode.OK, conn.Message, conn.Content);
+    }
+
+    [HttpPost("GetTablesListName")]
+    public HttpResponse GetTablesListName(PostgreSQLCredentialsModel credentials)
+    {
+        string connString = string.Format(
+            "Server={0};Username={1};Database={2};Port={3};Password={4};SSLMode=Prefer",
+            credentials.Host,
+            credentials.User,
+            credentials.DBname,
+            credentials.Port,
+            credentials.Password
+        );
+
+        var conn = _repository.GetTablesListName(connString);
+        if (conn.Error)
+        {
+            return new HttpResponse(HttpStatusCode.ServiceUnavailable, conn.Message, conn.Content);
+        }
+        return new HttpResponse(HttpStatusCode.OK, conn.Message, conn.Content);
+    }
+
+    [HttpPost("GetInfoTables")]
+    public HttpResponse GetInfoTables([FromBody] PostgreSQLCredentialsModel credentials, string tableName)
+    {
+        string connString = string.Format(
+            "Server={0};Username={1};Database={2};Port={3};Password={4};SSLMode=Prefer",
+            credentials.Host,
+            credentials.User,
+            credentials.DBname,
+            credentials.Port,
+            credentials.Password
+        );
+
+        var conn = _repository.GetInfoTables(connString, tableName);
+        if (conn.Error)
+        {
+            return new HttpResponse(HttpStatusCode.ServiceUnavailable, conn.Message, conn.Content);
+        }
+        return new HttpResponse(HttpStatusCode.OK, conn.Message, conn.Content);
     }
 }

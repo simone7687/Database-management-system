@@ -30,7 +30,7 @@ function MyDialog(props: IMyDialogProps) {
         );
     } catch (error) {
         console.error(error)
-        return <div style={{ color: "red" }}>DRDialog error</div>
+        return <div style={{ color: "red" }}>MyDialog error</div>
     }
 }
 

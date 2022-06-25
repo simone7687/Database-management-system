@@ -7,18 +7,20 @@ import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import { DataBaseService } from 'model/DataBaseService';
 import { IDBApi } from 'model/IDBApi';
 import { ReactNode, useState } from 'react';
 import SideStoreProcedure from './SideStoreProcedure';
 import SideTabelle from './SideTabelle';
 
-type ISideHostProps = {
-    database: IDBApi,
+type ISideHostProps<T extends IDBApi> = {
+    database: T,
     children?: ReactNode,
+    dataBaseService: DataBaseService<T>,
 }
 
-function SideHost(props: ISideHostProps) {
-    const { database, children } = props;
+function SideHost<T extends IDBApi>(props: ISideHostProps<T>) {
+    const { database, children, dataBaseService } = props;
     const [open, setOpen] = useState(false);
     const handleClick = () => {
         setOpen(!open);
@@ -41,7 +43,7 @@ function SideHost(props: ISideHostProps) {
                 </IconButton>
             </ListItemButton>
             <Collapse in={open} timeout="auto" unmountOnExit>
-                <SideTabelle />
+                <SideTabelle dataBaseService={dataBaseService} conn={database} />
                 <SideStoreProcedure />
             </Collapse>
         </List>

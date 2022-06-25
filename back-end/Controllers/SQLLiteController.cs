@@ -21,8 +21,20 @@ public class SQLLiteController : ControllerBase, ISQLController<SQLLiteCredentia
         var conn = _repository.TestConnection(credentials.Path);
         if (conn.Error)
         {
-            return new HttpResponse(HttpStatusCode.ServiceUnavailable, conn.Message, conn.ConnectionString);
+            return new HttpResponse(HttpStatusCode.ServiceUnavailable, conn.Message, conn.Content);
         }
-        return new HttpResponse(HttpStatusCode.OK, conn.Message, conn.ConnectionString);
+        return new HttpResponse(HttpStatusCode.OK, conn.Message, conn.Content);
+    }
+
+    [HttpPost("GetTablesListName")]
+    public HttpResponse GetTablesListName(SQLLiteCredentialsModel credentials)
+    {
+        throw new NotImplementedException();
+    }
+
+    [HttpPost("GetInfoTables")]
+    public HttpResponse GetInfoTables([FromBody] PostgreSQLCredentialsModel credentials, string tableName)
+    {
+        throw new NotImplementedException();
     }
 }
