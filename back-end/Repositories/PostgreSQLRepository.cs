@@ -67,7 +67,8 @@ public class PostgreSQLRepository : ISQLRepository
                                 c.data_type  as type,
                                 tco.constraint_type = 'PRIMARY KEY' as PrimaryKey,
                                 tco.constraint_type = 'FOREIGN KEY' as ForeignKey,
-                                tco.constraint_type = 'UNIQUE' as Index
+                                tco.constraint_type = 'UNIQUE' as Index,
+                                row_number() over(order by c.column_name) as Id
                                 FROM information_schema.columns c
                                 left join information_schema.key_column_usage kcu on c.column_name = kcu.column_name
                                 left join information_schema.table_constraints tco 
@@ -75,7 +76,7 @@ public class PostgreSQLRepository : ISQLRepository
                                 and kcu.constraint_schema = tco.constraint_schema
                                 and kcu.constraint_name = tco.constraint_name
                                 WHERE c.table_name   = @TableName
-                                ORDER BY c.table_name";
+                                ORDER BY c.column_name";
                 var res = conn.QueryAsync<InfoTables>(sQuery, param: new { TableName= tableName }).Result;
                 return new ResRepository<IEnumerable<InfoTables>>(conn.DataSource, res);
             }

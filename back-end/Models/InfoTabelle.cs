@@ -3,6 +3,7 @@ using System.Net;
 
 public class InfoTables
 {
+    public int Id { get; set; }
     public string? Name { get; set; }
     public string? Type { get; set; }
     public bool Nullable { get; set; }

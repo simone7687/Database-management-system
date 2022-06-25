@@ -1,5 +1,6 @@
 
-export type InfoTabelle = {
+export type InfoTabelleModel = {
+    id: number,
     name: string,
     type: string,
     nullable: boolean,

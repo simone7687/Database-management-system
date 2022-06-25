@@ -2,7 +2,7 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import InfoIcon from '@mui/icons-material/Info';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
-import { Collapse } from '@mui/material';
+import { Button, Collapse } from '@mui/material';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
@@ -13,7 +13,10 @@ import ListItemText from '@mui/material/ListItemText';
 import { DataBaseService } from 'model/DataBaseService';
 import { IDBApi } from 'model/IDBApi';
 import { IHttpResponse } from 'model/IHttpResponse';
+import { InfoTabelleModel } from 'model/InfoTabelleModel';
 import { useEffect, useState } from 'react';
+import InfoTabelle from './InfoTabelle';
+import MyDialog from './MyDialog';
 
 type ISideTabelleProps<T extends IDBApi> = {
     conn: T,
@@ -24,31 +27,58 @@ type ISideTabelleProps<T extends IDBApi> = {
 function SideTabelle<T extends IDBApi>(props: ISideTabelleProps<T>) {
     const { dataBaseService, conn } = props;
     const [open, setOpen] = useState(false);
-    const [tabelleList, settabelleList] = useState<string[]>([])
+    const [infoTabel, setInfoTabel] = useState({ open: false, tabelName: "" });
+    const [infoTabelData, setInfoTabelData] = useState<InfoTabelleModel[]>([]);
+    const [tabelleList, setTabelleList] = useState<string[]>([])
     const handleClick = () => {
         setOpen(!open);
     };
 
+
     useEffect(() => {
-        if (open) {
+        if (infoTabel.open) {
             const abortController = new AbortController();
-            dataBaseService.getTableListName(conn, abortController).then((res: IHttpResponse<string[]>) => {
+            dataBaseService.getInfoTables(conn, infoTabel.tabelName, abortController).then((res: IHttpResponse<InfoTabelleModel[]>) => {
                 if (abortController.signal.aborted) {
-                    settabelleList([])
+                    setInfoTabelData([])
                 }
                 else if (!res.isSuccessStatusCode) {
                     window.alert(res.messages);
-                    settabelleList([])
+                    setInfoTabelData([])
                 }
                 else if (res.content) {
-                    settabelleList(res.content)
+                    setInfoTabelData(res.content)
                 }
                 else {
-                    settabelleList([])
+                    setInfoTabelData([])
                 }
             }).catch((err: Error) => {
                 console.log("getTabellePostgre", err)
-                settabelleList([])
+                setInfoTabelData([])
+            })
+        }
+    }, [infoTabel, dataBaseService, conn])
+
+    useEffect(() => {
+        if (open) {
+            const abortController = new AbortController();
+            dataBaseService.getTablesListName(conn, abortController).then((res: IHttpResponse<string[]>) => {
+                if (abortController.signal.aborted) {
+                    setTabelleList([])
+                }
+                else if (!res.isSuccessStatusCode) {
+                    window.alert(res.messages);
+                    setTabelleList([])
+                }
+                else if (res.content) {
+                    setTabelleList(res.content)
+                }
+                else {
+                    setTabelleList([])
+                }
+            }).catch((err: Error) => {
+                console.log("getTabellePostgre", err)
+                setTabelleList([])
             })
         }
     }, [dataBaseService, conn, open])
@@ -71,14 +101,21 @@ function SideTabelle<T extends IDBApi>(props: ISideTabelleProps<T>) {
                     </IconButton>
                 </ListItemButton>
                 <Collapse in={open} timeout="auto" unmountOnExit>
-                    {tabelleList.length > 0 && tabelleList.map((text, index) => (
+                    {tabelleList.length > 0 && tabelleList.map((tabelName, index) => (
                         <ListItem key={index} disablePadding>
                             <ListItemButton sx={{ pl: 12 }}>
                                 <ListItemIcon>
                                     {index % 2 === 0 ? <InboxIcon /> : <InboxIcon />}
                                 </ListItemIcon>
-                                <ListItemText primary={text} />
-                                <IconButton color="primary" aria-label="upload picture" component="span" onClick={handleClick}>
+                                <ListItemText primary={tabelName} />
+                                <IconButton
+                                    color="primary"
+                                    aria-label="upload picture"
+                                    component="span"
+                                    onClick={() => {
+                                        setInfoTabel({ open: true, tabelName: tabelName })
+                                    }}
+                                >
                                     <InfoIcon />
                                 </IconButton>
                             </ListItemButton>
@@ -93,6 +130,27 @@ function SideTabelle<T extends IDBApi>(props: ISideTabelleProps<T>) {
                     }
                 </Collapse>
             </List>
+
+
+            <MyDialog
+                open={infoTabel.open}
+                title={infoTabel.tabelName}
+                maxWidth="md"
+                actions={
+                    <>
+                        <Button
+                            onClick={() => {
+                                setInfoTabel({ open: false, tabelName: "" })
+                            }}
+                        >Chiudi</Button>
+                    </>
+                }
+            >
+                <InfoTabelle
+                    data={infoTabelData}
+                    height={750}
+                />
+            </MyDialog>
         </>
     );
 }

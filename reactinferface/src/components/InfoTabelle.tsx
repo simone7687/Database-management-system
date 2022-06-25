@@ -1,13 +1,13 @@
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import { DataGrid } from '@mui/x-data-grid';
-import { InfoTabelle } from 'model/InfoTabelle';
+import { InfoTabelleModel } from 'model/InfoTabelleModel';
 
 const columns = [
     {
         field: 'name',
-        headerName: '',
-        width: 20,
+        headerName: 'Nome',
+        minWidth: 200,
         renderCell: (params: any) => (
             <strong>
                 {params?.value}
@@ -16,8 +16,8 @@ const columns = [
     },
     {
         field: 'type',
-        headerName: '',
-        width: 20,
+        headerName: 'Tipo',
+        minWidth: 200,
         renderCell: (params: any) => (
             <strong>
                 {params?.value}
@@ -26,9 +26,8 @@ const columns = [
     },
     {
         field: 'nullable',
-        headerName: 'Membership',
-        flex: 1,
-        minWidth: 50,
+        headerName: 'Nullable',
+        maxWidth: 100,
         renderCell: (params: any) => (
             <>
                 {params.value &&
@@ -41,10 +40,9 @@ const columns = [
         ),
     },
     {
-        field: 'primaryKey	',
-        headerName: 'Month',
-        flex: 1,
-        maxWidth: 60,
+        field: 'primaryKey',
+        headerName: 'Primary Key',
+        maxWidth: 100,
         renderCell: (params: any) => (
             <>
                 {params.value &&
@@ -58,8 +56,8 @@ const columns = [
     },
     {
         field: 'index',
-        headerName: 'Year',
-        maxWidth: 40,
+        headerName: 'Index',
+        maxWidth: 100,
         renderCell: (params: any) => (
             <>
                 {params.value &&
@@ -73,8 +71,8 @@ const columns = [
     },
     {
         field: 'foreignKey',
-        headerName: 'News',
-        maxWidth: 20,
+        headerName: 'Foreign Key',
+        maxWidth: 100,
         renderCell: (params: any) => (
             <>
                 {params.value &&
@@ -89,20 +87,23 @@ const columns = [
 ];
 
 type InfoTabelleProps = {
-    rowHeight: number,
-    data: InfoTabelle[],
+    rowHeight?: number,
+    height?: number,
+    data: InfoTabelleModel[],
 }
 
 function InfoTabelle(props: InfoTabelleProps) {
-    const { data, rowHeight = 75 } = props;
+    const { data, rowHeight = 75, height = 350 } = props;
 
     try {
         return (
-            <DataGrid
-                rows={data}
-                columns={columns}
-                rowHeight={rowHeight}
-            />
+            <div style={{ height: height, width: '100%' }}>
+                <DataGrid
+                    rows={data}
+                    columns={columns}
+                    rowHeight={rowHeight}
+                />
+            </div>
         );
     } catch (error) {
         console.error(error)
