@@ -139,7 +139,10 @@ function App() {
                         sx={{ flexGrow: 1, bgcolor: 'background.default', p: 3 }}
                     >
                         <Toolbar />
-                        <MultiCodeEditor />
+                        <MultiCodeEditor
+                            dataBaseService={undefined}
+                            conn={undefined}
+                        />
                     </Grid>
                 </Box>
 

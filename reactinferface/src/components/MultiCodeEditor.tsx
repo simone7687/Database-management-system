@@ -5,6 +5,8 @@ import TabPanel from '@mui/lab/TabPanel';
 import { Grid } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import Tab from '@mui/material/Tab';
+import { DataBaseService } from 'model/DataBaseService';
+import { IDBApi } from 'model/IDBApi';
 import { QueyData } from 'model/QueyData';
 import * as React from 'react';
 import { ReflexContainer, ReflexElement, ReflexSplitter } from 'react-reflex';
@@ -12,23 +14,37 @@ import 'react-reflex/styles.css';
 import CodeEditor from "./CodeEditor";
 import WindowsResults from './WindowsResults';
 
-type ICodeEditorProps = {
+type ICodeEditorProps<T extends IDBApi> = {
     defaultLanguage?: "sql" | undefined,
     height?: string | number | undefined,
     defaultValue?: string | undefined,
     handleEditorChange?: (value: string | undefined, event: any) => void,
+    dataBaseService: DataBaseService<T> | undefined,
+    conn: T | undefined,
 }
 type ITabs = {
     codeText: string,
     results: QueyData[]
 }
 
-function MultiCodeEditor(props: ICodeEditorProps) {
-    const { defaultLanguage = "sql", height = "78vh", defaultValue = undefined, handleEditorChange = undefined } = props;
+function MultiCodeEditor<T extends IDBApi>(props: ICodeEditorProps<T>) {
+    const { defaultLanguage = "sql", height = "78vh", defaultValue = undefined, handleEditorChange = undefined, conn, dataBaseService } = props;
     const [value, setValue] = React.useState('0');
+    const [executeQuery, setExecuteQuery] = React.useState(false);
     const [tabs, setTabs] = React.useState<ITabs[]>([{ results: [], codeText: defaultValue ? defaultValue : "" }]);
     const handleChange = (event: any, newValue: string) => {
         setValue(newValue);
+    };
+    const setResults = (value: QueyData[], index: number) => {
+        let array = tabs;
+        if (value) {
+            array[index].results = value
+            setTabs(array);
+        }
+        else {
+            array[index].results = []
+            setTabs(array);
+        }
     };
 
     function handleEditorChangeItems(value: string | undefined, index: number, event: any) {
@@ -48,10 +64,6 @@ function MultiCodeEditor(props: ICodeEditorProps) {
 
     return (
         <TabContext value={value}>
-
-
-
-
             <Grid
                 container
                 direction="row"
@@ -91,8 +103,6 @@ function MultiCodeEditor(props: ICodeEditorProps) {
                     value={index.toString()}
                     key={index}
                 >
-
-
                     <div style={{ height: height, width: '100%' }}>
                         <ReflexContainer orientation="horizontal">
                             <ReflexElement className="left-pane">
@@ -113,15 +123,19 @@ function MultiCodeEditor(props: ICodeEditorProps) {
                                         size={60}
                                     >
                                         <WindowsResults
+                                            conn={conn}
+                                            dataBaseService={dataBaseService}
                                             results={element.results}
+                                            codeText={element.codeText}
+                                            executeQuery={executeQuery}
+                                            setExecuteQuery={setExecuteQuery}
+                                            setResults={(value: QueyData[]) => { setResults(value, index) }}
                                         />
                                     </ReflexElement>
                                 </>
                             }
                         </ReflexContainer>
                     </div>
-
-
                 </TabPanel>
             })}
         </TabContext>
