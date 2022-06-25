@@ -44,33 +44,35 @@ function WindowsResults<T extends IDBApi>(props: IWindowsResultsProps<T>) {
     }, [dataBaseService, conn, codeText, executeQuery, setResults, setExecuteQuery])
 
     return (
-        <ReflexContainer orientation="vertical">
-            <ReflexSplitter />
+        <>
             {results.length > 0 &&
                 <>
                     <ReflexSplitter />
-                    <ReflexElement
-                        className="right-pane"
-                        minSize={20}
-                        size={60}
-                    >
-                        <ReflexContainer orientation="vertical">
-                            <ReflexSplitter />
-                            {results.map((element, index) => (
-                                <>
-                                    key={index}
-                                    <ReflexElement
-                                        minSize={5}
-                                    >
-                                    </ReflexElement>
-                                    <ReflexSplitter />
-                                </>
-                            ))}
-                        </ReflexContainer>
-                    </ReflexElement>
+                    <ReflexContainer orientation="vertical">
+                        <ReflexSplitter />
+                        <ReflexElement
+                            className="right-pane"
+                            minSize={20}
+                            size={60}
+                        >
+                            <ReflexContainer orientation="vertical">
+                                <ReflexSplitter />
+                                {results.map((element, index) => (
+                                    <>
+                                        key={index}
+                                        <ReflexElement
+                                            minSize={5}
+                                        >
+                                        </ReflexElement>
+                                        <ReflexSplitter />
+                                    </>
+                                ))}
+                            </ReflexContainer>
+                        </ReflexElement>
+                    </ReflexContainer>
                 </>
             }
-        </ReflexContainer>
+        </>
     );
 }
 export default WindowsResults;

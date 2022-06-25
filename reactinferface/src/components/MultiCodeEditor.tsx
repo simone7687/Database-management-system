@@ -1,4 +1,5 @@
 import AddIcon from '@mui/icons-material/Add';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
@@ -9,7 +10,7 @@ import { DataBaseService } from 'model/DataBaseService';
 import { IDBApi } from 'model/IDBApi';
 import { QueyData } from 'model/QueyData';
 import * as React from 'react';
-import { ReflexContainer, ReflexElement, ReflexSplitter } from 'react-reflex';
+import { ReflexContainer, ReflexElement } from 'react-reflex';
 import 'react-reflex/styles.css';
 import CodeEditor from "./CodeEditor";
 import WindowsResults from './WindowsResults';
@@ -86,7 +87,7 @@ function MultiCodeEditor<T extends IDBApi>(props: ICodeEditorProps<T>) {
                     </TabList>
                 </Grid>
                 <Grid item xs={2}>
-                    <IconButton color="primary" aria-label="upload picture" component="span"
+                    <IconButton color="primary" aria-label="Aggiungi Tab" component="span"
                         onClick={() => {
                             let array = tabs;
                             array.push({ results: [], codeText: defaultValue ? defaultValue : "" });
@@ -95,6 +96,13 @@ function MultiCodeEditor<T extends IDBApi>(props: ICodeEditorProps<T>) {
                         }}
                     >
                         <AddIcon />
+                    </IconButton>
+                    <IconButton color="primary" aria-label="Esegui Query" component="span"
+                        onClick={() => {
+                            setExecuteQuery(true)
+                        }}
+                    >
+                        <PlayArrowIcon />
                     </IconButton>
                 </Grid>
             </Grid>
@@ -114,26 +122,15 @@ function MultiCodeEditor<T extends IDBApi>(props: ICodeEditorProps<T>) {
                                     handleEditorChange={(value: string | undefined, event: any) => { handleEditorChangeItems(value, index, event) }}
                                 />
                             </ReflexElement>
-                            {element.results.length > 0 &&
-                                <>
-                                    <ReflexSplitter />
-                                    <ReflexElement
-                                        className="right-pane"
-                                        minSize={20}
-                                        size={60}
-                                    >
-                                        <WindowsResults
-                                            conn={conn}
-                                            dataBaseService={dataBaseService}
-                                            results={element.results}
-                                            codeText={element.codeText}
-                                            executeQuery={executeQuery}
-                                            setExecuteQuery={setExecuteQuery}
-                                            setResults={(value: QueyData[]) => { setResults(value, index) }}
-                                        />
-                                    </ReflexElement>
-                                </>
-                            }
+                            <WindowsResults
+                                conn={conn}
+                                dataBaseService={dataBaseService}
+                                results={element.results}
+                                codeText={element.codeText}
+                                executeQuery={executeQuery}
+                                setExecuteQuery={setExecuteQuery}
+                                setResults={(value: QueyData[]) => { setResults(value, index) }}
+                            />
                         </ReflexContainer>
                     </div>
                 </TabPanel>
