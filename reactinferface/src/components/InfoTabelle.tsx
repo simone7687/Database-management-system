@@ -15,6 +15,16 @@ const columns = [
         )
     },
     {
+        field: 'tableName',
+        headerName: 'Nome Tabella',
+        minWidth: 200,
+        renderCell: (params: any) => (
+            <strong>
+                {params?.value}
+            </strong>
+        )
+    },
+    {
         field: 'type',
         headerName: 'Tipo',
         minWidth: 200,

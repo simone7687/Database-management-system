@@ -62,21 +62,20 @@ public class PostgreSQLRepository : ISQLRepository
             {
                 _logger.LogTrace("GetTableListName PostgreSQLRepository");
                 conn.Open();
-                string sQuery = @"select DISTINCT ON  (c.column_name) 
+                string sQuery = @"select
                                 c.column_name  as Name,
                                 c.is_nullable = 'YES' as Nullable,
                                 c.data_type  as type,
+                                c.table_name as TableName,
                                 tco.constraint_type = 'PRIMARY KEY' as PrimaryKey,
                                 tco.constraint_type = 'FOREIGN KEY' as ForeignKey,
                                 tco.constraint_type = 'UNIQUE' as Index,
                                 row_number() over(order by c.column_name) as Id
                                 FROM information_schema.columns c
-                                left join information_schema.key_column_usage kcu on c.column_name = kcu.column_name
-                                left join information_schema.table_constraints tco 
-                                on kcu.constraint_name = tco.constraint_name
-                                and kcu.constraint_schema = tco.constraint_schema
-                                and kcu.constraint_name = tco.constraint_name
-                                WHERE c.table_name   = @TableName
+                                left join information_schema.key_column_usage kcu on c.column_name = kcu.column_name and kcu.table_name = @TableName
+                                left join information_schema.table_constraints tco on kcu.constraint_name = tco.constraint_name
+                                and kcu.constraint_schema = tco.constraint_schema and kcu.constraint_name = tco.constraint_name
+                                WHERE c.table_name = @TableName
                                 ORDER BY c.column_name";
                 var res = conn.QueryAsync<InfoTables>(sQuery, param: new { TableName= tableName }).Result;
                 return new ResRepository<IEnumerable<InfoTables>>(conn.DataSource, res);

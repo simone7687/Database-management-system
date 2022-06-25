@@ -31,4 +31,10 @@ public class SQLLiteController : ControllerBase, ISQLController<SQLLiteCredentia
     {
         throw new NotImplementedException();
     }
+
+    [HttpPost("GetInfoTables")]
+    public HttpResponse GetInfoTables([FromBody] PostgreSQLCredentialsModel credentials, string tableName)
+    {
+        throw new NotImplementedException();
+    }
 }

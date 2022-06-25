@@ -35,4 +35,9 @@ public class SQLLiteRepository : ISQLRepository
     {
         throw new NotImplementedException();
     }
+
+    public ResRepository<IEnumerable<InfoTables>> GetInfoTables(string? connString, string tableName)
+    {
+        throw new NotImplementedException();
+    }
 }
