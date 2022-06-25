@@ -9,6 +9,7 @@ Il Back-end approvano solo la connesione da:
 Questo è possibile modificarlo da [qui](https://github.com/simone7687/Database-management-system/blob/master/back-end/Program.cs#L12).
 ### Front-end
 Il Front-end invece di default si connette all url: [https://localhost:7119](https://localhost:7119)
+
 Questo è possibile modificarlo da qui.
 
 ## Postgresql Docker
