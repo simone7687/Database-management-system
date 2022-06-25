@@ -35,8 +35,8 @@ public class PostgreSQLController : ControllerBase, ISQLController<PostgreSQLCre
         return new HttpResponse(HttpStatusCode.OK, conn.Message, conn.Content);
     }
 
-    [HttpPost("GetTableListName")]
-    public HttpResponse GetTableListName(PostgreSQLCredentialsModel credentials)
+    [HttpPost("GetTablesListName")]
+    public HttpResponse GetTablesListName(PostgreSQLCredentialsModel credentials)
     {
         string connString = string.Format(
             "Server={0};Username={1};Database={2};Port={3};Password={4};SSLMode=Prefer",

@@ -36,6 +36,10 @@ function SideTabelle<T extends IDBApi>(props: ISideTabelleProps<T>) {
                 if (abortController.signal.aborted) {
                     settabelleList([])
                 }
+                else if (!res.isSuccessStatusCode) {
+                    window.alert(res.messages);
+                    settabelleList([])
+                }
                 else if (res.content) {
                     settabelleList(res.content)
                 }
@@ -63,9 +67,6 @@ function SideTabelle<T extends IDBApi>(props: ISideTabelleProps<T>) {
                     </ListItemIcon>
                     <ListItemText primary="Tabelle" />
                     <IconButton color="primary" aria-label="upload picture" component="span" onClick={handleClick}>
-                        <InfoIcon />
-                    </IconButton>
-                    <IconButton color="primary" aria-label="upload picture" component="span" onClick={handleClick}>
                         {open ? <ExpandLess /> : <ExpandMore />}
                     </IconButton>
                 </ListItemButton>
@@ -77,6 +78,9 @@ function SideTabelle<T extends IDBApi>(props: ISideTabelleProps<T>) {
                                     {index % 2 === 0 ? <InboxIcon /> : <InboxIcon />}
                                 </ListItemIcon>
                                 <ListItemText primary={text} />
+                                <IconButton color="primary" aria-label="upload picture" component="span" onClick={handleClick}>
+                                    <InfoIcon />
+                                </IconButton>
                             </ListItemButton>
                         </ListItem>
                     ))}

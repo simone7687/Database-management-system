@@ -7,5 +7,5 @@ public interface ISQLController<T>
 {
     [HttpPut("Connect")]
     public HttpResponse Connect(T credentials);
-    public HttpResponse GetTableListName(T credentials);
+    public HttpResponse GetTablesListName(T credentials);
 }
