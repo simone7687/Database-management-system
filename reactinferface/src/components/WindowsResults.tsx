@@ -47,7 +47,9 @@ function WindowsResults<T extends IDBApi>(props: IWindowsResultsProps<T>) {
             {results.length > 0 &&
                 <>
                     <ReflexSplitter />
-                    <ReflexContainer orientation="vertical">
+                    <ReflexContainer
+                        orientation="vertical"
+                    >
                         <ReflexSplitter />
                         <ReflexElement
                             className="right-pane"
@@ -60,6 +62,7 @@ function WindowsResults<T extends IDBApi>(props: IWindowsResultsProps<T>) {
                                     <>
                                         key={index}
                                         <ReflexElement
+                                            key={index}
                                             minSize={5}
                                         >
                                         </ReflexElement>

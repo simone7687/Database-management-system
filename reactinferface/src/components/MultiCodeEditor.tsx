@@ -98,8 +98,13 @@ function MultiCodeEditor<T extends IDBApi>(props: ICodeEditorProps<T>) {
                     value={index.toString()}
                     key={index}
                 >
-                    <div style={{ height: height, width: '100%' }}>
-                        <ReflexContainer orientation="horizontal">
+                    <div
+                        style={{ height: height, width: '100%' }}
+                    >
+                        <ReflexContainer
+                            orientation="horizontal"
+                            key={index}
+                        >
                             <ReflexElement className="left-pane">
                                 <CodeEditor
                                     key={index}
@@ -110,6 +115,7 @@ function MultiCodeEditor<T extends IDBApi>(props: ICodeEditorProps<T>) {
                                 />
                             </ReflexElement>
                             <WindowsResults
+                                key={index}
                                 conn={conn}
                                 dataBaseService={dataBaseService}
                                 codeText={element.codeText}
