@@ -8,7 +8,6 @@ import IconButton from '@mui/material/IconButton';
 import Tab from '@mui/material/Tab';
 import { DataBaseService } from 'model/DataBaseService';
 import { IDBApi } from 'model/IDBApi';
-import { QueyData } from 'model/QueyData';
 import * as React from 'react';
 import { ReflexContainer, ReflexElement } from 'react-reflex';
 import 'react-reflex/styles.css';
@@ -25,27 +24,15 @@ type ICodeEditorProps<T extends IDBApi> = {
 }
 type ITabs = {
     codeText: string,
-    results: QueyData[]
 }
 
 function MultiCodeEditor<T extends IDBApi>(props: ICodeEditorProps<T>) {
     const { defaultLanguage = "sql", height = "78vh", defaultValue = undefined, handleEditorChange = undefined, conn, dataBaseService } = props;
     const [value, setValue] = React.useState('0');
     const [executeQuery, setExecuteQuery] = React.useState(false);
-    const [tabs, setTabs] = React.useState<ITabs[]>([{ results: [], codeText: defaultValue ? defaultValue : "" }]);
+    const [tabs, setTabs] = React.useState<ITabs[]>([{ codeText: defaultValue ? defaultValue : "" }]);
     const handleChange = (event: any, newValue: string) => {
         setValue(newValue);
-    };
-    const setResults = (value: QueyData[], index: number) => {
-        let array = tabs;
-        if (value) {
-            array[index].results = value
-            setTabs(array);
-        }
-        else {
-            array[index].results = []
-            setTabs(array);
-        }
     };
 
     function handleEditorChangeItems(value: string | undefined, index: number, event: any) {
@@ -90,7 +77,7 @@ function MultiCodeEditor<T extends IDBApi>(props: ICodeEditorProps<T>) {
                     <IconButton color="primary" aria-label="Aggiungi Tab" component="span"
                         onClick={() => {
                             let array = tabs;
-                            array.push({ results: [], codeText: defaultValue ? defaultValue : "" });
+                            array.push({ codeText: defaultValue ? defaultValue : "" });
                             setTabs(array);
                             handleChange({}, (array.length - 1).toString())
                         }}
@@ -125,11 +112,9 @@ function MultiCodeEditor<T extends IDBApi>(props: ICodeEditorProps<T>) {
                             <WindowsResults
                                 conn={conn}
                                 dataBaseService={dataBaseService}
-                                results={element.results}
                                 codeText={element.codeText}
                                 executeQuery={executeQuery}
                                 setExecuteQuery={setExecuteQuery}
-                                setResults={(value: QueyData[]) => { setResults(value, index) }}
                             />
                         </ReflexContainer>
                     </div>

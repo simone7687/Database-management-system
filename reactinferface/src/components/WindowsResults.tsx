@@ -2,13 +2,11 @@ import { DataBaseService } from 'model/DataBaseService';
 import { IDBApi } from 'model/IDBApi';
 import { IHttpResponse } from 'model/IHttpResponse';
 import { QueyData } from 'model/QueyData';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { ReflexContainer, ReflexElement, ReflexSplitter } from 'react-reflex';
 import 'react-reflex/styles.css';
 
 type IWindowsResultsProps<T extends IDBApi> = {
-    results: QueyData[],
-    setResults: (value: QueyData[]) => void,
     codeText: string,
     executeQuery: boolean,
     setExecuteQuery: (value: boolean) => void,
@@ -16,7 +14,8 @@ type IWindowsResultsProps<T extends IDBApi> = {
     conn: T | undefined,
 }
 function WindowsResults<T extends IDBApi>(props: IWindowsResultsProps<T>) {
-    const { results = [], conn, codeText, setResults, dataBaseService, setExecuteQuery, executeQuery } = props;
+    const { conn, codeText, dataBaseService, setExecuteQuery, executeQuery } = props;
+    const [results, setResults] = useState<QueyData[]>([]);
 
     useEffect(() => {
         if (executeQuery && dataBaseService && conn) {
