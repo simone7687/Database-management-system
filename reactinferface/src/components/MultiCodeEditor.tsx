@@ -9,7 +9,6 @@ import Tab from '@mui/material/Tab';
 import { DataBaseService } from 'model/DataBaseService';
 import { IDBApi } from 'model/IDBApi';
 import * as React from 'react';
-import { ReflexContainer, ReflexElement } from 'react-reflex';
 import 'react-reflex/styles.css';
 import CodeEditor from "./CodeEditor";
 import WindowsResults from './WindowsResults';
@@ -98,32 +97,23 @@ function MultiCodeEditor<T extends IDBApi>(props: ICodeEditorProps<T>) {
                     value={index.toString()}
                     key={index}
                 >
-                    <div
-                        style={{ height: height, width: '100%' }}
+                    <WindowsResults
+                        key={index}
+                        conn={conn}
+                        dataBaseService={dataBaseService}
+                        codeText={element.codeText}
+                        executeQuery={executeQuery}
+                        setExecuteQuery={setExecuteQuery}
+                        height={height}
                     >
-                        <ReflexContainer
-                            orientation="horizontal"
+                        <CodeEditor
                             key={index}
-                        >
-                            <ReflexElement className="left-pane">
-                                <CodeEditor
-                                    key={index}
-                                    defaultLanguage={defaultLanguage}
-                                    height={height}
-                                    defaultValue={element.codeText}
-                                    handleEditorChange={(value: string | undefined, event: any) => { handleEditorChangeItems(value, index, event) }}
-                                />
-                            </ReflexElement>
-                            <WindowsResults
-                                key={index}
-                                conn={conn}
-                                dataBaseService={dataBaseService}
-                                codeText={element.codeText}
-                                executeQuery={executeQuery}
-                                setExecuteQuery={setExecuteQuery}
-                            />
-                        </ReflexContainer>
-                    </div>
+                            defaultLanguage={defaultLanguage}
+                            height={height}
+                            defaultValue={element.codeText}
+                            handleEditorChange={(value: string | undefined, event: any) => { handleEditorChangeItems(value, index, event) }}
+                        />
+                    </WindowsResults>
                 </TabPanel>
             })}
         </TabContext>

@@ -117,7 +117,7 @@ function App() {
                     >
                         <Toolbar>
                             <Typography variant="h6" noWrap component="div">
-                                Permanent drawer
+                                Database management system
                             </Typography>
                         </Toolbar>
                     </AppBar>

@@ -2,7 +2,7 @@ import { DataBaseService } from 'model/DataBaseService';
 import { IDBApi } from 'model/IDBApi';
 import { IHttpResponse } from 'model/IHttpResponse';
 import { QueyData } from 'model/QueyData';
-import { useEffect, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { ReflexContainer, ReflexElement, ReflexSplitter } from 'react-reflex';
 import 'react-reflex/styles.css';
 
@@ -12,9 +12,11 @@ type IWindowsResultsProps<T extends IDBApi> = {
     setExecuteQuery: (value: boolean) => void,
     dataBaseService: DataBaseService<T> | undefined,
     conn: T | undefined,
+    children?: ReactNode,
+    height?: string | number | undefined,
 }
 function WindowsResults<T extends IDBApi>(props: IWindowsResultsProps<T>) {
-    const { conn, codeText, dataBaseService, setExecuteQuery, executeQuery } = props;
+    const { conn, codeText, dataBaseService, setExecuteQuery, executeQuery, children, height } = props;
     const [results, setResults] = useState<QueyData[]>([]);
 
     useEffect(() => {
@@ -41,40 +43,56 @@ function WindowsResults<T extends IDBApi>(props: IWindowsResultsProps<T>) {
             setExecuteQuery(false)
         }
     }, [dataBaseService, conn, codeText, executeQuery, setResults, setExecuteQuery])
+    if (results.length > 0) {
+        return (
+            <div
+                style={{ height: height, width: '100%' }}
+            >
+                <ReflexContainer
+                    orientation="horizontal"
+                >
+                    <ReflexElement className="left-pane">
+                        {children}
+                    </ReflexElement>
 
-    return (
-        <>
-            {results.length > 0 &&
-                <>
                     <ReflexSplitter />
-                    <ReflexContainer
-                        orientation="vertical"
+
+                    <ReflexElement
+                        size={0}
                     >
                         <ReflexSplitter />
-                        <ReflexElement
-                            className="right-pane"
-                            minSize={20}
-                            size={60}
+                        <ReflexContainer
+                            orientation="vertical"
                         >
-                            <ReflexContainer orientation="vertical">
-                                <ReflexSplitter />
-                                {results.map((element, index) => (
-                                    <>
-                                        key={index}
-                                        <ReflexElement
+                            <ReflexSplitter />
+                            <ReflexElement
+                                className="right-pane"
+                                minSize={20}
+                                size={60}
+                            >
+                                <ReflexContainer orientation="vertical">
+                                    <ReflexSplitter />
+                                    {results.map((element, index) => (
+                                        <>
                                             key={index}
-                                            minSize={5}
-                                        >
-                                        </ReflexElement>
-                                        <ReflexSplitter />
-                                    </>
-                                ))}
-                            </ReflexContainer>
-                        </ReflexElement>
-                    </ReflexContainer>
-                </>
-            }
-        </>
-    );
+                                            <ReflexElement
+                                                key={index}
+                                                minSize={5}
+                                            >
+                                            </ReflexElement>
+                                            <ReflexSplitter />
+                                        </>
+                                    ))}
+                                </ReflexContainer>
+                            </ReflexElement>
+                        </ReflexContainer>
+                    </ReflexElement>
+                </ReflexContainer>
+            </div>
+        );
+    }
+    else {
+        return (<>{children}</>)
+    }
 }
 export default WindowsResults;
