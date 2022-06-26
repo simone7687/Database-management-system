@@ -10,3 +10,7 @@ export interface IPostGressIDBApi extends IDBApi {
     password: string,
     port: string,
 }
+
+export interface IPostGressQuery extends IPostGressIDBApi {
+    query?: string,
+}

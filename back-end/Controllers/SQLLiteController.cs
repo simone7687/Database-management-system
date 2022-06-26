@@ -4,7 +4,7 @@ using System.Net;
 
 [ApiController]
 [Route("[controller]")]
-public class SQLLiteController : ControllerBase, ISQLController<SQLLiteCredentialsModel>
+public class SQLLiteController : ControllerBase, ISQLController<SQLLiteCredentialsModel, SQLLiteQueryBody>
 {
     private readonly ILogger<SQLLiteController> _logger;
     private readonly SQLLiteRepository _repository;
@@ -16,24 +16,30 @@ public class SQLLiteController : ControllerBase, ISQLController<SQLLiteCredentia
     }
 
     [HttpPut("Connect")]
-    public HttpResponse Connect(SQLLiteCredentialsModel credentials)
+    public HttpResponse<string> Connect(SQLLiteCredentialsModel credentials)
     {
         var conn = _repository.TestConnection(credentials.Path);
         if (conn.Error)
         {
-            return new HttpResponse(HttpStatusCode.ServiceUnavailable, conn.Message, conn.Content);
+            return new HttpResponse<string>(HttpStatusCode.ServiceUnavailable, conn.Message, conn.Content);
         }
-        return new HttpResponse(HttpStatusCode.OK, conn.Message, conn.Content);
+        return new HttpResponse<string>(HttpStatusCode.OK, conn.Message, conn.Content);
     }
 
     [HttpPost("GetTablesListName")]
-    public HttpResponse GetTablesListName(SQLLiteCredentialsModel credentials)
+    public HttpResponse<IEnumerable<string>> GetTablesListName(SQLLiteCredentialsModel credentials)
     {
         throw new NotImplementedException();
     }
 
     [HttpPost("GetInfoTables")]
-    public HttpResponse GetInfoTables([FromBody] PostgreSQLCredentialsModel credentials, string tableName)
+    public HttpResponse<IEnumerable<InfoTables>> GetInfoTables([FromBody] PostgreSQLCredentialsModel credentials, string tableName)
+    {
+        throw new NotImplementedException();
+    }
+
+    [HttpPost("ExecuteQueries")]
+    public HttpResponse<IEnumerable<QueyData<object>>> ExecuteQueries([FromBody] SQLLiteQueryBody credentials)
     {
         throw new NotImplementedException();
     }

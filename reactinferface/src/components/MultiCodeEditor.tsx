@@ -1,12 +1,15 @@
 import AddIcon from '@mui/icons-material/Add';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import { Grid } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import Tab from '@mui/material/Tab';
-import * as React from 'react';
+import { useState } from 'react';
+import 'react-reflex/styles.css';
 import CodeEditor from "./CodeEditor";
+import WindowsResults from './WindowsResults';
 
 type ICodeEditorProps = {
     defaultLanguage?: "sql" | undefined,
@@ -19,9 +22,10 @@ type ITabs = {
 }
 
 function MultiCodeEditor(props: ICodeEditorProps) {
-    const { defaultLanguage = "sql", height = "90vh", defaultValue = undefined, handleEditorChange = undefined } = props;
-    const [value, setValue] = React.useState('0');
-    const [tabs, setTabs] = React.useState<ITabs[]>([{ codeText: defaultValue ? defaultValue : "" }]);
+    const { defaultLanguage = "sql", height = "78vh", defaultValue = undefined, handleEditorChange = undefined } = props;
+    const [value, setValue] = useState('0');
+    const [executeQuery, setExecuteQuery] = useState(false);
+    const [tabs, setTabs] = useState<ITabs[]>([{ codeText: defaultValue ? defaultValue : "" }]);
     const handleChange = (event: any, newValue: string) => {
         setValue(newValue);
     };
@@ -65,7 +69,7 @@ function MultiCodeEditor(props: ICodeEditorProps) {
                     </TabList>
                 </Grid>
                 <Grid item xs={2}>
-                    <IconButton color="primary" aria-label="upload picture" component="span"
+                    <IconButton color="primary" aria-label="Aggiungi Tab" component="span"
                         onClick={() => {
                             let array = tabs;
                             array.push({ codeText: defaultValue ? defaultValue : "" });
@@ -75,6 +79,13 @@ function MultiCodeEditor(props: ICodeEditorProps) {
                     >
                         <AddIcon />
                     </IconButton>
+                    <IconButton color="primary" aria-label="Esegui Query" component="span"
+                        onClick={() => {
+                            setExecuteQuery(true)
+                        }}
+                    >
+                        <PlayArrowIcon />
+                    </IconButton>
                 </Grid>
             </Grid>
             {tabs.map((element, index) => {
@@ -82,13 +93,21 @@ function MultiCodeEditor(props: ICodeEditorProps) {
                     value={index.toString()}
                     key={index}
                 >
-                    <CodeEditor
+                    <WindowsResults
                         key={index}
-                        defaultLanguage={defaultLanguage}
+                        codeText={element.codeText}
+                        executeQuery={executeQuery}
+                        setExecuteQuery={setExecuteQuery}
                         height={height}
-                        defaultValue={element.codeText}
-                        handleEditorChange={(value: string | undefined, event: any) => { handleEditorChangeItems(value, index, event) }}
-                    />
+                    >
+                        <CodeEditor
+                            key={index}
+                            defaultLanguage={defaultLanguage}
+                            height={height}
+                            defaultValue={element.codeText}
+                            handleEditorChange={(value: string | undefined, event: any) => { handleEditorChangeItems(value, index, event) }}
+                        />
+                    </WindowsResults>
                 </TabPanel>
             })}
         </TabContext>
