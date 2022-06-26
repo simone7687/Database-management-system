@@ -1,4 +1,4 @@
-import { ConnectionModel } from "./IDBApi"
+import { ConnectionModel } from "./ConnectionModels"
 import { IHttpResponse } from "./IHttpResponse"
 import { InfoTabelleModel } from "./InfoTabelleModel"
 import { QueyData } from "./QueyData"

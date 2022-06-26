@@ -8,7 +8,7 @@ import MyDialog from "components/MyDialog";
 import MyTextField from "components/MyTextField";
 import Sidebars from "components/Sidebars";
 import SideDatabase from "components/SideDatabase";
-import { PostgreSQLConnectionModel, SQLLiteConnectionModel } from "model/IDBApi";
+import { PostgreSQLConnectionModel, SQLLiteConnectionModel } from "model/ConnectionModels";
 import { IHttpResponse } from "model/IHttpResponse";
 import { useEffect, useState } from "react";
 import { BrowserRouter } from "react-router-dom";

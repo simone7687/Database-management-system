@@ -11,8 +11,8 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import { ConnectionModel } from 'model/ConnectionModels';
 import { DataBaseService } from 'model/DataBaseService';
-import { ConnectionModel } from 'model/IDBApi';
 import { useState } from 'react';
 import SideHost from './SideHost';
 

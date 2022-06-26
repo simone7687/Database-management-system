@@ -1,5 +1,5 @@
+import { PostgreSQLConnectionModel, PostgreSQLQueryModel } from "model/ConnectionModels";
 import { DataBaseService } from "model/DataBaseService";
-import { PostgreSQLConnectionModel, PostgreSQLQueryModel } from "model/IDBApi";
 import { generalIHttpResponseLog, IHttpResponse } from "model/IHttpResponse";
 import { InfoTabelleModel } from "model/InfoTabelleModel";
 import { QueyData } from "model/QueyData";

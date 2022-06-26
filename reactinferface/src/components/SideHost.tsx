@@ -7,8 +7,8 @@ import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import { ConnectionModel } from 'model/ConnectionModels';
 import { DataBaseService } from 'model/DataBaseService';
-import { ConnectionModel } from 'model/IDBApi';
 import { ReactNode, useState } from 'react';
 import SideTabelle from './SideTabelle';
 

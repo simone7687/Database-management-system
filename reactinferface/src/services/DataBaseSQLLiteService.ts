@@ -1,5 +1,5 @@
+import { SQLLiteConnectionModel, SQLLiteQueryModel } from "model/ConnectionModels";
 import { DataBaseService } from "model/DataBaseService";
-import { SQLLiteConnectionModel, SQLLiteQueryModel } from "model/IDBApi";
 import { generalIHttpResponseLog, IHttpResponse } from "model/IHttpResponse";
 import { InfoTabelleModel } from "model/InfoTabelleModel";
 import { QueyData } from "model/QueyData";
