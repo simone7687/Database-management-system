@@ -1,5 +1,5 @@
 import { Typography } from '@mui/material';
-import { selectDBState } from 'atom/downloadNotificationAtom';
+import { selectDBState } from 'atom/selectDBAtom';
 import { IHttpResponse } from 'model/IHttpResponse';
 import { QueyData } from 'model/QueyData';
 import { ReactNode, useEffect, useState } from 'react';
