@@ -6,6 +6,7 @@ import { ReactNode, useEffect, useState } from 'react';
 import { ReflexContainer, ReflexElement, ReflexSplitter } from 'react-reflex';
 import 'react-reflex/styles.css';
 import { useRecoilValue } from 'recoil';
+import QueryTabelle from './QueryTabelle';
 
 type IWindowsResultsProps = {
     codeText: string,
@@ -62,13 +63,19 @@ function WindowsResults(props: IWindowsResultsProps) {
                     <ReflexSplitter />
 
                     <ReflexElement
-                        size={100}
+                        size={200}
                         minSize={5}
                     >
                         {results.map((item: QueyData, index: number) => {
                             if (item.isSuccessStatusCode) {
                                 if (item.data && item.data.length > 0) {
-                                    return <>select<br /></>
+                                    return <>
+                                        <QueryTabelle
+                                            data={item.data}
+                                            height={400}
+                                            rowHeight={50}
+                                        />
+                                    </>
                                 } else {
                                     return <>
                                         <Typography mt={2} color="blue">{item.message}</Typography>
