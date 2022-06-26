@@ -80,6 +80,10 @@ class DataBasePostgreSQLService implements DataBaseService<IPostGressIDBApi> {
     }
 
     async executeQueries(conn: IPostGressIDBApi, queryText: string, abortController: any) {
+        if (queryText === '') {
+            queryText = "--"
+        }
+
         var raw = JSON.stringify(conn);
 
         var requestOptions = {
