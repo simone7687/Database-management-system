@@ -1,16 +1,16 @@
 import { DataBaseService } from "model/DataBaseService";
-import { PostgreSQLConnectionModel, PostgreSQLQueryModel } from "model/IDBApi";
+import { SQLLiteConnectionModel, SQLLiteQueryModel } from "model/IDBApi";
 import { generalIHttpResponseLog, IHttpResponse } from "model/IHttpResponse";
 import { InfoTabelleModel } from "model/InfoTabelleModel";
 import { QueyData } from "model/QueyData";
 import RequestsService from "./RequestsService";
 
-class DataBasePostgreSQLService implements DataBaseService<PostgreSQLConnectionModel> {
-    url = process.env.REACT_APP_API_URL + "/PostgreSQL/";
+class DataBaseSQLLiteService implements DataBaseService<SQLLiteConnectionModel> {
+    url = process.env.REACT_APP_API_URL + "/SQLLite/";
 
     authService = new RequestsService();
 
-    async connect(conn: PostgreSQLConnectionModel, abortController: any) {
+    async connect(conn: SQLLiteConnectionModel, abortController: any) {
         var raw = JSON.stringify(conn);
 
         var requestOptions = {
@@ -33,7 +33,7 @@ class DataBasePostgreSQLService implements DataBaseService<PostgreSQLConnectionM
             });
     }
 
-    async getTablesListName(conn: PostgreSQLConnectionModel, abortController: any) {
+    async getTablesListName(conn: SQLLiteConnectionModel, abortController: any) {
         var raw = JSON.stringify(conn);
 
         var requestOptions = {
@@ -56,7 +56,7 @@ class DataBasePostgreSQLService implements DataBaseService<PostgreSQLConnectionM
             });
     }
 
-    async getInfoTables(conn: PostgreSQLConnectionModel, tableName: string, abortController: any) {
+    async getInfoTables(conn: SQLLiteConnectionModel, tableName: string, abortController: any) {
         var raw = JSON.stringify(conn);
 
         var requestOptions = {
@@ -79,11 +79,11 @@ class DataBasePostgreSQLService implements DataBaseService<PostgreSQLConnectionM
             });
     }
 
-    async executeQueries(conn: PostgreSQLConnectionModel, queryText: string, abortController: any) {
+    async executeQueries(conn: SQLLiteConnectionModel, queryText: string, abortController: any) {
         if (queryText === '') {
             queryText = "--"
         }
-        let querybody: PostgreSQLQueryModel = { ...conn, query: queryText };
+        let querybody: SQLLiteQueryModel = { ...conn, query: queryText };
 
         var raw = JSON.stringify(querybody);
 
@@ -107,4 +107,4 @@ class DataBasePostgreSQLService implements DataBaseService<PostgreSQLConnectionM
             });
     }
 }
-export default DataBasePostgreSQLService;
+export default DataBaseSQLLiteService;

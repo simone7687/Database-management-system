@@ -12,11 +12,11 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { DataBaseService } from 'model/DataBaseService';
-import { IDBApi } from 'model/IDBApi';
+import { ConnectionModel } from 'model/IDBApi';
 import { useState } from 'react';
 import SideHost from './SideHost';
 
-type ISideDatabaseProps<T extends IDBApi> = {
+type ISideDatabaseProps<T extends ConnectionModel> = {
     connnectNewDB: () => void,
     databases: T[],
     setDatabases: (list: T[]) => void,
@@ -24,7 +24,7 @@ type ISideDatabaseProps<T extends IDBApi> = {
     dataBaseService: DataBaseService<T>,
 }
 
-function SideDatabase<T extends IDBApi>(props: ISideDatabaseProps<T>) {
+function SideDatabase<T extends ConnectionModel>(props: ISideDatabaseProps<T>) {
     const { connnectNewDB, databases, setDatabases, name, dataBaseService } = props;
     const [open, setOpen] = useState(true);
     const handleClick = () => {

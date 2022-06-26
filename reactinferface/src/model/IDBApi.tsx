@@ -1,9 +1,9 @@
 
-export type IDBApi = {
+export type ConnectionModel = {
     key: string,
 }
 
-export interface IPostGressIDBApi extends IDBApi {
+export interface PostgreSQLConnectionModel extends ConnectionModel {
     host: string,
     user: string,
     dbName: string,
@@ -11,6 +11,18 @@ export interface IPostGressIDBApi extends IDBApi {
     port: string,
 }
 
-export interface IPostGressQuery extends IPostGressIDBApi {
+export interface PostgreSQLQueryModel extends PostgreSQLConnectionModel {
+    query?: string,
+}
+
+export interface SQLLiteConnectionModel extends ConnectionModel {
+    host: string,
+    user: string,
+    dbName: string,
+    password: string,
+    port: string,
+}
+
+export interface SQLLiteQueryModel extends SQLLiteConnectionModel {
     query?: string,
 }

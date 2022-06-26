@@ -11,20 +11,20 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { DataBaseService } from 'model/DataBaseService';
-import { IDBApi } from 'model/IDBApi';
+import { ConnectionModel } from 'model/IDBApi';
 import { IHttpResponse } from 'model/IHttpResponse';
 import { InfoTabelleModel } from 'model/InfoTabelleModel';
 import { useEffect, useState } from 'react';
 import InfoTabelle from './InfoTabelle';
 import MyDialog from './MyDialog';
 
-type ISideTabelleProps<T extends IDBApi> = {
+type ISideTabelleProps<T extends ConnectionModel> = {
     conn: T,
     dataBaseService: DataBaseService<T>,
 }
 
 
-function SideTabelle<T extends IDBApi>(props: ISideTabelleProps<T>) {
+function SideTabelle<T extends ConnectionModel>(props: ISideTabelleProps<T>) {
     const { dataBaseService, conn } = props;
     const [open, setOpen] = useState(false);
     const [infoTabel, setInfoTabel] = useState({ open: false, tabelName: "" });
