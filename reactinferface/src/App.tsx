@@ -82,15 +82,11 @@ function App() {
         var dbPostgreSQLListName = dbPostgreSQLList.map((item) => {
             return (item.key + " - PostgreSQL")
         })
-        setListDBToSelect(dbPostgreSQLListName)
-    }, [dbPostgreSQLList])
-
-    useEffect(() => {
         var dbSQLLiteListName = dbSQLLiteList.map((item) => {
             return (item.key + " - SQLLite")
         })
-        setListDBToSelect(dbSQLLiteListName)
-    }, [dbSQLLiteList])
+        setListDBToSelect([...dbPostgreSQLListName, ...dbSQLLiteListName])
+    }, [dbPostgreSQLList, dbSQLLiteList])
 
     const setDBPostgreSQLList = (list: PostgreSQLConnectionModel[]) => {
         setDBPostgreSQLListState(list)
