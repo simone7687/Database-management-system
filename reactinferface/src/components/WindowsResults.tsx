@@ -1,28 +1,27 @@
-import { DataBaseService } from 'model/DataBaseService';
-import { IDBApi } from 'model/IDBApi';
+import { selectDBState } from 'atom/downloadNotificationAtom';
 import { IHttpResponse } from 'model/IHttpResponse';
 import { QueyData } from 'model/QueyData';
 import { ReactNode, useEffect, useState } from 'react';
 import { ReflexContainer, ReflexElement, ReflexSplitter } from 'react-reflex';
 import 'react-reflex/styles.css';
+import { useRecoilValue } from 'recoil';
 
-type IWindowsResultsProps<T extends IDBApi> = {
+type IWindowsResultsProps = {
     codeText: string,
     executeQuery: boolean,
     setExecuteQuery: (value: boolean) => void,
-    dataBaseService: DataBaseService<T> | undefined,
-    conn: T | undefined,
     children?: ReactNode,
     height?: string | number | undefined,
 }
-function WindowsResults<T extends IDBApi>(props: IWindowsResultsProps<T>) {
-    const { conn, codeText, dataBaseService, setExecuteQuery, executeQuery, children, height } = props;
+function WindowsResults(props: IWindowsResultsProps) {
+    const { codeText, setExecuteQuery, executeQuery, children, height } = props;
     const [results, setResults] = useState<QueyData[]>([]);
+    const selectDB = useRecoilValue(selectDBState);
 
     useEffect(() => {
-        if (executeQuery && dataBaseService && conn) {
+        if (executeQuery && selectDB.dataBaseService && selectDB.conn) {
             const abortController = new AbortController();
-            dataBaseService.executeQueries(conn, codeText, abortController).then((res: IHttpResponse<QueyData[]>) => {
+            selectDB.dataBaseService.executeQueries(selectDB.conn, codeText, abortController).then((res: IHttpResponse<QueyData[]>) => {
                 if (abortController.signal.aborted) {
                     setResults([])
                 }
@@ -40,9 +39,11 @@ function WindowsResults<T extends IDBApi>(props: IWindowsResultsProps<T>) {
                 console.log("getTabellePostgre", err)
                 setResults([])
             })
+        }
+        if (executeQuery) {
             setExecuteQuery(false)
         }
-    }, [dataBaseService, conn, codeText, executeQuery, setResults, setExecuteQuery])
+    }, [selectDB, codeText, executeQuery, setExecuteQuery])
     if (results.length > 0) {
         return (
             <div

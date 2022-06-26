@@ -6,30 +6,26 @@ import TabPanel from '@mui/lab/TabPanel';
 import { Grid } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import Tab from '@mui/material/Tab';
-import { DataBaseService } from 'model/DataBaseService';
-import { IDBApi } from 'model/IDBApi';
-import * as React from 'react';
+import { useState } from 'react';
 import 'react-reflex/styles.css';
 import CodeEditor from "./CodeEditor";
 import WindowsResults from './WindowsResults';
 
-type ICodeEditorProps<T extends IDBApi> = {
+type ICodeEditorProps = {
     defaultLanguage?: "sql" | undefined,
     height?: string | number | undefined,
     defaultValue?: string | undefined,
     handleEditorChange?: (value: string | undefined, event: any) => void,
-    dataBaseService: DataBaseService<T> | undefined,
-    conn: T | undefined,
 }
 type ITabs = {
     codeText: string,
 }
 
-function MultiCodeEditor<T extends IDBApi>(props: ICodeEditorProps<T>) {
-    const { defaultLanguage = "sql", height = "78vh", defaultValue = undefined, handleEditorChange = undefined, conn, dataBaseService } = props;
-    const [value, setValue] = React.useState('0');
-    const [executeQuery, setExecuteQuery] = React.useState(false);
-    const [tabs, setTabs] = React.useState<ITabs[]>([{ codeText: defaultValue ? defaultValue : "" }]);
+function MultiCodeEditor(props: ICodeEditorProps) {
+    const { defaultLanguage = "sql", height = "78vh", defaultValue = undefined, handleEditorChange = undefined } = props;
+    const [value, setValue] = useState('0');
+    const [executeQuery, setExecuteQuery] = useState(false);
+    const [tabs, setTabs] = useState<ITabs[]>([{ codeText: defaultValue ? defaultValue : "" }]);
     const handleChange = (event: any, newValue: string) => {
         setValue(newValue);
     };
@@ -99,8 +95,6 @@ function MultiCodeEditor<T extends IDBApi>(props: ICodeEditorProps<T>) {
                 >
                     <WindowsResults
                         key={index}
-                        conn={conn}
-                        dataBaseService={dataBaseService}
                         codeText={element.codeText}
                         executeQuery={executeQuery}
                         setExecuteQuery={setExecuteQuery}
