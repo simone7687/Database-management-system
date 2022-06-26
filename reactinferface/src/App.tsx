@@ -195,7 +195,9 @@ function App() {
                     sx={{ flexGrow: 1, bgcolor: 'background.default', p: 3 }}
                 >
                     <Toolbar />
-                    <MultiCodeEditor />
+                    <MultiCodeEditor
+                        defaultValue="Per Eseguire più Statement suddividere le queri con: ';'"
+                    />
                 </Grid>
             </Box>
 
