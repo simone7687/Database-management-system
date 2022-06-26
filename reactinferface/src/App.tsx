@@ -60,18 +60,16 @@ function App() {
         try {
             console.log(selectDB)
             let a = value.split(" - ")
-            let c = dbPostgreSQLList.find((item: PostgreSQLConnectionModel) => {
-                return item.dbName === a[0]
-            })
-            if (!c) {
-                c = dbSQLLiteList.find((item: SQLLiteConnectionModel) => {
-                    return item.dbName === a[0]
-                })
-            }
             if (a[1] === "PostgreSQL") {
+                let c = dbPostgreSQLList.find((item: PostgreSQLConnectionModel) => {
+                    return item.key === a[0]
+                })
                 setSelectDB({ id: a[0], conn: c, dataBaseService: postgreSQLService })
             }
             else if (a[1] === "SQLLite") {
+                let c = dbSQLLiteList.find((item: SQLLiteConnectionModel) => {
+                    return item.key === a[0]
+                })
                 setSelectDB({ id: a[0], conn: c, dataBaseService: SQLLiteService })
             }
         }
@@ -82,14 +80,14 @@ function App() {
 
     useEffect(() => {
         var dbPostgreSQLListName = dbPostgreSQLList.map((item) => {
-            return (item.dbName + " - PostgreSQL")
+            return (item.key + " - PostgreSQL")
         })
         setListDBToSelect(dbPostgreSQLListName)
     }, [dbPostgreSQLList])
 
     useEffect(() => {
         var dbSQLLiteListName = dbSQLLiteList.map((item) => {
-            return (item.dbName + " - SQLLite")
+            return (item.key + " - SQLLite")
         })
         setListDBToSelect(dbSQLLiteListName)
     }, [dbSQLLiteList])
@@ -122,6 +120,9 @@ function App() {
     const handleSendPostgreSQL = (item: PostgreSQLConnectionModel) => {
         setErrorFieldsPostgreSQL([])
         var er = []
+        if (!item.key || item.key === "") {
+            er.push("key")
+        }
         if (!item.dbName || item.dbName === "") {
             er.push("dbName")
         }
@@ -179,20 +180,11 @@ function App() {
     const handleSendSQLLite = (item: SQLLiteConnectionModel) => {
         setErrorFieldsSQLLite([])
         var er = []
-        if (!item.dbName || item.dbName === "") {
-            er.push("dbName")
+        if (!item.key || item.key === "") {
+            er.push("key")
         }
-        if (!item.host || item.host === "") {
-            er.push("host")
-        }
-        if (!item.password || item.password === "") {
-            er.push("password")
-        }
-        if (!item.port || item.port === "") {
-            er.push("port")
-        }
-        if (!item.user || item.user === "") {
-            er.push("user")
+        if (!item.path || item.path === "") {
+            er.push("path")
         }
         setErrorFieldsSQLLite(er)
         if (er.length > 0) {
@@ -395,6 +387,13 @@ function App() {
                     onChange={(event: any) => handleInputChangeGeneric(event, itemToEditSQLLite, setItemToEditSQLLite)}
                     defaultValue={itemToEditSQLLite?.key || ""}
                     error={errorFieldsSQLLite.includes("key")}
+                />
+                <MyTextField
+                    id="path"
+                    label="PercorsoFile"
+                    onChange={(event: any) => handleInputChangeGeneric(event, itemToEditSQLLite, setItemToEditSQLLite)}
+                    defaultValue={itemToEditSQLLite?.path || ""}
+                    error={errorFieldsSQLLite.includes("path")}
                 />
             </MyDialog>
 

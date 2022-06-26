@@ -16,11 +16,7 @@ export interface PostgreSQLQueryModel extends PostgreSQLConnectionModel {
 }
 
 export interface SQLLiteConnectionModel extends ConnectionModel {
-    host: string,
-    user: string,
-    dbName: string,
-    password: string,
-    port: string,
+    path: string,
 }
 
 export interface SQLLiteQueryModel extends SQLLiteConnectionModel {
