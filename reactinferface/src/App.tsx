@@ -196,7 +196,8 @@ function App() {
                 >
                     <Toolbar />
                     <MultiCodeEditor
-                        defaultValue="Per Eseguire più Statement suddividere le queri con: ';'"
+                        defaultValue="-- Per eseguire più statement suddividere le query con: ';'
+"
                     />
                 </Grid>
             </Box>
