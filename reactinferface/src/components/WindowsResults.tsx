@@ -2,7 +2,7 @@ import { Typography } from '@mui/material';
 import { selectDBState } from 'atom/selectDBAtom';
 import { IHttpResponse } from 'model/IHttpResponse';
 import { QueyData } from 'model/QueyData';
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { ReflexContainer, ReflexElement, ReflexSplitter } from 'react-reflex';
 import 'react-reflex/styles.css';
 import { useRecoilValue } from 'recoil';
@@ -14,10 +14,11 @@ type IWindowsResultsProps = {
     setExecuteQuery: (value: boolean) => void,
     children?: ReactNode,
     height?: string | number | undefined,
+    results: QueyData[],
+    setResults: (value: QueyData[]) => void
 }
 function WindowsResults(props: IWindowsResultsProps) {
-    const { codeText, setExecuteQuery, executeQuery, children, height } = props;
-    const [results, setResults] = useState<QueyData[]>([]);
+    const { codeText, setExecuteQuery, executeQuery, children, height, results, setResults } = props;
     const selectDB = useRecoilValue(selectDBState);
 
     useEffect(() => {
@@ -47,7 +48,7 @@ function WindowsResults(props: IWindowsResultsProps) {
             window.alert("Devi selezionare un DataBase");
             setExecuteQuery(false)
         }
-    }, [selectDB, codeText, executeQuery, setExecuteQuery])
+    }, [selectDB, codeText, executeQuery, setExecuteQuery, setResults])
     if (results.length > 0) {
         return (
             <div
