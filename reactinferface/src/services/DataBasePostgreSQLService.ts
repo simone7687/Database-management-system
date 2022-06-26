@@ -6,7 +6,7 @@ import { QueyData } from "model/QueyData";
 import RequestsService from "./RequestsService";
 
 class DataBasePostgreSQLService implements DataBaseService<IPostGressIDBApi> {
-    url = "https://localhost:7119/PostgreSQL/";
+    url = process.env.REACT_APP_API_URL + "/PostgreSQL/";
 
     authService = new RequestsService();
 

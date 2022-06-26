@@ -10,7 +10,6 @@ import ListItemText from '@mui/material/ListItemText';
 import { DataBaseService } from 'model/DataBaseService';
 import { IDBApi } from 'model/IDBApi';
 import { ReactNode, useState } from 'react';
-import SideStoreProcedure from './SideStoreProcedure';
 import SideTabelle from './SideTabelle';
 
 type ISideHostProps<T extends IDBApi> = {
@@ -44,7 +43,7 @@ function SideHost<T extends IDBApi>(props: ISideHostProps<T>) {
             </ListItemButton>
             <Collapse in={open} timeout="auto" unmountOnExit>
                 <SideTabelle dataBaseService={dataBaseService} conn={database} />
-                <SideStoreProcedure />
+                {/* <SideStoreProcedure /> */}
             </Collapse>
         </List>
     );

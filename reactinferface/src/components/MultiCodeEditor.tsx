@@ -6,6 +6,7 @@ import TabPanel from '@mui/lab/TabPanel';
 import { Grid } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import Tab from '@mui/material/Tab';
+import { QueyData } from 'model/QueyData';
 import { useState } from 'react';
 import 'react-reflex/styles.css';
 import CodeEditor from "./CodeEditor";
@@ -19,16 +20,22 @@ type ICodeEditorProps = {
 }
 type ITabs = {
     codeText: string,
+    results: QueyData[],
 }
 
 function MultiCodeEditor(props: ICodeEditorProps) {
     const { defaultLanguage = "sql", height = "78vh", defaultValue = undefined, handleEditorChange = undefined } = props;
     const [value, setValue] = useState('0');
     const [executeQuery, setExecuteQuery] = useState(false);
-    const [tabs, setTabs] = useState<ITabs[]>([{ codeText: defaultValue ? defaultValue : "" }]);
+    const [tabs, setTabs] = useState<ITabs[]>([{ codeText: defaultValue ? defaultValue : "", results: [] }]);
     const handleChange = (event: any, newValue: string) => {
         setValue(newValue);
-    };
+    }
+    const handleResults = (newValue: QueyData[], index: number) => {
+        let temp = tabs
+        temp[index].results = newValue
+        setTabs(temp);
+    }
 
     function handleEditorChangeItems(value: string | undefined, index: number, event: any) {
         if (handleEditorChange) {
@@ -72,7 +79,7 @@ function MultiCodeEditor(props: ICodeEditorProps) {
                     <IconButton color="primary" aria-label="Aggiungi Tab" component="span"
                         onClick={() => {
                             let array = tabs;
-                            array.push({ codeText: defaultValue ? defaultValue : "" });
+                            array.push({ codeText: defaultValue ? defaultValue : "", results: [] });
                             setTabs(array);
                             handleChange({}, (array.length - 1).toString())
                         }}
@@ -99,6 +106,8 @@ function MultiCodeEditor(props: ICodeEditorProps) {
                         executeQuery={executeQuery}
                         setExecuteQuery={setExecuteQuery}
                         height={height}
+                        setResults={(value: QueyData[]) => { handleResults(value, index) }}
+                        results={element.results}
                     >
                         <CodeEditor
                             key={index}
