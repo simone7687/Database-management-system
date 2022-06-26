@@ -41,7 +41,7 @@ public class SQLLiteRepository : ISQLRepository
         throw new NotImplementedException();
     }
 
-    public ResRepository<IEnumerable<QueyData<object>>> ExecuteQueries(string? connString, string[] arrayQuery)
+    public ResRepository<IEnumerable<QueyData<object>>> ExecuteQueries(string? connString, IEnumerable<string> arrayQuery)
     {
         throw new NotImplementedException();
     }

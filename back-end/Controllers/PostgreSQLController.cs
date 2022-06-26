@@ -8,11 +8,13 @@ public class PostgreSQLController : ControllerBase, ISQLController<PostgreSQLCre
 {
     private readonly ILogger<PostgreSQLController> _logger;
     private readonly PostgreSQLRepository _repository;
+    private readonly Utility _utility;
 
-    public PostgreSQLController(ILogger<PostgreSQLController> logger, PostgreSQLRepository repository)
+    public PostgreSQLController(ILogger<PostgreSQLController> logger, PostgreSQLRepository repository, Utility utility)
     {
         _logger = logger;
         _repository = repository;
+        _utility = utility;
     }
 
     [HttpPut("Connect")]
@@ -91,7 +93,7 @@ public class PostgreSQLController : ControllerBase, ISQLController<PostgreSQLCre
             return new HttpResponse<IEnumerable<QueyData<object>>>(HttpStatusCode.OK, "Query nulla");
         }
 
-        var arrayQuery = credentials.Query.Split(";");
+        var arrayQuery = _utility.ConvertQueryStringInCleanArray(credentials.Query);
         var data = _repository.ExecuteQueries(connString, arrayQuery);
         if (data.Error)
         {

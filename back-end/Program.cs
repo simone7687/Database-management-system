@@ -24,6 +24,7 @@ builder.Services.AddSwaggerGen();
 // Injection: https://docs.microsoft.com/it-it/aspnet/core/mvc/views/dependency-injection?view=aspnetcore-6.0#service-injection
 builder.Services.AddTransient<PostgreSQLRepository>();
 builder.Services.AddTransient<SQLLiteRepository>();
+builder.Services.AddTransient<Utility>();
 
 var app = builder.Build();
 
