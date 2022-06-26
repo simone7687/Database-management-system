@@ -48,7 +48,7 @@ function App() {
             return
         }
         try {
-            let b = selectDB;
+            console.log(selectDB)
             let a = value.split(" - ")
             let c = dbPostgreSQLList.find((item: IPostGressIDBApi) => {
                 return item.dbName === a[0]

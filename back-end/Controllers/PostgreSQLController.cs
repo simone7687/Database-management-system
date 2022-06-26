@@ -4,7 +4,7 @@ using System.Net;
 
 [ApiController]
 [Route("[controller]")]
-public class PostgreSQLController : ControllerBase, ISQLController<PostgreSQLCredentialsModel>
+public class PostgreSQLController : ControllerBase, ISQLController<PostgreSQLCredentialsModel, PostgreSQLQueryBody>
 {
     private readonly ILogger<PostgreSQLController> _logger;
     private readonly PostgreSQLRepository _repository;
@@ -76,7 +76,7 @@ public class PostgreSQLController : ControllerBase, ISQLController<PostgreSQLCre
     }
 
     [HttpPost("ExecuteQueries")]
-    public HttpResponse<IEnumerable<QueyData<object>>> ExecuteQueries([FromBody] PostgreSQLCredentialsModel credentials, string query)
+    public HttpResponse<IEnumerable<QueyData<object>>> ExecuteQueries([FromBody] PostgreSQLQueryBody credentials)
     {
         string connString = string.Format(
             "Server={0};Username={1};Database={2};Port={3};Password={4};SSLMode=Prefer",
@@ -86,8 +86,12 @@ public class PostgreSQLController : ControllerBase, ISQLController<PostgreSQLCre
             credentials.Port,
             credentials.Password
         );
-        var arrayQuery = query.Split(";");
+        if (string.IsNullOrWhiteSpace(credentials.Query))
+        {
+            return new HttpResponse<IEnumerable<QueyData<object>>>(HttpStatusCode.OK, "Query nulla");
+        }
 
+        var arrayQuery = credentials.Query.Split(";");
         var data = _repository.ExecuteQueries(connString, arrayQuery);
         if (data.Error)
         {

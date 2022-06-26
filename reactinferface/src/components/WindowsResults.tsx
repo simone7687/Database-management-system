@@ -1,3 +1,4 @@
+import { Typography } from '@mui/material';
 import { selectDBState } from 'atom/downloadNotificationAtom';
 import { IHttpResponse } from 'model/IHttpResponse';
 import { QueyData } from 'model/QueyData';
@@ -39,8 +40,10 @@ function WindowsResults(props: IWindowsResultsProps) {
                 console.log("getTabellePostgre", err)
                 setResults([])
             })
+            setExecuteQuery(false)
         }
-        if (executeQuery) {
+        else if (executeQuery) {
+            window.alert("Devi selezionare un DataBase");
             setExecuteQuery(false)
         }
     }, [selectDB, codeText, executeQuery, setExecuteQuery])
@@ -59,34 +62,25 @@ function WindowsResults(props: IWindowsResultsProps) {
                     <ReflexSplitter />
 
                     <ReflexElement
-                        size={0}
+                        size={100}
+                        minSize={5}
                     >
-                        <ReflexSplitter />
-                        <ReflexContainer
-                            orientation="vertical"
-                        >
-                            <ReflexSplitter />
-                            <ReflexElement
-                                className="right-pane"
-                                minSize={20}
-                                size={60}
-                            >
-                                <ReflexContainer orientation="vertical">
-                                    <ReflexSplitter />
-                                    {results.map((element, index) => (
-                                        <>
-                                            key={index}
-                                            <ReflexElement
-                                                key={index}
-                                                minSize={5}
-                                            >
-                                            </ReflexElement>
-                                            <ReflexSplitter />
-                                        </>
-                                    ))}
-                                </ReflexContainer>
-                            </ReflexElement>
-                        </ReflexContainer>
+                        {results.map((item: QueyData, index: number) => {
+                            if (item.isSuccessStatusCode) {
+                                if (item.data && item.data.length > 0) {
+                                    return <>select<br /></>
+                                } else {
+                                    return <>
+                                        <Typography mt={2} color="blue">{item.message}</Typography>
+                                    </>
+                                }
+                            }
+                            else {
+                                return <>
+                                    <Typography mt={2} color="red">{item.message} - Query: {index + 1}</Typography>
+                                </>
+                            }
+                        })}
                     </ReflexElement>
                 </ReflexContainer>
             </div>

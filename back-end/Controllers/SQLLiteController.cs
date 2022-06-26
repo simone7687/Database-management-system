@@ -4,7 +4,7 @@ using System.Net;
 
 [ApiController]
 [Route("[controller]")]
-public class SQLLiteController : ControllerBase, ISQLController<SQLLiteCredentialsModel>
+public class SQLLiteController : ControllerBase, ISQLController<SQLLiteCredentialsModel, SQLLiteQueryBody>
 {
     private readonly ILogger<SQLLiteController> _logger;
     private readonly SQLLiteRepository _repository;
@@ -39,7 +39,7 @@ public class SQLLiteController : ControllerBase, ISQLController<SQLLiteCredentia
     }
 
     [HttpPost("ExecuteQueries")]
-    public HttpResponse<IEnumerable<QueyData<object>>> ExecuteQueries([FromBody] PostgreSQLCredentialsModel credentials, string query)
+    public HttpResponse<IEnumerable<QueyData<object>>> ExecuteQueries([FromBody] SQLLiteQueryBody credentials)
     {
         throw new NotImplementedException();
     }

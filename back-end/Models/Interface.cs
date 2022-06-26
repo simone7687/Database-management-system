@@ -1,4 +1,7 @@
-﻿static class Constants
+﻿namespace back_end.Models
 {
-    public const string UNHANDLED_ERROR = "unhandled_error";
+    static class Constants
+    {
+        public const string UNHANDLED_ERROR = "unhandled_error";
+    }
 }

@@ -3,7 +3,7 @@ using back_end.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Data.Common;
 
-public interface ISQLController<T>
+public interface ISQLController<T, T2>
 {
     [HttpPut("Connect")]
     public HttpResponse<string> Connect(T credentials);
@@ -12,5 +12,5 @@ public interface ISQLController<T>
     [HttpPost("GetInfoTables")]
     public HttpResponse<IEnumerable<InfoTables>> GetInfoTables([FromBody] PostgreSQLCredentialsModel credentials, string tableName);
     [HttpPost("ExecuteQueries")]
-    public HttpResponse<IEnumerable<QueyData<object>>> ExecuteQueries([FromBody] PostgreSQLCredentialsModel credentials, string query);
+    public HttpResponse<IEnumerable<QueyData<object>>> ExecuteQueries([FromBody] T2 credentials);
 }

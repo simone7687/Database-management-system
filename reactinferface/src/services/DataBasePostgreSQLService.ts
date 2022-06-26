@@ -1,5 +1,5 @@
 import { DataBaseService } from "model/DataBaseService";
-import { IPostGressIDBApi } from "model/IDBApi";
+import { IPostGressIDBApi, IPostGressQuery } from "model/IDBApi";
 import { generalIHttpResponseLog, IHttpResponse } from "model/IHttpResponse";
 import { InfoTabelleModel } from "model/InfoTabelleModel";
 import { QueyData } from "model/QueyData";
@@ -83,15 +83,16 @@ class DataBasePostgreSQLService implements DataBaseService<IPostGressIDBApi> {
         if (queryText === '') {
             queryText = "--"
         }
+        let querybody: IPostGressQuery = { ...conn, query: queryText };
 
-        var raw = JSON.stringify(conn);
+        var raw = JSON.stringify(querybody);
 
         var requestOptions = {
             method: 'POST',
             body: raw,
         };
 
-        return this.authService.fetch(this.url + "ExecuteQueries?query=" + queryText, requestOptions, null, "", { signal: abortController.signal })
+        return this.authService.fetch(this.url + "ExecuteQueries", requestOptions, null, "", { signal: abortController.signal })
             .then((response: IHttpResponse<QueyData[]>) => {
                 if (response) {
                     generalIHttpResponseLog(response)
