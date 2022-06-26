@@ -10,7 +10,7 @@ Questo è possibile modificarlo da [qui](/back-end/Program.cs#L12).
 ### Front-end
 Il Front-end invece di default si connette all url: [https://localhost:7119](https://localhost:7119)
 
-Questo è possibile modificarlo da qui.
+Questo è possibile modificarlo da [qui](/reactinferface/.env#L1).
 
 ## Postgresql Docker
 ```docker
