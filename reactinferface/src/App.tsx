@@ -6,6 +6,7 @@ import MultiCodeEditor from "components/MultiCodeEditor";
 import MyAutocomplete from "components/MyAutocomplete";
 import MyDialog from "components/MyDialog";
 import MyTextField from "components/MyTextField";
+import MyTextFieldControlled from "components/MyTextFieldControlled";
 import Sidebars from "components/Sidebars";
 import SideDatabase from "components/SideDatabase";
 import { PostgreSQLConnectionModel, SQLLiteConnectionModel } from "model/ConnectionModels";
@@ -384,13 +385,26 @@ function App() {
                     defaultValue={itemToEditSQLLite?.key || ""}
                     error={errorFieldsSQLLite.includes("key")}
                 />
-                <MyTextField
+
+                <MyTextFieldControlled
                     id="path"
-                    label="PercorsoFile"
+                    label="Percorso File"
+                    // disabled
                     onChange={(event: any) => handleInputChangeGeneric(event, itemToEditSQLLite, setItemToEditSQLLite)}
                     defaultValue={itemToEditSQLLite?.path || ""}
                     error={errorFieldsSQLLite.includes("path")}
                 />
+                <Button
+                    variant="contained"
+                    component="label"
+                >
+                    Seleziona il file
+                    <input
+                        type="file"
+                        hidden
+                        onChange={(event: any) => handleInputChangeGeneric(event, itemToEditSQLLite, setItemToEditSQLLite, "path", event.target?.value)}
+                    />
+                </Button>
             </MyDialog>
 
             {/* Progress Bar */}
