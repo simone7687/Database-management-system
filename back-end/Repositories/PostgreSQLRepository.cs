@@ -111,7 +111,7 @@ public class PostgreSQLRepository : ISQLRepository
         }
     }
 
-    public ResRepository<IEnumerable<QueyData<object>>> ExecuteQueries(string? connString, string[] arrayQuery)
+    public ResRepository<IEnumerable<QueyData<object>>> ExecuteQueries(string? connString, IEnumerable<string> arrayQuery)
     {
         List<QueyData<object>> res = new List<QueyData<object>>();
         try
@@ -129,7 +129,7 @@ public class PostgreSQLRepository : ISQLRepository
                     }
                     try
                     {
-                        if (sQuery.ToLower().Contains("select"))
+                        if (sQuery.ToLower().StartsWith("select"))
                         {
                             var resQuery = conn.QueryAsync<object>(sQuery).Result;
                             res.Add(new QueyData<object>(resQuery, "Rows Read: " + resQuery.Count()));
