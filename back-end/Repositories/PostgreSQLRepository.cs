@@ -13,6 +13,27 @@ public class PostgreSQLRepository : ISQLRepository
         _logger = logger;
     }
 
+    public string BuiltConnectionString(PostgreSQLCredentialsModel credentials)
+    {
+        try
+        {
+            var builder = new NpgsqlConnectionStringBuilder
+            {
+                Host = credentials.Host,
+                Username = credentials.User,
+                Database = credentials.DBname,
+                Port = string.IsNullOrEmpty(credentials.Port) ? 5432 : int.Parse(credentials.Port),
+                Password = credentials.Password
+            };
+            return builder.ConnectionString;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(Constants.UNHANDLED_ERROR, ex);
+            throw;
+        }
+    }
+
     public ResRepository<string> TestConnection(string? connString)
     {
         try

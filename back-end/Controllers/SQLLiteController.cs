@@ -18,7 +18,9 @@ public class SQLLiteController : ControllerBase, ISQLController<SQLLiteCredentia
     [HttpPut("Connect")]
     public HttpResponse<string> Connect(SQLLiteCredentialsModel credentials)
     {
-        var conn = _repository.TestConnection(credentials.Path);
+        string connString = _repository.BuiltConnectionString(credentials);
+
+        var conn = _repository.TestConnection(connString);
         if (conn.Error)
         {
             return new HttpResponse<string>(HttpStatusCode.ServiceUnavailable, conn.Message, conn.Content);

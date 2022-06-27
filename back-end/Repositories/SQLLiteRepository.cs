@@ -1,8 +1,5 @@
 ﻿using back_end.Models;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.Sqlite;
-using Npgsql;
-using System.Data.Common;
 
 public class SQLLiteRepository : ISQLRepository
 {
@@ -11,6 +8,24 @@ public class SQLLiteRepository : ISQLRepository
     public SQLLiteRepository(ILogger<SQLLiteRepository> logger)
     {
         _logger = logger;
+    }
+
+    public string BuiltConnectionString(SQLLiteCredentialsModel credentials)
+    {
+        try
+        {
+            var builder = new SqliteConnectionStringBuilder
+            {
+                DataSource = credentials.Path,
+                Password = credentials.Password
+            };
+            return builder.ConnectionString;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(Constants.UNHANDLED_ERROR, ex);
+            throw;
+        }
     }
 
     public ResRepository<string> TestConnection(string? connString)

@@ -6,5 +6,6 @@ namespace back_end.Models
     {
         [Required]
         public string? Path { get; set; }
+        public string? Password { get; set; }
     }
 }
