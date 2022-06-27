@@ -16,7 +16,7 @@ public class SQLLiteRepository : ISQLRepository
         {
             var builder = new SqliteConnectionStringBuilder
             {
-                DataSource = credentials.Path,
+                DataSource = credentials.Path?.Replace("\\", "/"),
                 Password = credentials.Password
             };
             return builder.ConnectionString;
