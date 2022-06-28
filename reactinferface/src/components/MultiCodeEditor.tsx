@@ -1,4 +1,5 @@
 import AddIcon from '@mui/icons-material/Add';
+import CloseIcon from '@mui/icons-material/Close';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
@@ -71,6 +72,20 @@ function MultiCodeEditor(props: ICodeEditorProps) {
                                 label={"Query " + index}
                                 value={index.toString()}
                                 key={index}
+                                icon={
+                                    <IconButton
+                                        color="primary"
+                                        aria-label="upload picture"
+                                        component="span"
+                                        onClick={() => {
+                                            let a = tabs.filter((a: any, i: number) => { return index !== i })
+                                            setTabs(a);
+                                        }}>
+                                        <CloseIcon fontSize="small" />
+                                    </IconButton>
+
+
+                                } iconPosition="end"
                             />
                         ))}
                     </TabList>
