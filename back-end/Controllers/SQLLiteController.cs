@@ -20,12 +20,20 @@ public class SQLLiteController : ControllerBase, ISQLController<SQLLiteCredentia
     [HttpPut("Connect")]
     public HttpResponse<string> Connect(SQLLiteCredentialsModel credentials)
     {
+
         string connString = _repository.BuiltConnectionString(credentials);
 
         var conn = _repository.TestConnection(connString);
         if (conn.Error)
         {
-            return new HttpResponse<string>(HttpStatusCode.ServiceUnavailable, conn.Message, conn.Content);
+            if (credentials.Path != null && credentials.Path.Contains("fakepath"))
+            {
+                return new HttpResponse<string>(HttpStatusCode.BadRequest, conn.Message, "Il tuo browser non permette la lettura del percorso del file, a causa di un settaggio di sicurezza. Sostituisci “fakepath” con il percorso reale del file.", conn.Content);
+            }
+            else
+            {
+                return new HttpResponse<string>(HttpStatusCode.ServiceUnavailable, conn.Message, conn.Content);
+            }
         }
         return new HttpResponse<string>(HttpStatusCode.OK, conn.Message, conn.Content);
     }
