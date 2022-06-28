@@ -151,6 +151,11 @@ function App() {
             }
             if (res.isSuccessStatusCode && itemToEditPostgreSQL) {
                 let list = dbPostgreSQLList
+
+                let b = listDBToSelect
+                b.push(itemToEditPostgreSQL.key + " - SQLLite")
+                setListDBToSelect(b)
+
                 list.push(itemToEditPostgreSQL)
                 setDBPostgreSQLList(list)
                 setItemToEditPostgreSQL(undefined)
@@ -199,6 +204,11 @@ function App() {
             }
             if (res.isSuccessStatusCode && itemToEditSQLLite) {
                 let list = dbSQLLiteList
+
+                let b = listDBToSelect
+                b.push(itemToEditSQLLite.key + " - PostgreSQL")
+                setListDBToSelect(b)
+
                 list.push(itemToEditSQLLite)
                 setDBSQLLiteList(list)
                 setItemToEditSQLLite(undefined)
