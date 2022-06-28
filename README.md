@@ -24,7 +24,7 @@ Il Front-end invece di default si connette all url: [https://localhost:7119](htt
 Questo è possibile modificarlo da [qui](/reactinferface/.env#L1).
 
 ## Aggiungere un DataBase e conoscere le sue Informazioni
-![image](https://user-images.githubusercontent.com/49060178/176263869-d5e37cd1-5596-4fbf-9572-c9a76bf66ab9.png)
+![image](https://user-images.githubusercontent.com/49060178/176276573-24d9dae1-79d2-4fae-91e0-89ec7dc1eb22.png)
 
 Per collegare un database basta cliccare il '+' nella barra platerale sinistra, ed chiudere la connesione con la 'x'.
 Allinterco della tab del database si può parere una seconda tab che mostrerà la lista delle tabelle.
@@ -32,7 +32,7 @@ Con il pulsante ![image](https://user-images.githubusercontent.com/49060178/1762
 
 
 ## Per eseguire Statement
-![image](https://user-images.githubusercontent.com/49060178/176270082-a7189fc8-2434-41a0-bd04-53f0008e298c.png)
+![image](https://user-images.githubusercontent.com/49060178/176276967-4b2f0083-fd9b-4f2b-9df6-7dd8ad9f9735.png)
 
 Dopo ever stritto la uno o più Statement divise da ';', si deve selezionere il database ed eseguire attraverso il pulsante play.
 
