@@ -1,18 +1,23 @@
-# Database-management-system
-Il progetto è stato realizzato usando ASP.NET Core & React. La soluzione è divisa in due progetti:
+# Database management system
+Il progetto è stato realizzato usando ASP.NET Core & React. 
+
+La soluzione è divisa in due progetti:
 ### Back-end
 
-Implementa una web app e delle API. La documentazione per le API è presente all’indirizzo /swagger.
+Implementa una web app e delle API. 
+La documentazione per le API è presente all’indirizzo /swagger.
 Composta da:
 - Controllers: contiene i controller per le API e delle classi contenenti i metodi esposti dalle API.
-- Repositories: ambiente di un sistema informativo, in cui vengono gestiti i metadati, attraverso tabelle relazionali.
+- Repositories: usate per scrivere e leggere dati dal database (utilizza Dapper per mappare i dati).
+- (Ho preferito non aggiungere un Service intermediario tra Controllers e Repositories)
+
 
 ### Front-end
-Implementa l'intefaccia è stata realizzata attraverso React con interfaccia MUI (https://mui.com/) e tipicizzazion Typescript.
+Implementa l'interfaccia è stata realizzata attraverso React con interfaccia MUI (https://mui.com/) e 
+silicizzazioni Typescript.
 
-# Settaggi
-## Connesione WebApi 
-### Back-end
+# Settaggi per la Connessione WebApi 
+## Back-end
 Il Back-end approva solo la connesione da:
 - [http://localhost:3000](http://localhost:3000)
 - [https://database-management-syst-614c1.web.app](https://database-management-syst-614c1.web.app)
@@ -23,20 +28,28 @@ Il Front-end invece di default si connette all url: [https://localhost:7119](htt
 
 Questo è possibile modificarlo da [qui](/reactinferface/.env#L1).
 
-## Aggiungere un DataBase e conoscere le sue Informazioni
+# Istruzioni
+## Aggiungere un Database e conoscere le sue Informazioni
 ![image](https://user-images.githubusercontent.com/49060178/176276573-24d9dae1-79d2-4fae-91e0-89ec7dc1eb22.png)
 
-Per collegare un database basta cliccare il '+' nella barra platerale sinistra, ed chiudere la connesione con la 'x'.
-Allinterco della tab del database si può parere una seconda tab che mostrerà la lista delle tabelle.
-Con il pulsante ![image](https://user-images.githubusercontent.com/49060178/176268984-6fef5638-ea58-4244-b18c-389642ad51c6.png) si può aprire un finestra che mostrerà le sue informazioni.
+Per collegare un database basta cliccare il '+' nella barra laterale sinistra, ed chiudere la connessione con la 
+'x'.
+
+Durante la connessione SQLite in caso in cui il browser non permette la lettura del percorso del file verrà
+segnalato all’utente e invogliato e settarlo manualmente.
+
+All’interno della tab del database si può aprire una seconda tab che mostrerà la lista delle tabelle.
+
+Con il pulsante ![image](https://user-images.githubusercontent.com/49060178/176268984-6fef5638-ea58-4244-b18c-389642ad51c6.png) si può aprire una finestra che mostrerà le sue informazioni.
 
 
 ## Per eseguire Statement
 ![image](https://user-images.githubusercontent.com/49060178/176276967-4b2f0083-fd9b-4f2b-9df6-7dd8ad9f9735.png)
 
-Dopo ever stritto la uno o più Statement divise da ';', si deve selezionere il database ed eseguire attraverso il pulsante play.
+Dopo aver scritto uno o più Statement divise da ';', si deve selezionare il database ed eseguire attraverso il 
+pulsante play.
 
-Verra mostrato il risultato in una vinestra sottostante.
+Verrà mostrato il risultato in una finestra sottostante.
 
 
 # Database
