@@ -1,8 +1,8 @@
 import AddIcon from '@mui/icons-material/Add';
+import BackupTableIcon from '@mui/icons-material/BackupTable';
 import CloseIcon from '@mui/icons-material/Close';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
 import { Collapse } from '@mui/material';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
@@ -22,10 +22,11 @@ type ISideDatabaseProps<T extends ConnectionModel> = {
     setDatabases: (list: T[]) => void,
     name?: string,
     dataBaseService: DataBaseService<T>,
+    maxWidth: number,
 }
 
 function SideDatabase<T extends ConnectionModel>(props: ISideDatabaseProps<T>) {
-    const { connnectNewDB, databases, setDatabases, name, dataBaseService } = props;
+    const { connnectNewDB, databases, setDatabases, name, dataBaseService, maxWidth } = props;
     const [open, setOpen] = useState(true);
     const handleClick = () => {
         setOpen(!open);
@@ -43,13 +44,13 @@ function SideDatabase<T extends ConnectionModel>(props: ISideDatabaseProps<T>) {
         <>
             <Divider />
             <List
-                sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+                sx={{ width: '100%', maxWidth: maxWidth, bgcolor: 'background.paper' }}
                 component="nav"
                 aria-labelledby="nested-list-subheader"
             >
                 <ListItemButton >
                     <ListItemIcon>
-                        <InboxIcon />
+                        <BackupTableIcon />
                     </ListItemIcon>
                     <ListItemText primary={name} />
                     <IconButton color="primary" aria-label="upload picture" component="span" onClick={connnectNewDB}>
@@ -64,7 +65,7 @@ function SideDatabase<T extends ConnectionModel>(props: ISideDatabaseProps<T>) {
                 <Collapse in={open} timeout="auto" unmountOnExit>
                     {databases.map((item: T, index: number) => (
                         <ListItem key={item.key} disablePadding>
-                            <SideHost<T> database={item} dataBaseService={dataBaseService} >
+                            <SideHost<T> database={item} dataBaseService={dataBaseService} maxWidth={maxWidth}>
                                 <IconButton color="primary" aria-label="upload picture" component="span" onClick={() => { remove(item.key) }}>
                                     <CloseIcon />
                                 </IconButton>

@@ -2,14 +2,14 @@ import Drawer from '@mui/material/Drawer';
 import Toolbar from '@mui/material/Toolbar';
 import { ReactNode } from 'react';
 
-const drawerWidth = 240;
 
 type ISidebarsProps = {
     children?: ReactNode,
+    drawerWidth: number,
 }
 
 function Sidebars(props: ISidebarsProps) {
-    const { children } = props;
+    const { children, drawerWidth } = props;
     return (
         <Drawer
             sx={{

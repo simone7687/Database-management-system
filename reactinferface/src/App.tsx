@@ -17,7 +17,7 @@ import { useRecoilState } from "recoil";
 import DataBasePostgreSQLService from "services/DataBasePostgreSQLService";
 import DataBaseSQLLiteService from "services/DataBaseSQLLiteService";
 
-const drawerWidth = 240;
+const drawerWidth = 400;
 const postgreSQLService = new DataBasePostgreSQLService();
 const SQLLiteService = new DataBaseSQLLiteService();
 
@@ -268,8 +268,9 @@ function App() {
                         </Grid>
                     </Toolbar>
                 </AppBar>
-                <Sidebars >
+                <Sidebars drawerWidth={drawerWidth} >
                     <SideDatabase<SQLLiteConnectionModel>
+                        maxWidth={drawerWidth}
                         databases={dbSQLLiteList}
                         name="SQLLite"
                         connnectNewDB={addDBSQLLite}
@@ -277,6 +278,7 @@ function App() {
                         dataBaseService={SQLLiteService}
                     />
                     <SideDatabase<PostgreSQLConnectionModel>
+                        maxWidth={drawerWidth}
                         databases={dbPostgreSQLList}
                         name="PostgreSQL"
                         connnectNewDB={addDBPostgreSQL}
