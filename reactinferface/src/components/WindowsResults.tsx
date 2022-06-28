@@ -2,7 +2,7 @@ import { Typography } from '@mui/material';
 import { selectDBState } from 'atom/selectDBAtom';
 import { IHttpResponse } from 'model/IHttpResponse';
 import { QueyData } from 'model/QueyData';
-import { ReactNode, useEffect } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { ReflexContainer, ReflexElement, ReflexSplitter } from 'react-reflex';
 import 'react-reflex/styles.css';
 import { useRecoilValue } from 'recoil';
@@ -20,6 +20,7 @@ type IWindowsResultsProps = {
 function WindowsResults(props: IWindowsResultsProps) {
     const { codeText, setExecuteQuery, executeQuery, children, height, results, setResults } = props;
     const selectDB = useRecoilValue(selectDBState);
+    const [resultsTemoraney, setResultsTemoraney] = useState<QueyData[]>(results);
 
     useEffect(() => {
         if (executeQuery && selectDB.dataBaseService && selectDB.conn) {
@@ -27,16 +28,20 @@ function WindowsResults(props: IWindowsResultsProps) {
             selectDB.dataBaseService.executeQueries(selectDB.conn, codeText, abortController).then((res: IHttpResponse<QueyData[]>) => {
                 if (abortController.signal.aborted) {
                     setResults([])
+                    setResultsTemoraney([])
                 }
                 else if (!res.isSuccessStatusCode) {
                     window.alert(res.messages);
                     setResults([])
+                    setResultsTemoraney([])
                 }
                 else if (res.content) {
                     setResults(res.content)
+                    setResultsTemoraney(res.content)
                 }
                 else {
                     setResults([])
+                    setResultsTemoraney([])
                 }
             }).catch((err: Error) => {
                 console.log("getTabellePostgre", err)
@@ -49,7 +54,7 @@ function WindowsResults(props: IWindowsResultsProps) {
             setExecuteQuery(false)
         }
     }, [selectDB, codeText, executeQuery, setExecuteQuery, setResults])
-    if (results.length > 0) {
+    if (resultsTemoraney.length > 0) {
         return (
             <div
                 style={{ height: height, width: '100%' }}
@@ -67,7 +72,7 @@ function WindowsResults(props: IWindowsResultsProps) {
                         size={200}
                         minSize={5}
                     >
-                        {results.map((item: QueyData, index: number) => {
+                        {resultsTemoraney.map((item: QueyData, index: number) => {
                             if (item.isSuccessStatusCode) {
                                 if (item.data && item.data.length > 0) {
                                     return <>
