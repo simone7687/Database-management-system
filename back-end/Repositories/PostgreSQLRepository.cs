@@ -13,27 +13,6 @@ public class PostgreSQLRepository : ISQLRepository
         _logger = logger;
     }
 
-    public string BuiltConnectionString(PostgreSQLCredentialsModel credentials)
-    {
-        try
-        {
-            var builder = new NpgsqlConnectionStringBuilder
-            {
-                Host = credentials.Host,
-                Username = credentials.User,
-                Database = credentials.DBname,
-                Port = string.IsNullOrEmpty(credentials.Port) ? 5432 : int.Parse(credentials.Port),
-                Password = credentials.Password
-            };
-            return builder.ConnectionString;
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(Constants.UNHANDLED_ERROR, ex);
-            throw;
-        }
-    }
-
     public ResRepository<string> TestConnection(string? connString)
     {
         try
@@ -87,20 +66,30 @@ public class PostgreSQLRepository : ISQLRepository
                                 c.column_name  as Name,
                                 c.is_nullable = 'YES' as Nullable,
                                 c.data_type  as type,
-                                c.table_name as     ,
-                                tco.constraint_type = 'PRIMARY KEY' as PrimaryKey,
-                                tco.constraint_type = 'FOREIGN KEY' as ForeignKey,
-                                tco.constraint_type = 'UNIQUE' as Index,
-                                ccu.table_name AS ForeignTable,
-                                ccu.column_name AS ForeignColumn,
-                                row_number() over(order by c.column_name) as Id
+                                c.table_name as TableName
                                 FROM information_schema.columns c
-                                full join information_schema.key_column_usage kcu on c.column_name = kcu.column_name and kcu.table_name = @TableName
-                                left join information_schema.table_constraints tco on kcu.constraint_name = tco.constraint_name and kcu.constraint_schema = tco.constraint_schema and kcu.constraint_name = tco.constraint_name
-                                left JOIN information_schema.constraint_column_usage AS ccu ON ccu.constraint_name = kcu.constraint_name
                                 WHERE c.table_name = @TableName
                                 ORDER BY c.column_name";
+                string sQueryKey = @"select
+                                tco.constraint_type = 'PRIMARY KEY' as PrimaryKey,
+                                tco.constraint_type = 'FOREIGN KEY' as ForeignKey,
+                                tco.constraint_type = 'UNIQUE' as Index
+                                FROM  information_schema.key_column_usage kcu
+                                left join information_schema.table_constraints tco on kcu.constraint_name = tco.constraint_name and kcu.constraint_schema = tco.constraint_schema and kcu.constraint_name = tco.constraint_name
+                                left JOIN information_schema.constraint_column_usage AS ccu ON ccu.constraint_name = kcu.constraint_name
+                                WHERE kcu.table_name = @TableName";
                 var res = conn.QueryAsync<InfoTables>(sQuery, param: new { TableName = tableName }).Result;
+                var resKey = conn.QueryAsync<InfoTables>(sQueryKey, param: new { TableName = tableName }).Result;
+                res = res.Union(resKey);
+
+                var i = 0;
+                var array = res.ToArray();
+                foreach (var item in res)
+                {
+                    item.Id = i;
+                    array[i] = item;
+                    i++;
+                }
                 return new ResRepository<IEnumerable<InfoTables>>(conn.DataSource, res);
             }
         }
