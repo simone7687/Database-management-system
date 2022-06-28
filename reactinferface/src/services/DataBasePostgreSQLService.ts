@@ -57,6 +57,7 @@ class DataBasePostgreSQLService implements DataBaseService<PostgreSQLConnectionM
     }
 
     async getInfoTables(conn: PostgreSQLConnectionModel, tableName: string, abortController: any) {
+        let myArray = tableName.split(".");
         var raw = JSON.stringify(conn);
 
         var requestOptions = {
@@ -64,7 +65,7 @@ class DataBasePostgreSQLService implements DataBaseService<PostgreSQLConnectionM
             body: raw,
         };
 
-        return this.authService.fetch(this.url + "GetInfoTables?tableName=" + tableName, requestOptions, null, "", { signal: abortController.signal })
+        return this.authService.fetch(this.url + "GetInfoTables?tableName=" + myArray[1], requestOptions, null, "", { signal: abortController.signal })
             .then((response: IHttpResponse<InfoTabelleModel[]>) => {
                 if (response) {
                     generalIHttpResponseLog(response)
