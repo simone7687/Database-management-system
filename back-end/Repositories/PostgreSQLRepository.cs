@@ -60,7 +60,7 @@ public class PostgreSQLRepository : ISQLRepository
             {
                 _logger.LogTrace("GetTableListName PostgreSQLRepository");
                 conn.Open();
-                string sQuery = @"SELECT table_name AS TableName
+                string sQuery = @"SELECT concat_ws('.', table_schema, table_name) AS TableName
                                 FROM information_schema.tables
                                 WHERE table_type='BASE TABLE'
                                 ORDER BY table_name";

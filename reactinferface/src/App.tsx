@@ -295,6 +295,8 @@ function App() {
                     <Toolbar />
                     <MultiCodeEditor
                         defaultValue="-- Per eseguire più statement suddividere le query con: ';'
+-- Per le select in postgres: nel from bisogna inserire nome_schema.nome_tabella
+-- Es: SELECT * FROM myschema.mytable;
 "
                     />
                 </Grid>
