@@ -86,21 +86,40 @@ public class PostgreSQLRepository : ISQLRepository
                 string sQuery = @"select
                                 c.column_name  as Name,
                                 c.is_nullable = 'YES' as Nullable,
-                                c.data_type  as type,
-                                c.table_name as     ,
+                                '" + tableName + @"' as TableName,
                                 tco.constraint_type = 'PRIMARY KEY' as PrimaryKey,
-                                tco.constraint_type = 'FOREIGN KEY' as ForeignKey,
                                 tco.constraint_type = 'UNIQUE' as Index,
-                                ccu.table_name AS ForeignTable,
-                                ccu.column_name AS ForeignColumn,
-                                row_number() over(order by c.column_name) as Id
+                                c.data_type  as type
                                 FROM information_schema.columns c
-                                full join information_schema.key_column_usage kcu on c.column_name = kcu.column_name and kcu.table_name = @TableName
+                                full join information_schema.key_column_usage kcu on c.column_name = kcu.column_name and kcu.table_name = 'pg_cast'
                                 left join information_schema.table_constraints tco on kcu.constraint_name = tco.constraint_name and kcu.constraint_schema = tco.constraint_schema and kcu.constraint_name = tco.constraint_name
-                                left JOIN information_schema.constraint_column_usage AS ccu ON ccu.constraint_name = kcu.constraint_name
                                 WHERE c.table_name = @TableName
                                 ORDER BY c.column_name";
+                string sQueryKey = @"select
+                                kcu.constraint_name as Name, 
+                                tco.constraint_type = 'FOREIGN KEY' as ForeignKey,
+                                tco.constraint_type = 'PRIMARY KEY' as PrimaryKey,
+                                tco.constraint_type = 'UNIQUE' as Index,
+                                tco.constraint_type as type,
+                                ccu.table_name AS ForeignTable,
+                                '" + tableName + @"' as TableName,
+                                ccu.column_name AS ForeignColumn
+                                FROM  information_schema.key_column_usage kcu 
+                                left join information_schema.table_constraints tco on kcu.constraint_name = tco.constraint_name and kcu.constraint_schema = tco.constraint_schema and kcu.constraint_name = tco.constraint_name
+                                left JOIN information_schema.constraint_column_usage AS ccu ON ccu.constraint_name = kcu.constraint_name
+                                WHERE tco.table_name = @TableName";
                 var res = conn.QueryAsync<InfoTables>(sQuery, param: new { TableName = tableName }).Result;
+                var resKey = conn.QueryAsync<InfoTables>(sQueryKey, param: new { TableName = tableName }).Result;
+                res = res.Union(resKey);
+
+                var i = 0;
+                var array = res.ToArray();
+                foreach (var item in res)
+                {
+                    item.Id = i;
+                    array[i] = item;
+                    i++;
+                }
                 return new ResRepository<IEnumerable<InfoTables>>(conn.DataSource, res);
             }
         }

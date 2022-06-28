@@ -153,7 +153,7 @@ function App() {
                 let list = dbPostgreSQLList
 
                 let b = listDBToSelect
-                b.push(itemToEditPostgreSQL.key + " - SQLLite")
+                b.push(itemToEditPostgreSQL.key + " - PostgreSQL")
                 setListDBToSelect(b)
 
                 list.push(itemToEditPostgreSQL)
@@ -206,7 +206,7 @@ function App() {
                 let list = dbSQLLiteList
 
                 let b = listDBToSelect
-                b.push(itemToEditSQLLite.key + " - PostgreSQL")
+                b.push(itemToEditSQLLite.key + " - SQLLite")
                 setListDBToSelect(b)
 
                 list.push(itemToEditSQLLite)
@@ -269,19 +269,19 @@ function App() {
                     </Toolbar>
                 </AppBar>
                 <Sidebars >
-                    <SideDatabase<PostgreSQLConnectionModel>
-                        databases={dbPostgreSQLList}
-                        name="PostgreSQL"
-                        connnectNewDB={addDBPostgreSQL}
-                        setDatabases={setDBPostgreSQLList}
-                        dataBaseService={postgreSQLService}
-                    />
                     <SideDatabase<SQLLiteConnectionModel>
                         databases={dbSQLLiteList}
                         name="SQLLite"
                         connnectNewDB={addDBSQLLite}
                         setDatabases={setDBSQLLiteList}
                         dataBaseService={SQLLiteService}
+                    />
+                    <SideDatabase<PostgreSQLConnectionModel>
+                        databases={dbPostgreSQLList}
+                        name="PostgreSQL"
+                        connnectNewDB={addDBPostgreSQL}
+                        setDatabases={setDBPostgreSQLList}
+                        dataBaseService={postgreSQLService}
                     />
                 </Sidebars>
                 <Grid
