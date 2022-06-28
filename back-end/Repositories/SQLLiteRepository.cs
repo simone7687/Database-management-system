@@ -88,13 +88,16 @@ public class SQLLiteRepository : ISQLRepository
                                 JOIN (SELECT COUNT(*) FROM " + tableName + @")";
                 string sQueryIndex = @"SELECT name  as Name,
                                 '" + tableName + @"' as TableName,
+                                type as Type,
                                 IIF(type = 'index', 1, 0 ) as 'Index'
                                 FROM sqlite_master 
                                 WHERE tbl_name = '" + tableName + @"' and type = 'index'";
                 string sQueryForeignKey = @"select 
                                 '" + tableName + @"' as TableName,
+                                'ForeignKey' as Type,
+                                [table] as ForeignTable,
                                 1 AS ForeignKey,
-                                [to] as ForeignColumn
+                                [to] as Name
                                 FROM pragma_foreign_key_list('" + tableName + @"')";
                 var res = conn.QueryAsync<InfoTables>(sQuery).Result;
                 var resIndex = conn.QueryAsync<InfoTables>(sQueryIndex).Result;
