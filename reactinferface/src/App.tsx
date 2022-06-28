@@ -9,17 +9,17 @@ import MyTextField from "components/MyTextField";
 import MyTextFieldControlled from "components/MyTextFieldControlled";
 import Sidebars from "components/Sidebars";
 import SideDatabase from "components/SideDatabase";
-import { PostgreSQLConnectionModel, SQLLiteConnectionModel } from "model/ConnectionModels";
+import { PostgreSQLConnectionModel, SQLiteConnectionModel } from "model/ConnectionModels";
 import { IHttpResponse } from "model/IHttpResponse";
 import { useEffect, useState } from "react";
 import { BrowserRouter } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import DataBasePostgreSQLService from "services/DataBasePostgreSQLService";
-import DataBaseSQLLiteService from "services/DataBaseSQLLiteService";
+import DataBaseSQLiteService from "services/DataBaseSQLLiteService";
 
 const drawerWidth = 400;
 const postgreSQLService = new DataBasePostgreSQLService();
-const SQLLiteService = new DataBaseSQLLiteService();
+const SQLiteService = new DataBaseSQLiteService();
 
 function App() {
     // PostgreSQL
@@ -28,12 +28,12 @@ function App() {
     const [openErrorPostgreSQLDialog, setOpenErrorPostgreSQLDialog] = useState(false)
     const [itemToEditPostgreSQL, setItemToEditPostgreSQL] = useState<PostgreSQLConnectionModel>()
     const [errorFieldsPostgreSQL, setErrorFieldsPostgreSQL] = useState<string[]>([])
-    // SQLLite
-    const [dbSQLLiteList, setDBSQLLiteListState] = useState<SQLLiteConnectionModel[]>(JSON.parse(localStorage.getItem('dbSQLLiteList') || "null") || [])
-    const [openSQLLiteDialog, setOpenSQLLiteDialog] = useState(false)
-    const [openErrorSQLLiteDialog, setOpenErrorSQLLiteDialog] = useState(false)
-    const [itemToEditSQLLite, setItemToEditSQLLite] = useState<SQLLiteConnectionModel>()
-    const [errorFieldsSQLLite, setErrorFieldsSQLLite] = useState<string[]>([])
+    // SQLite
+    const [dbSQLiteList, setDBSQLiteListState] = useState<SQLiteConnectionModel[]>(JSON.parse(localStorage.getItem('dbSQLiteList') || "null") || [])
+    const [openSQLiteDialog, setOpenSQLiteDialog] = useState(false)
+    const [openErrorSQLiteDialog, setOpenErrorSQLiteDialog] = useState(false)
+    const [itemToEditSQLite, setItemToEditSQLite] = useState<SQLiteConnectionModel>()
+    const [errorFieldsSQLite, setErrorFieldsSQLite] = useState<string[]>([])
     //Olther
     const [listDBToSelect, setListDBToSelect] = useState<string[]>([])
     const [selectDB, setSelectDB] = useRecoilState(selectDBState)
@@ -67,11 +67,11 @@ function App() {
                 })
                 setSelectDB({ id: a[0], conn: c, dataBaseService: postgreSQLService })
             }
-            else if (a[1] === "SQLLite") {
-                let c = dbSQLLiteList.find((item: SQLLiteConnectionModel) => {
+            else if (a[1] === "SQLite") {
+                let c = dbSQLiteList.find((item: SQLiteConnectionModel) => {
                     return item.key === a[0]
                 })
-                setSelectDB({ id: a[0], conn: c, dataBaseService: SQLLiteService })
+                setSelectDB({ id: a[0], conn: c, dataBaseService: SQLiteService })
             }
         }
         catch (er: any) {
@@ -83,11 +83,11 @@ function App() {
         var dbPostgreSQLListName = dbPostgreSQLList.map((item) => {
             return (item.key + " - PostgreSQL")
         })
-        var dbSQLLiteListName = dbSQLLiteList.map((item) => {
-            return (item.key + " - SQLLite")
+        var dbSQLiteListName = dbSQLiteList.map((item) => {
+            return (item.key + " - SQLite")
         })
-        setListDBToSelect([...dbPostgreSQLListName, ...dbSQLLiteListName])
-    }, [dbPostgreSQLList, dbSQLLiteList])
+        setListDBToSelect([...dbPostgreSQLListName, ...dbSQLiteListName])
+    }, [dbPostgreSQLList, dbSQLiteList])
 
     const setDBPostgreSQLList = (list: PostgreSQLConnectionModel[]) => {
         setDBPostgreSQLListState(list)
@@ -98,20 +98,20 @@ function App() {
         setOpenPostgreSQLDialog(true);
     }
 
-    const setDBSQLLiteList = (list: SQLLiteConnectionModel[]) => {
-        setDBSQLLiteListState(list)
-        localStorage.setItem('dbSQLLiteList', JSON.stringify(list));
+    const setDBSQLiteList = (list: SQLiteConnectionModel[]) => {
+        setDBSQLiteListState(list)
+        localStorage.setItem('dbSQLiteList', JSON.stringify(list));
     }
 
-    const addDBSQLLite = () => {
-        setOpenSQLLiteDialog(true);
+    const addDBSQLite = () => {
+        setOpenSQLiteDialog(true);
     }
 
     const handleCloseDialogs = () => {
         setOpenPostgreSQLDialog(false);
-        setOpenSQLLiteDialog(false);
+        setOpenSQLiteDialog(false);
         setOpenProgressBarDialog(false);
-        setOpenErrorSQLLiteDialog(false);
+        setOpenErrorSQLiteDialog(false);
     };
 
     const handleSendPostgreSQL = (item: PostgreSQLConnectionModel) => {
@@ -179,8 +179,8 @@ function App() {
     }
 
 
-    const handleSendSQLLite = (item: SQLLiteConnectionModel) => {
-        setErrorFieldsSQLLite([])
+    const handleSendSQLite = (item: SQLiteConnectionModel) => {
+        setErrorFieldsSQLite([])
         var er = []
         if (!item.key || item.key === "") {
             er.push("key")
@@ -188,42 +188,42 @@ function App() {
         if (!item.path || item.path === "") {
             er.push("path")
         }
-        setErrorFieldsSQLLite(er)
+        setErrorFieldsSQLite(er)
         if (er.length > 0) {
             return
         }
 
-        setOpenSQLLiteDialog(false);
-        setOpenErrorSQLLiteDialog(false);
+        setOpenSQLiteDialog(false);
+        setOpenErrorSQLiteDialog(false);
         setOpenProgressBarDialog(true);
 
         const abortController = new AbortController();
-        SQLLiteService.connect(item, abortController).then((res: IHttpResponse<string>) => {
+        SQLiteService.connect(item, abortController).then((res: IHttpResponse<string>) => {
             if (abortController.signal.aborted) {
                 return;
             }
-            if (res.isSuccessStatusCode && itemToEditSQLLite) {
-                let list = dbSQLLiteList
+            if (res.isSuccessStatusCode && itemToEditSQLite) {
+                let list = dbSQLiteList
 
                 let b = listDBToSelect
-                b.push(itemToEditSQLLite.key + " - SQLLite")
+                b.push(itemToEditSQLite.key + " - SQLite")
                 setListDBToSelect(b)
 
-                list.push(itemToEditSQLLite)
-                setDBSQLLiteList(list)
-                setItemToEditSQLLite(undefined)
+                list.push(itemToEditSQLite)
+                setDBSQLiteList(list)
+                setItemToEditSQLite(undefined)
                 setOpenProgressBarDialog(false);
             }
             else {
                 setOpenProgressBarDialog(false);
-                setOpenSQLLiteDialog(true);
+                setOpenSQLiteDialog(true);
                 // TODO cambiare ErrorDialog
-                setOpenErrorSQLLiteDialog(true);
+                setOpenErrorSQLiteDialog(true);
             }
         }).catch((err: Error) => {
             console.log("handleSend", err)
             setOpenProgressBarDialog(false);
-            setOpenErrorSQLLiteDialog(true);
+            setOpenErrorSQLiteDialog(true);
         })
 
         return function cleanUp() {
@@ -269,13 +269,13 @@ function App() {
                     </Toolbar>
                 </AppBar>
                 <Sidebars drawerWidth={drawerWidth} >
-                    <SideDatabase<SQLLiteConnectionModel>
+                    <SideDatabase<SQLiteConnectionModel>
                         maxWidth={drawerWidth}
-                        databases={dbSQLLiteList}
-                        name="SQLLite"
-                        connnectNewDB={addDBSQLLite}
-                        setDatabases={setDBSQLLiteList}
-                        dataBaseService={SQLLiteService}
+                        databases={dbSQLiteList}
+                        name="SQLite"
+                        connnectNewDB={addDBSQLite}
+                        setDatabases={setDBSQLiteList}
+                        dataBaseService={SQLiteService}
                     />
                     <SideDatabase<PostgreSQLConnectionModel>
                         maxWidth={drawerWidth}
@@ -373,19 +373,19 @@ function App() {
             </MyDialog>
 
 
-            {/* SQLLite Dialog */}
+            {/* SQLite Dialog */}
             <MyDialog
-                open={openSQLLiteDialog}
+                open={openSQLiteDialog}
                 title="Parametri di connessione"
                 maxWidth="sm"
                 actions={
                     <>
                         <Button onClick={handleCloseDialogs}>Annulla</Button>
                         <Button
-                            disabled={!itemToEditSQLLite}
+                            disabled={!itemToEditSQLite}
                             onClick={() => {
-                                if (itemToEditSQLLite) {
-                                    handleSendSQLLite(itemToEditSQLLite)
+                                if (itemToEditSQLite) {
+                                    handleSendSQLite(itemToEditSQLite)
                                 }
                             }}
                         >Connettiti</Button>
@@ -393,23 +393,23 @@ function App() {
                 }
             >
                 <DialogContentText>
-                    SQLLite parametri di connessione.
+                    SQLite parametri di connessione.
                 </DialogContentText>
                 <MyTextField
                     id="key"
                     label="Nome"
-                    onChange={(event: any) => handleInputChangeGeneric(event, itemToEditSQLLite, setItemToEditSQLLite)}
-                    defaultValue={itemToEditSQLLite?.key || ""}
-                    error={errorFieldsSQLLite.includes("key")}
+                    onChange={(event: any) => handleInputChangeGeneric(event, itemToEditSQLite, setItemToEditSQLite)}
+                    defaultValue={itemToEditSQLite?.key || ""}
+                    error={errorFieldsSQLite.includes("key")}
                 />
 
                 <MyTextFieldControlled
                     id="path"
                     label="Percorso File"
                     // disabled
-                    onChange={(event: any) => handleInputChangeGeneric(event, itemToEditSQLLite, setItemToEditSQLLite)}
-                    defaultValue={itemToEditSQLLite?.path || ""}
-                    error={errorFieldsSQLLite.includes("path")}
+                    onChange={(event: any) => handleInputChangeGeneric(event, itemToEditSQLite, setItemToEditSQLite)}
+                    defaultValue={itemToEditSQLite?.path || ""}
+                    error={errorFieldsSQLite.includes("path")}
                 />
                 <Button
                     variant="contained"
@@ -419,7 +419,7 @@ function App() {
                     <input
                         type="file"
                         hidden
-                        onChange={(event: any) => handleInputChangeGeneric(event, itemToEditSQLLite, setItemToEditSQLLite, "path", event.target?.value)}
+                        onChange={(event: any) => handleInputChangeGeneric(event, itemToEditSQLite, setItemToEditSQLite, "path", event.target?.value)}
                     />
                 </Button>
             </MyDialog>
@@ -474,19 +474,19 @@ function App() {
                     </DialogContentText>
                 </Grid>
             </MyDialog>
-            {/* Error SQLLite */}
+            {/* Error SQLite */}
             <MyDialog
-                open={openErrorSQLLiteDialog}
+                open={openErrorSQLiteDialog}
                 title="Error"
                 maxWidth="sm"
                 actions={
                     <>
                         <Button onClick={handleCloseDialogs}>Annulla</Button>
                         <Button
-                            disabled={!itemToEditSQLLite}
+                            disabled={!itemToEditSQLite}
                             onClick={() => {
-                                if (itemToEditSQLLite) {
-                                    handleSendSQLLite(itemToEditSQLLite)
+                                if (itemToEditSQLite) {
+                                    handleSendSQLite(itemToEditSQLite)
                                 }
                             }}
                         >Riprova</Button>

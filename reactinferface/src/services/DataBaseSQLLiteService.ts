@@ -1,16 +1,16 @@
-import { SQLLiteConnectionModel, SQLLiteQueryModel } from "model/ConnectionModels";
+import { SQLiteConnectionModel, SQLiteQueryModel } from "model/ConnectionModels";
 import { DataBaseService } from "model/DataBaseService";
 import { generalIHttpResponseLog, IHttpResponse } from "model/IHttpResponse";
 import { InfoTabelleModel } from "model/InfoTabelleModel";
 import { QueyData } from "model/QueyData";
 import RequestsService from "./RequestsService";
 
-class DataBaseSQLLiteService implements DataBaseService<SQLLiteConnectionModel> {
-    url = process.env.REACT_APP_API_URL + "/SQLLite/";
+class DataBaseSQLiteService implements DataBaseService<SQLiteConnectionModel> {
+    url = process.env.REACT_APP_API_URL + "/SQLite/";
 
     authService = new RequestsService();
 
-    async connect(conn: SQLLiteConnectionModel, abortController: any) {
+    async connect(conn: SQLiteConnectionModel, abortController: any) {
         var raw = JSON.stringify(conn);
 
         var requestOptions = {
@@ -33,7 +33,7 @@ class DataBaseSQLLiteService implements DataBaseService<SQLLiteConnectionModel> 
             });
     }
 
-    async getTablesListName(conn: SQLLiteConnectionModel, abortController: any) {
+    async getTablesListName(conn: SQLiteConnectionModel, abortController: any) {
         var raw = JSON.stringify(conn);
 
         var requestOptions = {
@@ -56,7 +56,7 @@ class DataBaseSQLLiteService implements DataBaseService<SQLLiteConnectionModel> 
             });
     }
 
-    async getInfoTables(conn: SQLLiteConnectionModel, tableName: string, abortController: any) {
+    async getInfoTables(conn: SQLiteConnectionModel, tableName: string, abortController: any) {
         var raw = JSON.stringify(conn);
 
         var requestOptions = {
@@ -79,11 +79,11 @@ class DataBaseSQLLiteService implements DataBaseService<SQLLiteConnectionModel> 
             });
     }
 
-    async executeQueries(conn: SQLLiteConnectionModel, queryText: string, abortController: any) {
+    async executeQueries(conn: SQLiteConnectionModel, queryText: string, abortController: any) {
         if (queryText === '') {
             queryText = "--"
         }
-        let querybody: SQLLiteQueryModel = { ...conn, query: queryText };
+        let querybody: SQLiteQueryModel = { ...conn, query: queryText };
 
         var raw = JSON.stringify(querybody);
 
@@ -107,4 +107,4 @@ class DataBaseSQLLiteService implements DataBaseService<SQLLiteConnectionModel> 
             });
     }
 }
-export default DataBaseSQLLiteService;
+export default DataBaseSQLiteService;

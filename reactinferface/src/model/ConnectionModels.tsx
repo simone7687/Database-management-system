@@ -15,10 +15,10 @@ export interface PostgreSQLQueryModel extends PostgreSQLConnectionModel {
     query?: string,
 }
 
-export interface SQLLiteConnectionModel extends ConnectionModel {
+export interface SQLiteConnectionModel extends ConnectionModel {
     path: string,
 }
 
-export interface SQLLiteQueryModel extends SQLLiteConnectionModel {
+export interface SQLiteQueryModel extends SQLiteConnectionModel {
     query?: string,
 }
