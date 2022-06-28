@@ -104,16 +104,16 @@ const columns = [
             </strong>
         )
     },
-    {
-        field: 'foreignColumn',
-        headerName: 'Column Foreign',
-        minWidth: 200,
-        renderCell: (params: any) => (
-            <strong>
-                {params?.value}
-            </strong>
-        )
-    },
+    // {
+    //     field: 'foreignColumn',
+    //     headerName: 'Column Foreign',
+    //     minWidth: 200,
+    //     renderCell: (params: any) => (
+    //         <strong>
+    //             {params?.value}
+    //         </strong>
+    //     )
+    // },
 ];
 
 type InfoTabelleProps = {

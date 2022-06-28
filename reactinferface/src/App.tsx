@@ -269,19 +269,19 @@ function App() {
                     </Toolbar>
                 </AppBar>
                 <Sidebars >
-                    <SideDatabase<PostgreSQLConnectionModel>
-                        databases={dbPostgreSQLList}
-                        name="PostgreSQL"
-                        connnectNewDB={addDBPostgreSQL}
-                        setDatabases={setDBPostgreSQLList}
-                        dataBaseService={postgreSQLService}
-                    />
                     <SideDatabase<SQLLiteConnectionModel>
                         databases={dbSQLLiteList}
                         name="SQLLite"
                         connnectNewDB={addDBSQLLite}
                         setDatabases={setDBSQLLiteList}
                         dataBaseService={SQLLiteService}
+                    />
+                    <SideDatabase<PostgreSQLConnectionModel>
+                        databases={dbPostgreSQLList}
+                        name="PostgreSQL"
+                        connnectNewDB={addDBPostgreSQL}
+                        setDatabases={setDBPostgreSQLList}
+                        dataBaseService={postgreSQLService}
                     />
                 </Sidebars>
                 <Grid
