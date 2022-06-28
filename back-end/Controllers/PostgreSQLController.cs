@@ -20,14 +20,7 @@ public class PostgreSQLController : ControllerBase, ISQLController<PostgreSQLCre
     [HttpPut("Connect")]
     public HttpResponse<string> Connect(PostgreSQLCredentialsModel credentials)
     {
-        string connString = string.Format(
-            "Server={0};Username={1};Database={2};Port={3};Password={4};SSLMode=Prefer",
-            credentials.Host,
-            credentials.User,
-            credentials.DBname,
-            credentials.Port,
-            credentials.Password
-        );
+        string connString = _repository.BuiltConnectionString(credentials);
 
         var conn = _repository.TestConnection(connString);
         if (conn.Error)
@@ -40,14 +33,7 @@ public class PostgreSQLController : ControllerBase, ISQLController<PostgreSQLCre
     [HttpPost("GetTablesListName")]
     public HttpResponse<IEnumerable<string>> GetTablesListName(PostgreSQLCredentialsModel credentials)
     {
-        string connString = string.Format(
-            "Server={0};Username={1};Database={2};Port={3};Password={4};SSLMode=Prefer",
-            credentials.Host,
-            credentials.User,
-            credentials.DBname,
-            credentials.Port,
-            credentials.Password
-        );
+        string connString = _repository.BuiltConnectionString(credentials);
 
         var data = _repository.GetTablesListName(connString);
         if (data.Error)
@@ -60,14 +46,7 @@ public class PostgreSQLController : ControllerBase, ISQLController<PostgreSQLCre
     [HttpPost("GetInfoTables")]
     public HttpResponse<IEnumerable<InfoTables>> GetInfoTables([FromBody] PostgreSQLCredentialsModel credentials, string tableName)
     {
-        string connString = string.Format(
-            "Server={0};Username={1};Database={2};Port={3};Password={4};SSLMode=Prefer",
-            credentials.Host,
-            credentials.User,
-            credentials.DBname,
-            credentials.Port,
-            credentials.Password
-        );
+        string connString = _repository.BuiltConnectionString(credentials);
 
         var data = _repository.GetInfoTables(connString, tableName);
         if (data.Error)
@@ -80,14 +59,7 @@ public class PostgreSQLController : ControllerBase, ISQLController<PostgreSQLCre
     [HttpPost("ExecuteQueries")]
     public HttpResponse<IEnumerable<QueyData<object>>> ExecuteQueries([FromBody] PostgreSQLQueryBody credentials)
     {
-        string connString = string.Format(
-            "Server={0};Username={1};Database={2};Port={3};Password={4};SSLMode=Prefer",
-            credentials.Host,
-            credentials.User,
-            credentials.DBname,
-            credentials.Port,
-            credentials.Password
-        );
+        string connString = _repository.BuiltConnectionString(credentials);
         if (string.IsNullOrWhiteSpace(credentials.Query))
         {
             return new HttpResponse<IEnumerable<QueyData<object>>>(HttpStatusCode.OK, "Query nulla");

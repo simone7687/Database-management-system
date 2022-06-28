@@ -16,6 +16,13 @@ namespace back_end.Models
             Messages = messages;
             Content = content;
         }
+        public HttpResponse(HttpStatusCode statusCode, string messages, string messagesAlert, T? content)
+        {
+            StatusCode = statusCode;
+            Messages = messages;
+            MessagesAlert = messagesAlert;
+            Content = content;
+        }
         public HttpResponse(HttpStatusCode statusCode, string messages)
         {
             StatusCode = statusCode;
@@ -23,5 +30,6 @@ namespace back_end.Models
         }
         public new T? Content { get; set; }
         public string Messages { get; set; }
+        public string? MessagesAlert { get; set; }
     }
 }

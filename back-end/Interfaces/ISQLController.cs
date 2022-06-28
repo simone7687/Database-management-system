@@ -10,7 +10,7 @@ public interface ISQLController<T, T2>
     [HttpPost("GetTablesListName")]
     public HttpResponse<IEnumerable<string>> GetTablesListName(T credentials);
     [HttpPost("GetInfoTables")]
-    public HttpResponse<IEnumerable<InfoTables>> GetInfoTables([FromBody] PostgreSQLCredentialsModel credentials, string tableName);
+    public HttpResponse<IEnumerable<InfoTables>> GetInfoTables([FromBody] T credentials, string tableName);
     [HttpPost("ExecuteQueries")]
     public HttpResponse<IEnumerable<QueyData<object>>> ExecuteQueries([FromBody] T2 credentials);
 }

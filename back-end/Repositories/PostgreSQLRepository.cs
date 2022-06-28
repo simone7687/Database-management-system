@@ -13,6 +13,27 @@ public class PostgreSQLRepository : ISQLRepository
         _logger = logger;
     }
 
+    public string BuiltConnectionString(PostgreSQLCredentialsModel credentials)
+    {
+        try
+        {
+            var builder = new NpgsqlConnectionStringBuilder
+            {
+                Host = credentials.Host,
+                Username = credentials.User,
+                Database = credentials.DBname,
+                Port = string.IsNullOrEmpty(credentials.Port) ? 5432 : int.Parse(credentials.Port),
+                Password = credentials.Password
+            };
+            return builder.ConnectionString;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(Constants.UNHANDLED_ERROR, ex);
+            throw;
+        }
+    }
+
     public ResRepository<string> TestConnection(string? connString)
     {
         try
@@ -66,7 +87,7 @@ public class PostgreSQLRepository : ISQLRepository
                                 c.column_name  as Name,
                                 c.is_nullable = 'YES' as Nullable,
                                 c.data_type  as type,
-                                c.table_name as TableName,
+                                c.table_name as     ,
                                 tco.constraint_type = 'PRIMARY KEY' as PrimaryKey,
                                 tco.constraint_type = 'FOREIGN KEY' as ForeignKey,
                                 tco.constraint_type = 'UNIQUE' as Index,

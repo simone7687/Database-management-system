@@ -6,27 +6,38 @@ import MultiCodeEditor from "components/MultiCodeEditor";
 import MyAutocomplete from "components/MyAutocomplete";
 import MyDialog from "components/MyDialog";
 import MyTextField from "components/MyTextField";
+import MyTextFieldControlled from "components/MyTextFieldControlled";
 import Sidebars from "components/Sidebars";
 import SideDatabase from "components/SideDatabase";
-import { IPostGressIDBApi } from "model/IDBApi";
+import { PostgreSQLConnectionModel, SQLLiteConnectionModel } from "model/ConnectionModels";
 import { IHttpResponse } from "model/IHttpResponse";
 import { useEffect, useState } from "react";
 import { BrowserRouter } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import DataBasePostgreSQLService from "services/DataBasePostgreSQLService";
+import DataBaseSQLLiteService from "services/DataBaseSQLLiteService";
 
 const drawerWidth = 240;
 const postgreSQLService = new DataBasePostgreSQLService();
+const SQLLiteService = new DataBaseSQLLiteService();
 
 function App() {
-    const [dbPostgreSQLList, setDBPostgreSQLListState] = useState<IPostGressIDBApi[]>(JSON.parse(localStorage.getItem('dbPostgreSQLList') || "null") || [])
-    const [openBugDialog, setOpenBugDialog] = useState(false)
-    const [openProgressBarDialog, setOpenProgressBarDialog] = useState(false)
-    const [openErrorDialog, setOpenErrorDialog] = useState(false)
-    const [itemToEdit, setItemToEdit] = useState<IPostGressIDBApi>()
-    const [errorFields, setErrorFields] = useState<string[]>([])
+    // PostgreSQL
+    const [dbPostgreSQLList, setDBPostgreSQLListState] = useState<PostgreSQLConnectionModel[]>(JSON.parse(localStorage.getItem('dbPostgreSQLList') || "null") || [])
+    const [openPostgreSQLDialog, setOpenPostgreSQLDialog] = useState(false)
+    const [openErrorPostgreSQLDialog, setOpenErrorPostgreSQLDialog] = useState(false)
+    const [itemToEditPostgreSQL, setItemToEditPostgreSQL] = useState<PostgreSQLConnectionModel>()
+    const [errorFieldsPostgreSQL, setErrorFieldsPostgreSQL] = useState<string[]>([])
+    // SQLLite
+    const [dbSQLLiteList, setDBSQLLiteListState] = useState<SQLLiteConnectionModel[]>(JSON.parse(localStorage.getItem('dbSQLLiteList') || "null") || [])
+    const [openSQLLiteDialog, setOpenSQLLiteDialog] = useState(false)
+    const [openErrorSQLLiteDialog, setOpenErrorSQLLiteDialog] = useState(false)
+    const [itemToEditSQLLite, setItemToEditSQLLite] = useState<SQLLiteConnectionModel>()
+    const [errorFieldsSQLLite, setErrorFieldsSQLLite] = useState<string[]>([])
+    //Olther
     const [listDBToSelect, setListDBToSelect] = useState<string[]>([])
     const [selectDB, setSelectDB] = useRecoilState(selectDBState)
+    const [openProgressBarDialog, setOpenProgressBarDialog] = useState(false)
 
     function handleInputChangeGeneric(event: any, itemToEdit: any, setItemToEdit: any, id?: string, newVal?: any) {
         const target = event.target;
@@ -50,11 +61,17 @@ function App() {
         try {
             console.log(selectDB)
             let a = value.split(" - ")
-            let c = dbPostgreSQLList.find((item: IPostGressIDBApi) => {
-                return item.dbName === a[0]
-            })
             if (a[1] === "PostgreSQL") {
+                let c = dbPostgreSQLList.find((item: PostgreSQLConnectionModel) => {
+                    return item.key === a[0]
+                })
                 setSelectDB({ id: a[0], conn: c, dataBaseService: postgreSQLService })
+            }
+            else if (a[1] === "SQLLite") {
+                let c = dbSQLLiteList.find((item: SQLLiteConnectionModel) => {
+                    return item.key === a[0]
+                })
+                setSelectDB({ id: a[0], conn: c, dataBaseService: SQLLiteService })
             }
         }
         catch (er: any) {
@@ -64,29 +81,45 @@ function App() {
 
     useEffect(() => {
         var dbPostgreSQLListName = dbPostgreSQLList.map((item) => {
-            return (item.dbName + " - PostgreSQL")
+            return (item.key + " - PostgreSQL")
         })
-        setListDBToSelect(dbPostgreSQLListName)
-    }, [dbPostgreSQLList])
+        var dbSQLLiteListName = dbSQLLiteList.map((item) => {
+            return (item.key + " - SQLLite")
+        })
+        setListDBToSelect([...dbPostgreSQLListName, ...dbSQLLiteListName])
+    }, [dbPostgreSQLList, dbSQLLiteList])
 
-    const setDBPostgreSQLList = (list: IPostGressIDBApi[]) => {
+    const setDBPostgreSQLList = (list: PostgreSQLConnectionModel[]) => {
         setDBPostgreSQLListState(list)
         localStorage.setItem('dbPostgreSQLList', JSON.stringify(list));
     }
 
     const addDBPostgreSQL = () => {
-        setOpenBugDialog(true);
+        setOpenPostgreSQLDialog(true);
     }
 
-    const handleClose = () => {
-        setOpenBugDialog(false);
+    const setDBSQLLiteList = (list: SQLLiteConnectionModel[]) => {
+        setDBSQLLiteListState(list)
+        localStorage.setItem('dbSQLLiteList', JSON.stringify(list));
+    }
+
+    const addDBSQLLite = () => {
+        setOpenSQLLiteDialog(true);
+    }
+
+    const handleCloseDialogs = () => {
+        setOpenPostgreSQLDialog(false);
+        setOpenSQLLiteDialog(false);
         setOpenProgressBarDialog(false);
-        setOpenErrorDialog(false);
+        setOpenErrorSQLLiteDialog(false);
     };
 
-    const handleSend = (item: IPostGressIDBApi) => {
-        setErrorFields([])
+    const handleSendPostgreSQL = (item: PostgreSQLConnectionModel) => {
+        setErrorFieldsPostgreSQL([])
         var er = []
+        if (!item.key || item.key === "") {
+            er.push("key")
+        }
         if (!item.dbName || item.dbName === "") {
             er.push("dbName")
         }
@@ -102,13 +135,13 @@ function App() {
         if (!item.user || item.user === "") {
             er.push("user")
         }
-        setErrorFields(er)
+        setErrorFieldsPostgreSQL(er)
         if (er.length > 0) {
             return
         }
 
-        setOpenBugDialog(false);
-        setOpenErrorDialog(false);
+        setOpenPostgreSQLDialog(false);
+        setOpenErrorPostgreSQLDialog(false);
         setOpenProgressBarDialog(true);
 
         const abortController = new AbortController();
@@ -116,23 +149,71 @@ function App() {
             if (abortController.signal.aborted) {
                 return;
             }
-            if (res.isSuccessStatusCode && itemToEdit) {
+            if (res.isSuccessStatusCode && itemToEditPostgreSQL) {
                 let list = dbPostgreSQLList
-                list.push(itemToEdit)
+                list.push(itemToEditPostgreSQL)
                 setDBPostgreSQLList(list)
-                setItemToEdit(undefined)
+                setItemToEditPostgreSQL(undefined)
                 setOpenProgressBarDialog(false);
             }
             else {
                 setOpenProgressBarDialog(false);
-                setOpenBugDialog(true);
+                setOpenPostgreSQLDialog(true);
                 // TODO cambiare ErrorDialog
-                setOpenErrorDialog(true);
+                setOpenErrorPostgreSQLDialog(true);
             }
         }).catch((err: Error) => {
             console.log("handleSend", err)
             setOpenProgressBarDialog(false);
-            setOpenErrorDialog(true);
+            setOpenErrorPostgreSQLDialog(true);
+        })
+
+        return function cleanUp() {
+            abortController.abort();
+        }
+    }
+
+
+    const handleSendSQLLite = (item: SQLLiteConnectionModel) => {
+        setErrorFieldsSQLLite([])
+        var er = []
+        if (!item.key || item.key === "") {
+            er.push("key")
+        }
+        if (!item.path || item.path === "") {
+            er.push("path")
+        }
+        setErrorFieldsSQLLite(er)
+        if (er.length > 0) {
+            return
+        }
+
+        setOpenSQLLiteDialog(false);
+        setOpenErrorSQLLiteDialog(false);
+        setOpenProgressBarDialog(true);
+
+        const abortController = new AbortController();
+        SQLLiteService.connect(item, abortController).then((res: IHttpResponse<string>) => {
+            if (abortController.signal.aborted) {
+                return;
+            }
+            if (res.isSuccessStatusCode && itemToEditSQLLite) {
+                let list = dbSQLLiteList
+                list.push(itemToEditSQLLite)
+                setDBSQLLiteList(list)
+                setItemToEditSQLLite(undefined)
+                setOpenProgressBarDialog(false);
+            }
+            else {
+                setOpenProgressBarDialog(false);
+                setOpenSQLLiteDialog(true);
+                // TODO cambiare ErrorDialog
+                setOpenErrorSQLLiteDialog(true);
+            }
+        }).catch((err: Error) => {
+            console.log("handleSend", err)
+            setOpenProgressBarDialog(false);
+            setOpenErrorSQLLiteDialog(true);
         })
 
         return function cleanUp() {
@@ -178,12 +259,19 @@ function App() {
                     </Toolbar>
                 </AppBar>
                 <Sidebars >
-                    <SideDatabase<IPostGressIDBApi>
+                    <SideDatabase<PostgreSQLConnectionModel>
                         databases={dbPostgreSQLList}
                         name="PostgreSQL"
                         connnectNewDB={addDBPostgreSQL}
                         setDatabases={setDBPostgreSQLList}
                         dataBaseService={postgreSQLService}
+                    />
+                    <SideDatabase<SQLLiteConnectionModel>
+                        databases={dbSQLLiteList}
+                        name="SQLLite"
+                        connnectNewDB={addDBSQLLite}
+                        setDatabases={setDBSQLLiteList}
+                        dataBaseService={SQLLiteService}
                     />
                 </Sidebars>
                 <Grid
@@ -202,19 +290,19 @@ function App() {
                 </Grid>
             </Box>
 
-            {/* Progress Dialog */}
+            {/* PostgreSQL Dialog */}
             <MyDialog
-                open={openBugDialog}
+                open={openPostgreSQLDialog}
                 title="Parametri di connessione"
                 maxWidth="sm"
                 actions={
                     <>
-                        <Button onClick={handleClose}>Annulla</Button>
+                        <Button onClick={handleCloseDialogs}>Annulla</Button>
                         <Button
-                            disabled={!itemToEdit}
+                            disabled={!itemToEditPostgreSQL}
                             onClick={() => {
-                                if (itemToEdit) {
-                                    handleSend(itemToEdit)
+                                if (itemToEditPostgreSQL) {
+                                    handleSendPostgreSQL(itemToEditPostgreSQL)
                                 }
                             }}
                         >Connettiti</Button>
@@ -227,48 +315,101 @@ function App() {
                 <MyTextField
                     id="key"
                     label="Nome"
-                    onChange={(event: any) => handleInputChangeGeneric(event, itemToEdit, setItemToEdit)}
-                    defaultValue={itemToEdit?.key || ""}
-                    error={errorFields.includes("key")}
+                    onChange={(event: any) => handleInputChangeGeneric(event, itemToEditPostgreSQL, setItemToEditPostgreSQL)}
+                    defaultValue={itemToEditPostgreSQL?.key || ""}
+                    error={errorFieldsPostgreSQL.includes("key")}
                 />
                 <MyTextField
                     id="dbName"
                     label="Nome del DataBase"
-                    onChange={(event: any) => handleInputChangeGeneric(event, itemToEdit, setItemToEdit)}
-                    defaultValue={itemToEdit?.dbName || ""}
-                    error={errorFields.includes("dbName")}
+                    onChange={(event: any) => handleInputChangeGeneric(event, itemToEditPostgreSQL, setItemToEditPostgreSQL)}
+                    defaultValue={itemToEditPostgreSQL?.dbName || ""}
+                    error={errorFieldsPostgreSQL.includes("dbName")}
                 />
                 <MyTextField
                     id="host"
                     label="Host"
-                    onChange={(event: any) => handleInputChangeGeneric(event, itemToEdit, setItemToEdit)}
-                    defaultValue={itemToEdit?.host || ""}
-                    error={errorFields.includes("host")}
+                    onChange={(event: any) => handleInputChangeGeneric(event, itemToEditPostgreSQL, setItemToEditPostgreSQL)}
+                    defaultValue={itemToEditPostgreSQL?.host || ""}
+                    error={errorFieldsPostgreSQL.includes("host")}
                 />
                 <MyTextField
                     id="port"
                     label="Port"
                     type="number"
-                    onChange={(event: any) => handleInputChangeGeneric(event, itemToEdit, setItemToEdit)}
-                    defaultValue={itemToEdit?.port || ""}
-                    error={errorFields.includes("port")}
+                    onChange={(event: any) => handleInputChangeGeneric(event, itemToEditPostgreSQL, setItemToEditPostgreSQL)}
+                    defaultValue={itemToEditPostgreSQL?.port || ""}
+                    error={errorFieldsPostgreSQL.includes("port")}
                 />
                 <MyTextField
                     id="user"
                     label="User"
-                    onChange={(event: any) => handleInputChangeGeneric(event, itemToEdit, setItemToEdit)}
-                    defaultValue={itemToEdit?.user || ""}
-                    error={errorFields.includes("user")}
+                    onChange={(event: any) => handleInputChangeGeneric(event, itemToEditPostgreSQL, setItemToEditPostgreSQL)}
+                    defaultValue={itemToEditPostgreSQL?.user || ""}
+                    error={errorFieldsPostgreSQL.includes("user")}
                 />
                 <MyTextField
                     id="password"
                     label="Password"
                     type="password"
-                    onChange={(event: any) => handleInputChangeGeneric(event, itemToEdit, setItemToEdit)}
-                    defaultValue={itemToEdit?.password || ""}
-                    error={errorFields.includes("password")}
+                    onChange={(event: any) => handleInputChangeGeneric(event, itemToEditPostgreSQL, setItemToEditPostgreSQL)}
+                    defaultValue={itemToEditPostgreSQL?.password || ""}
+                    error={errorFieldsPostgreSQL.includes("password")}
                 />
             </MyDialog>
+
+
+            {/* SQLLite Dialog */}
+            <MyDialog
+                open={openSQLLiteDialog}
+                title="Parametri di connessione"
+                maxWidth="sm"
+                actions={
+                    <>
+                        <Button onClick={handleCloseDialogs}>Annulla</Button>
+                        <Button
+                            disabled={!itemToEditSQLLite}
+                            onClick={() => {
+                                if (itemToEditSQLLite) {
+                                    handleSendSQLLite(itemToEditSQLLite)
+                                }
+                            }}
+                        >Connettiti</Button>
+                    </>
+                }
+            >
+                <DialogContentText>
+                    SQLLite parametri di connessione.
+                </DialogContentText>
+                <MyTextField
+                    id="key"
+                    label="Nome"
+                    onChange={(event: any) => handleInputChangeGeneric(event, itemToEditSQLLite, setItemToEditSQLLite)}
+                    defaultValue={itemToEditSQLLite?.key || ""}
+                    error={errorFieldsSQLLite.includes("key")}
+                />
+
+                <MyTextFieldControlled
+                    id="path"
+                    label="Percorso File"
+                    // disabled
+                    onChange={(event: any) => handleInputChangeGeneric(event, itemToEditSQLLite, setItemToEditSQLLite)}
+                    defaultValue={itemToEditSQLLite?.path || ""}
+                    error={errorFieldsSQLLite.includes("path")}
+                />
+                <Button
+                    variant="contained"
+                    component="label"
+                >
+                    Seleziona il file
+                    <input
+                        type="file"
+                        hidden
+                        onChange={(event: any) => handleInputChangeGeneric(event, itemToEditSQLLite, setItemToEditSQLLite, "path", event.target?.value)}
+                    />
+                </Button>
+            </MyDialog>
+
             {/* Progress Bar */}
             <MyDialog
                 open={openProgressBarDialog}
@@ -289,19 +430,49 @@ function App() {
                     </DialogContentText>
                 </Grid>
             </MyDialog>
-            {/* Error */}
+            {/* Error PostgreSQL */}
             <MyDialog
-                open={openErrorDialog}
+                open={openErrorPostgreSQLDialog}
                 title="Error"
                 maxWidth="sm"
                 actions={
                     <>
-                        <Button onClick={handleClose}>Annulla</Button>
+                        <Button onClick={handleCloseDialogs}>Annulla</Button>
                         <Button
-                            disabled={!itemToEdit}
+                            disabled={!itemToEditPostgreSQL}
                             onClick={() => {
-                                if (itemToEdit) {
-                                    handleSend(itemToEdit)
+                                if (itemToEditPostgreSQL) {
+                                    handleSendPostgreSQL(itemToEditPostgreSQL)
+                                }
+                            }}
+                        >Riprova</Button>
+                    </>
+                }
+            >
+                <Grid
+                    container
+                    direction="row"
+                    justifyContent="center"
+                    alignItems="center"
+                >
+                    <DialogContentText>
+                        Non è stato possibile connetersi al database, perfavore riprova.
+                    </DialogContentText>
+                </Grid>
+            </MyDialog>
+            {/* Error SQLLite */}
+            <MyDialog
+                open={openErrorSQLLiteDialog}
+                title="Error"
+                maxWidth="sm"
+                actions={
+                    <>
+                        <Button onClick={handleCloseDialogs}>Annulla</Button>
+                        <Button
+                            disabled={!itemToEditSQLLite}
+                            onClick={() => {
+                                if (itemToEditSQLLite) {
+                                    handleSendSQLLite(itemToEditSQLLite)
                                 }
                             }}
                         >Riprova</Button>

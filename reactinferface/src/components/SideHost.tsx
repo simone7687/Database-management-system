@@ -7,18 +7,18 @@ import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import { ConnectionModel } from 'model/ConnectionModels';
 import { DataBaseService } from 'model/DataBaseService';
-import { IDBApi } from 'model/IDBApi';
 import { ReactNode, useState } from 'react';
 import SideTabelle from './SideTabelle';
 
-type ISideHostProps<T extends IDBApi> = {
+type ISideHostProps<T extends ConnectionModel> = {
     database: T,
     children?: ReactNode,
     dataBaseService: DataBaseService<T>,
 }
 
-function SideHost<T extends IDBApi>(props: ISideHostProps<T>) {
+function SideHost<T extends ConnectionModel>(props: ISideHostProps<T>) {
     const { database, children, dataBaseService } = props;
     const [open, setOpen] = useState(false);
     const handleClick = () => {

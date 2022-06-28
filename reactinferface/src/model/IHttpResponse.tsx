@@ -3,6 +3,7 @@ export interface IHttpResponse<T> {
     isSuccessStatusCode: boolean,
     content?: T,
     messages: string,
+    messagesAlert?: string,
     reasonPhrase?: string,
     requestMessage?: any,
     statusCode?: number,
@@ -12,6 +13,9 @@ export interface IHttpResponse<T> {
 
 export function generalIHttpResponseLog(body: IHttpResponse<any>) {
     if (body?.isSuccessStatusCode) {
+        if (body?.messagesAlert) {
+            window.alert(body?.messagesAlert)
+        }
         if (body?.messages) {
             console.info(body?.messages)
         }
@@ -20,6 +24,9 @@ export function generalIHttpResponseLog(body: IHttpResponse<any>) {
         }
     }
     else {
+        if (body?.messagesAlert) {
+            window.alert(body?.messagesAlert)
+        }
         if (body?.messages) {
             console.trace(body?.messages)
         } else if (body?.reasonPhrase) {
