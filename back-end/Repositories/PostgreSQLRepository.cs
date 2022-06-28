@@ -62,7 +62,7 @@ public class PostgreSQLRepository : ISQLRepository
                 conn.Open();
                 string sQuery = @"SELECT concat_ws('.', table_schema, table_name) AS TableName
                                 FROM information_schema.tables
-                                WHERE table_type='BASE TABLE'
+                                WHERE table_type='BASE TABLE' and NOT table_schema = 'pg_catalog' and NOT table_schema = 'information_schema'
                                 ORDER BY table_name";
                 var res = conn.QueryAsync<string>(sQuery).Result;
                 return new ResRepository<IEnumerable<string>>(conn.DataSource, res);
