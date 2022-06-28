@@ -87,7 +87,7 @@ public class PostgreSQLRepository : ISQLRepository
                                 c.column_name  as Name,
                                 c.is_nullable = 'YES' as Nullable,
                                 c.data_type  as type,
-                                c.table_name as TableName,
+                                c.table_name as     ,
                                 tco.constraint_type = 'PRIMARY KEY' as PrimaryKey,
                                 tco.constraint_type = 'FOREIGN KEY' as ForeignKey,
                                 tco.constraint_type = 'UNIQUE' as Index,

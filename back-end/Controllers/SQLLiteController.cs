@@ -8,11 +8,13 @@ public class SQLLiteController : ControllerBase, ISQLController<SQLLiteCredentia
 {
     private readonly ILogger<SQLLiteController> _logger;
     private readonly SQLLiteRepository _repository;
+    private readonly Utility _utility;
 
-    public SQLLiteController(ILogger<SQLLiteController> logger, SQLLiteRepository repository)
+    public SQLLiteController(ILogger<SQLLiteController> logger, SQLLiteRepository repository, Utility utility)
     {
         _logger = logger;
         _repository = repository;
+        _utility = utility;
     }
 
     [HttpPut("Connect")]
@@ -31,18 +33,44 @@ public class SQLLiteController : ControllerBase, ISQLController<SQLLiteCredentia
     [HttpPost("GetTablesListName")]
     public HttpResponse<IEnumerable<string>> GetTablesListName(SQLLiteCredentialsModel credentials)
     {
-        throw new NotImplementedException();
+        string connString = _repository.BuiltConnectionString(credentials);
+
+        var data = _repository.GetTablesListName(connString);
+        if (data.Error)
+        {
+            return new HttpResponse<IEnumerable<string>>(HttpStatusCode.ServiceUnavailable, data.Message, data.Content);
+        }
+        return new HttpResponse<IEnumerable<string>>(HttpStatusCode.OK, data.Message, data.Content);
     }
 
     [HttpPost("GetInfoTables")]
-    public HttpResponse<IEnumerable<InfoTables>> GetInfoTables([FromBody] PostgreSQLCredentialsModel credentials, string tableName)
+    public HttpResponse<IEnumerable<InfoTables>> GetInfoTables([FromBody] SQLLiteCredentialsModel credentials, string tableName)
     {
-        throw new NotImplementedException();
+        string connString = _repository.BuiltConnectionString(credentials);
+
+        var data = _repository.GetInfoTables(connString, tableName);
+        if (data.Error)
+        {
+            return new HttpResponse<IEnumerable<InfoTables>>(HttpStatusCode.ServiceUnavailable, data.Message, data.Content);
+        }
+        return new HttpResponse<IEnumerable<InfoTables>>(HttpStatusCode.OK, data.Message, data.Content);
     }
 
     [HttpPost("ExecuteQueries")]
     public HttpResponse<IEnumerable<QueyData<object>>> ExecuteQueries([FromBody] SQLLiteQueryBody credentials)
     {
-        throw new NotImplementedException();
+        string connString = _repository.BuiltConnectionString(credentials);
+        if (string.IsNullOrWhiteSpace(credentials.Query))
+        {
+            return new HttpResponse<IEnumerable<QueyData<object>>>(HttpStatusCode.OK, "Query nulla");
+        }
+
+        var arrayQuery = _utility.ConvertQueryStringInCleanArray(credentials.Query);
+        var data = _repository.ExecuteQueries(connString, arrayQuery);
+        if (data.Error)
+        {
+            return new HttpResponse<IEnumerable<QueyData<object>>>(HttpStatusCode.ServiceUnavailable, data.Message, data.Content);
+        }
+        return new HttpResponse<IEnumerable<QueyData<object>>>(HttpStatusCode.OK, data.Message, data.Content);
     }
 }
