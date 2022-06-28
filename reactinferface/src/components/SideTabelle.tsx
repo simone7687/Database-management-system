@@ -1,7 +1,7 @@
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import InfoIcon from '@mui/icons-material/Info';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
+import TableRowsIcon from '@mui/icons-material/TableRows';
 import { Button, Collapse } from '@mui/material';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
@@ -21,11 +21,12 @@ import MyDialog from './MyDialog';
 type ISideTabelleProps<T extends ConnectionModel> = {
     conn: T,
     dataBaseService: DataBaseService<T>,
+    maxWidth: number,
 }
 
 
 function SideTabelle<T extends ConnectionModel>(props: ISideTabelleProps<T>) {
-    const { dataBaseService, conn } = props;
+    const { dataBaseService, conn, maxWidth } = props;
     const [open, setOpen] = useState(false);
     const [infoTabel, setInfoTabel] = useState({ open: false, tabelName: "" });
     const [infoTabelData, setInfoTabelData] = useState<InfoTabelleModel[]>([]);
@@ -87,13 +88,13 @@ function SideTabelle<T extends ConnectionModel>(props: ISideTabelleProps<T>) {
         <>
             <Divider />
             <List
-                sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+                sx={{ width: '100%', maxWidth: maxWidth, bgcolor: 'background.paper' }}
                 component="nav"
                 aria-labelledby="nested-list-subheader"
             >
                 <ListItemButton sx={{ pl: 8 }}>
                     <ListItemIcon>
-                        <InboxIcon />
+                        <TableRowsIcon />
                     </ListItemIcon>
                     <ListItemText primary="Tabelle" />
                     <IconButton color="primary" aria-label="upload picture" component="span" onClick={handleClick}>
@@ -104,10 +105,6 @@ function SideTabelle<T extends ConnectionModel>(props: ISideTabelleProps<T>) {
                     {tabelleList.length > 0 && tabelleList.map((tabelName, index) => (
                         <ListItem key={index} disablePadding>
                             <ListItemButton sx={{ pl: 12 }}>
-                                <ListItemIcon>
-                                    {index % 2 === 0 ? <InboxIcon /> : <InboxIcon />}
-                                </ListItemIcon>
-                                <ListItemText primary={tabelName} />
                                 <IconButton
                                     color="primary"
                                     aria-label="upload picture"
@@ -118,6 +115,7 @@ function SideTabelle<T extends ConnectionModel>(props: ISideTabelleProps<T>) {
                                 >
                                     <InfoIcon />
                                 </IconButton>
+                                <ListItemText primary={tabelName} />
                             </ListItemButton>
                         </ListItem>
                     ))}
