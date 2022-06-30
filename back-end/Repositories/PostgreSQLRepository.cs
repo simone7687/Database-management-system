@@ -1,8 +1,10 @@
 ﻿using back_end.Models;
 using Dapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using System.Data.Common;
+using System.Linq;
 
 public class PostgreSQLRepository : ISQLRepository
 {
@@ -13,50 +15,49 @@ public class PostgreSQLRepository : ISQLRepository
         _logger = logger;
     }
 
-    public string BuiltConnectionString(PostgreSQLCredentialsModel credentials)
+    public ResRepository<string> TestConnection(DbContext dbContext)
     {
         try
         {
-            var builder = new NpgsqlConnectionStringBuilder
+            _logger.LogTrace("TestConnection");
+            if (dbContext.Database.CanConnect())
             {
-                Host = credentials.Host,
-                Username = credentials.User,
-                Database = credentials.DBname,
-                Port = string.IsNullOrEmpty(credentials.Port) ? 5432 : int.Parse(credentials.Port),
-                Password = credentials.Password
-            };
-            return builder.ConnectionString;
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(Constants.UNHANDLED_ERROR, ex);
-            throw;
-        }
-    }
-
-    public ResRepository<string> TestConnection(string? connString)
-    {
-        try
-        {
-            using (var conn = new NpgsqlConnection(connString))
+                return new ResRepository<string>("TestConnection OK", dbContext.ContextId.ToString());
+            }
+            else
             {
-                _logger.LogTrace("TestConnection PostgreSQLRepository");
-                conn.Open();
-                return new ResRepository<string>(conn.DataSource, conn.ConnectionString);
+                _logger.LogError("TestConnection Bad");
+                return new ResRepository<string>(true, "TestConnection Bad", dbContext.ContextId.ToString());
             }
         }
         catch (Exception ex)
         {
             _logger.LogError(Constants.UNHANDLED_ERROR, ex);
-            return new ResRepository<string>(true, ex.Message, connString);
+            return new ResRepository<string>(true, ex.Message, dbContext.ContextId.ToString());
         }
     }
 
-    public ResRepository<IEnumerable<string>> GetTablesListName(string? connString)
+    public ResRepository<IEnumerable<string>> GetTablesListName(DbContext dbContext)
     {
+        _logger.LogTrace("GetTablesListName");
         try
         {
-            using (var conn = new NpgsqlConnection(connString))
+            if (dbContext.Database.CanConnect())
+            {
+                var model = dbContext.;
+                foreach (var mt in model.GetTables())
+                    Console.WriteLine(mt.TableName);
+
+
+
+                    return new ResRepository<string>("TestConnection OK", dbContext.ContextId.ToString());
+            }
+            else
+            {
+                _logger.LogError("TestConnection Bad");
+                return new ResRepository<IEnumerable<string>>(true, "TestConnection Bad", default);
+            }
+            using (var conn = new NpgsqlConnection(dbContext))
             {
                 _logger.LogTrace("GetTableListName PostgreSQLRepository");
                 conn.Open();
@@ -156,7 +157,7 @@ public class PostgreSQLRepository : ISQLRepository
                         else
                         {
                             var resQuery = conn.Execute(sQuery);
-                            if (resQuery<0)
+                            if (resQuery < 0)
                             {
                                 res.Add(new QueyData<object>($"Query executed", true));
                             }

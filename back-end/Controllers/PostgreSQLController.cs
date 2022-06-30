@@ -1,3 +1,4 @@
+using back_end.DBContext;
 using back_end.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -20,9 +21,9 @@ public class PostgreSQLController : ControllerBase, ISQLController<PostgreSQLCre
     [HttpPut("Connect")]
     public HttpResponse<string> Connect(PostgreSQLCredentialsModel credentials)
     {
-        string connString = _repository.BuiltConnectionString(credentials);
+        var db = new PostgreSQLDbContext(credentials);
 
-        var conn = _repository.TestConnection(connString);
+        var conn = _repository.TestConnection(db);
         if (conn.Error)
         {
             return new HttpResponse<string>(HttpStatusCode.ServiceUnavailable, conn.Message, conn.Content);
@@ -33,9 +34,9 @@ public class PostgreSQLController : ControllerBase, ISQLController<PostgreSQLCre
     [HttpPost("GetTablesListName")]
     public HttpResponse<IEnumerable<string>> GetTablesListName(PostgreSQLCredentialsModel credentials)
     {
-        string connString = _repository.BuiltConnectionString(credentials);
+        var db = new PostgreSQLDbContext(credentials);
 
-        var data = _repository.GetTablesListName(connString);
+        var data = _repository.GetTablesListName(db);
         if (data.Error)
         {
             return new HttpResponse<IEnumerable<string>>(HttpStatusCode.ServiceUnavailable, data.Message, data.Content);
@@ -46,9 +47,9 @@ public class PostgreSQLController : ControllerBase, ISQLController<PostgreSQLCre
     [HttpPost("GetInfoTables")]
     public HttpResponse<IEnumerable<InfoTables>> GetInfoTables([FromBody] PostgreSQLCredentialsModel credentials, string tableName)
     {
-        string connString = _repository.BuiltConnectionString(credentials);
+        var db = new PostgreSQLDbContext(credentials);
 
-        var data = _repository.GetInfoTables(connString, tableName);
+        var data = _repository.GetInfoTables(db, tableName);
         if (data.Error)
         {
             return new HttpResponse<IEnumerable<InfoTables>>(HttpStatusCode.ServiceUnavailable, data.Message, data.Content);
@@ -59,14 +60,15 @@ public class PostgreSQLController : ControllerBase, ISQLController<PostgreSQLCre
     [HttpPost("ExecuteQueries")]
     public HttpResponse<IEnumerable<QueyData<object>>> ExecuteQueries([FromBody] PostgreSQLQueryBody credentials)
     {
-        string connString = _repository.BuiltConnectionString(credentials);
+        var db = new PostgreSQLDbContext(credentials);
+
         if (string.IsNullOrWhiteSpace(credentials.Query))
         {
             return new HttpResponse<IEnumerable<QueyData<object>>>(HttpStatusCode.OK, "Query nulla");
         }
 
         var arrayQuery = _utility.ConvertQueryStringInCleanArray(credentials.Query);
-        var data = _repository.ExecuteQueries(connString, arrayQuery);
+        var data = _repository.ExecuteQueries(db, arrayQuery);
         if (data.Error)
         {
             return new HttpResponse<IEnumerable<QueyData<object>>>(HttpStatusCode.ServiceUnavailable, data.Message, data.Content);
